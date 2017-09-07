@@ -1,0 +1,12 @@
+query EntesByNombre($Nombre: String!) {
+  EntesByNombre(Nombre: $Nombre) {
+    Id
+    TipoDocumento
+    NumeroDocumento
+    Nombre
+    Ciudad
+    Direccion
+    Telefono
+    Relacion 
+  }
+}

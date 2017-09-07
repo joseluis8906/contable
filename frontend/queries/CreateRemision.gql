@@ -1,0 +1,56 @@
+mutation CreateRemision ( 
+  $Numero: String!
+  $Fecha: String!
+  $EnteId: Int!
+  $ProduccionId: Int!
+  $EnvaseId: Int!
+  $Total: Float
+) {
+  CreateRemision (
+    Numero: $Numero
+    Fecha: $Fecha
+    EnteId: $EnteId
+    ProduccionId: $ProduccionId
+    EnvaseId: $EnvaseId
+    Total: $Total
+  ){
+    Id
+    Numero
+    Fecha
+    EnteId
+    ProduccionId
+    EnvaseId
+    Total
+    Ente {
+      Id
+      TipoDocumento
+      NumeroDocumento
+      Nombre
+      Ciudad
+      Direccion
+      Telefono
+    }
+    Produccion {
+      Id
+      Fecha
+      Lote
+      Cantidad
+      Producto {
+        Id
+        Nombre
+        UnidadDeMedida
+      }
+      FechaFabricacion
+      FechaVencimiento
+      Envase {
+        Id
+        Numero
+        Capacidad
+      }
+    }
+    Envase {
+      Id
+      Numero
+    }
+  }
+}

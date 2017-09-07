@@ -1,0 +1,12 @@
+query Entes {
+  Entes {
+    Id
+    TipoDocumento
+    NumeroDocumento
+    Nombre
+    Ciudad
+    Direccion
+    Telefono
+    Relacion 
+  }
+}

@@ -1,0 +1,87 @@
+mutation UpdateEnvase ( 
+  $Estado: String, 
+  $EnteId: Int!,
+  $Material: String,
+  $ProductoId: Int,
+  $Capacidad: Float,
+  $Numero: String!,
+  $NumeroInterno: String,
+  $Presion: Float,
+  $AlturaConValvula: Float,
+  $PesoConValvula: Float,
+  $Valvula: String,
+  $TipoValvula: String,
+  $AcabadoColor: String,
+  $NormaTecnicaFabricacion: String,
+  $Proveedor: String,
+  $FechaCompra: String,
+  $Garantia: String,
+  $FechaFabricacion: String,
+  $PruebaHidrostatica: String,
+  $EquipoAlquilado: String,
+  $FechaAlquiler: String,
+  $Observaciones: String
+) {
+  UpdateEnvase (
+    Estado: $Estado,
+    EnteId: $EnteId,
+    Material: $Material,
+    ProductoId: $ProductoId,
+    Capacidad: $Capacidad,
+    Numero: $Numero,
+    NumeroInterno: $NumeroInterno,
+    Presion: $Presion,
+    AlturaConValvula: $AlturaConValvula,
+    PesoConValvula: $PesoConValvula,
+    Valvula: $Valvula,
+    TipoValvula: $TipoValvula,
+    AcabadoColor: $AcabadoColor,
+    NormaTecnicaFabricacion: $NormaTecnicaFabricacion,
+    Proveedor: $Proveedor,
+    FechaCompra: $FechaCompra,
+    Garantia: $Garantia,
+    FechaFabricacion: $FechaFabricacion,
+    PruebaHidrostatica: $PruebaHidrostatica,
+    EquipoAlquilado: $EquipoAlquilado,
+    FechaAlquiler: $FechaAlquiler,
+    Observaciones: $Observaciones
+  ){
+    Id
+    Estado
+    EnteId
+    Material
+    ProductoId
+    Capacidad
+    Numero
+    NumeroInterno
+    Presion
+    AlturaConValvula
+    PesoConValvula
+    Valvula
+    TipoValvula
+    AcabadoColor
+    NormaTecnicaFabricacion
+    Proveedor
+    FechaCompra
+    Garantia
+    FechaFabricacion
+    PruebaHidrostatica
+    EquipoAlquilado
+    FechaAlquiler
+    Observaciones
+    Propietario {
+      Id
+      TipoDocumento
+      NumeroDocumento
+      Nombre
+      Direccion
+      Telefono
+    }
+    Producto {
+      Id
+      Nombre
+      UnidadDeMedida
+    }
+  }
+}
+
