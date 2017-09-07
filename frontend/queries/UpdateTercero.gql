@@ -23,7 +23,7 @@ mutation UpdateTercero (
     PrimerNombre: $PrimerNombre,
     OtrosNombres: $OtrosNombres,
     RazonSocial: $RazonSocial,
-    Direccion: $Ciudad,
+    Direccion: $Direccion,
     CodigoDepartamento: $CodigoDepartamento,
     CodigoMunicipio: $CodigoMunicipio,
     PaisDeResidencia: $PaisDeResidencia

@@ -23,5 +23,5 @@ CREATE TABLE IF NOT EXISTS "Tercero" (
   "CodigoDepartamento" TEXT,
   "CodigoMunicipio" TEXT,
   "PaisDeResidencia" TEXT,
-  UNIQUE ("TipoDeIdentificacion", "NumeroDeIdentificacion")
+  UNIQUE ("TipoDeIdentificacion", "NumeroDeIdentificacion", "DigitoDeVerificacion")
 );
