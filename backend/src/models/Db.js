@@ -8,8 +8,7 @@ const Db = new Sequelize(`sqlite://${db}`);
 const User = Db.define('User', {
   Id: {type: Sequelize.INTEGER, primaryKey: true, autoIncrement: true},
   UserName: {type: Sequelize.STRING, unique: true},
-  Password: Sequelize.STRING,
-  Active: Sequelize.BOOLEAN
+  Password: Sequelize.STRING
 },
 {
   timestamps: false,

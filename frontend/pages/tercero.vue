@@ -11,17 +11,17 @@ v-layout( align-center justify-center )
     :multi-line="snackbar.mode === 'multi-line'"
     :vertical="snackbar.mode === 'vertical'"
     :top="true"
-    v-model="loading" ) 
+    v-model="loading" )
       h6(class="grey--text text--lighten-4 mb-0") {{ snackbar.text }}
       v-icon autorenew
-  
+
   v-flex( xs12 md8 lg6 )
     v-card
       v-card-text
         v-layout( row wrap )
           v-flex( xs12 mt-3 )
-            h5(class="grey--text text--lighten-4") Ente
-            
+            h5(class="grey--text text--lighten-4") Tercero
+
           v-flex( xs12 )
             v-select( v-bind:items="ItemsDocumento"
                       v-model="TipoDocumento"
@@ -30,9 +30,9 @@ v-layout( align-center justify-center )
                       dark )
 
             v-text-field( label="Numero de Documento" v-model="NumeroDocumento" dark )
-            
+
             v-text-field( label="Nombre" v-model="Nombre" dark )
-            
+
             v-text-field( label="Ciudad" v-model="Ciudad" dark )
 
             v-text-field( label="Dirección" v-model="Direccion" dark )
@@ -44,7 +44,7 @@ v-layout( align-center justify-center )
                       label="Relacion"
                       item-value="text"
                       dark )
-            
+
       v-card-actions
         v-spacer
         v-btn( dark @click.native="Reset" ) Cancelar
@@ -52,7 +52,6 @@ v-layout( align-center justify-center )
 </template>
 
 <script>
-
 import ENTES from '~/queries/Entes.gql'
 import ONE_ENTE from '~/queries/OneEnte.gql'
 import CREATE_ENTE from '~/queries/CreateEnte.gql'
@@ -82,7 +81,7 @@ export default {
       {text: 'Propia'},
       {text: 'Cliente'}
     ],
-    
+
     loading: 0,
     update: false,
     UpdateDb: false
@@ -103,7 +102,7 @@ export default {
         this.Direccion = data.OneEnte ? data.OneEnte.Direccion : ''
         this.Telefono = data.OneEnte ? data.OneEnte.Telefono : ''
         this.Relacion = data.OneEnte ? data.OneEnte.Relacion : ''
-        
+
         this.update = data.OneEnte ? true : false
       }
     }
@@ -131,9 +130,9 @@ export default {
         Telefono: this.Telefono,
         Relacion: this.Relacion
       };
-      
+
       this.Reset ();
-      
+
       this.$apollo.mutate ({
         mutation: CREATE_ENTE,
         variables: {
@@ -149,44 +148,44 @@ export default {
       update: (store, { data: res }) => {
         //console.log(Ente);
         var data = {OneEnte: res.CreateEnte}
-        store.writeQuery({ 
-          query: ONE_ENTE, 
+        store.writeQuery({
+          query: ONE_ENTE,
           variables: {
             TipoDocumento: Ente.TipoDocumento,
             NumeroDocumento: Ente.NumeroDocumento
           },
           data: data
         })
-       
+
         try{
-          
+
           data = store.readQuery({
             query: ENTES
           })
-        
+
           data.Entes.push(res.CreateEnte)
-        
+
           store.writeQuery({
             query: ENTES,
             data: data
           })
-          
+
         } catch (Err) {
-          
-          
+
+
           data = {Entes: []}
-        
+
           data.Entes.push(res.CreateEnte)
-        
+
           store.writeQuery({
             query: ENTES,
             data: data
           })
-          
+
         }
-        
+
       },
-      }).then( data => {        
+      }).then( data => {
         //console.log(data)
       }).catch( Err => {
         //console.log(Err)
@@ -202,9 +201,9 @@ export default {
         Telefono: this.Telefono,
         Relacion: this.Relacion
       };
-      
+
       this.Reset ();
-      
+
       this.$apollo.mutate ({
         mutation: UPDATE_ENTE,
         variables: {
@@ -220,21 +219,21 @@ export default {
       update: (store, { data: res }) => {
         //console.log(Ente);
         var data = {OneEnte: res.UpdateEnte}
-        store.writeQuery({ 
-          query: ONE_ENTE, 
+        store.writeQuery({
+          query: ONE_ENTE,
           variables: {
             TipoDocumento: Ente.TipoDocumento,
             NumeroDocumento: Ente.NumeroDocumento
           },
           data: data
         })
-        
+
         try {
-          
+
           data = store.readQuery({
             query: ENTES
           })
-          
+
           for (let i=0; i<data.Entes.length; i++) {
             if (data.Entes[i].Id === res.UpdateEnte.Id) {
               data.Entes[i].TipoDocumento = res.UpdateEnte.TipoDocumento
@@ -246,27 +245,27 @@ export default {
               data.Entes[i].Relacion = res.UpdateEnte.Relacion
             }
           }
-          
+
           store.writeQuery({
             query: ENTES,
             data: data
           })
-          
+
         } catch (Err) {
-        
+
           data = {Entes: []}
-          
+
           data.Entes.push(res.UpdateEnte)
-          
+
           store.writeQuery({
             query: ENTES,
             data: data
           })
-          
+
         }
-        
+
       },
-      }).then( data => {        
+      }).then( data => {
         //console.log(data)
       }).catch( Err => {
         //console.log(Err)
@@ -290,5 +289,5 @@ export default {
 <style lang="stylus" scoped>
 .alert-especial
   position absolute
-    
+
 </style>

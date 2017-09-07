@@ -1,0 +1,17 @@
+query Terceros {
+  Terceros {
+    Id
+    TipoDeIdentificacion
+    NumeroDeIdentificacion
+    DigitoDeVerificacion
+    PrimerApellido
+    SegundoApellido
+    PrimerNombre
+    OtrosNombres
+    RazonSocial
+    Direccion
+    CodigoDepartamento
+    CodigoMunicipio
+    PaisDeResidencia
+  }
+}

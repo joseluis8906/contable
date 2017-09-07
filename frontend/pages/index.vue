@@ -1,14 +1,15 @@
 <template lang="pug">
 div(class="hello")
-  g-carousel
-  g-icon-grid
-  g-section1
-  g-section3
-  g-section4
-  g-section2
-  g-section5
-  g-testimonios
-  g-contact
+  p Contable
+  //g-carousel
+  //g-icon-grid
+  //g-section1
+  //g-section3
+  //g-section4
+  //g-section2
+  //g-section5
+  //g-testimonios
+  //g-contact
 
 </template>
 
@@ -55,19 +56,19 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="stylus" scoped>
 
-h1, h2 
+h1, h2
   font-weight normal;
 
-ul 
+ul
   list-style-type none
   padding 0
 
 
-li 
+li
   display inline-block
   margin 0 10px
 
-a 
+a
   color #42b983
 
 </style>

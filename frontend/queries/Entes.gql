@@ -1,5 +1,5 @@
-query Entes {
-  Entes {
+query Terceros {
+  Terceros {
     Id
     TipoDocumento
     NumeroDocumento
@@ -7,6 +7,6 @@ query Entes {
     Ciudad
     Direccion
     Telefono
-    Relacion 
+    Relacion
   }
 }
