@@ -25,6 +25,6 @@ CREATE TABLE IF NOT EXISTS "Tercero" (
   "PaisDeResidencia" TEXT,
   "Cliente" TEXT,
   "Proveedor" TEXT,
-  "Empleado" TEXT
+  "Empleado" TEXT,
   UNIQUE ("TipoDeIdentificacion", "NumeroDeIdentificacion", "DigitoDeVerificacion")
 );
