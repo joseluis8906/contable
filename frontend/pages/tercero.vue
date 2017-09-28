@@ -69,6 +69,14 @@ v-layout( align-center justify-center )
                       item-text="nombre"
                       dark )
 
+            v-switch( label="Cliente"
+                      v-model="Cliente" )
+
+            v-switch( label="Proveedor"
+                      v-model="Proveedor" )
+
+            v-switch( label="Empleado"
+                      v-model="Empleado" )
 
       v-card-actions
         v-spacer
@@ -104,6 +112,9 @@ export default {
     CodigoDepartamento: null,
     CodigoMunicipio: null,
     PaisDeResidencia: null,
+    Cliente: null,
+    Proveedor: null,
+    Empleado: null,
     ItemsDeIdentificacion: [
       {text: 'Cédula de ciudadanía', value: '13'},
       {text: 'Tarjeta de extranjería', value: '21'},
