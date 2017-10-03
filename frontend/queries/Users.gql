@@ -1,0 +1,22 @@
+query Users(
+  $Id: Int,
+  $UserName: String,
+  $Password: String,
+  $Active: String
+) {
+  Users (
+    Id: $Id,
+    UserName: $UserName,
+    Password: $Password,
+    Active: $Active
+  ) {
+    Id
+    UserName
+    Password
+    Active
+    Groups {
+      Id
+      Name
+    }
+  }
+}

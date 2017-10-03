@@ -1,0 +1,16 @@
+mutation CreateUser (
+  $UserName: String,
+  $Password: String,
+  $Active: String
+) {
+  CreateUser (
+    UserName: $UserName,
+    Password: $Password,
+    Active: $Active
+  ) {
+    Id
+    UserName
+    Password
+    Active
+  }
+}

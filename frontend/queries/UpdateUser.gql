@@ -1,0 +1,18 @@
+mutation UpdateUser(
+  $Id: Int,
+  $UserName: String,
+  $Password: String,
+  $Active: String
+) {
+  UpdateUser (
+    Id: $Id,
+    UserName: $UserName,
+    Password: $Password,
+    Active: $Active
+  ) {
+    Id
+    UserName
+    Password
+    Active
+  }
+}

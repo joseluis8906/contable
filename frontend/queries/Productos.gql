@@ -1,7 +1,0 @@
-query Productos {
-  Productos {
-    Id
-    Nombre
-    UnidadDeMedida
-  }
-}

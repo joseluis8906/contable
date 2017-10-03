@@ -1,7 +1,0 @@
-query OneProducto($Nombre: String!) {
-  OneProducto(Nombre: $Nombre) {
-    Id
-    Nombre
-    UnidadDeMedida
-  }
-}
