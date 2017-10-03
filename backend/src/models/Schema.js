@@ -7,6 +7,74 @@ import { GraphQLObjectType,
 
 import Db from './Db.js';
 
+var User = new GraphQLObjectType({
+  name: "User",
+  description: "Object representation of User",
+  fields: () => {
+    return {
+      Id: {
+        type: GraphQLInt,
+        resolve(User) {
+          return User.Id;
+        }
+      },
+      UserName: {
+        type: GraphQLString,
+        resolve(User) {
+          return User.UserName;
+        }
+      },
+      Password: {
+        type: GraphQLString,
+        resolve(User) {
+          return User.Password;
+        }
+      },
+      Active: {
+        type: GraphQLString,
+        resolve(User) {
+          return User.Active;
+        }
+      },
+      Groups: {
+        type: new GraphQLList(Group),
+        resolve(User) {
+          return User.getGroups();
+        }
+      }
+    };
+  }
+});
+
+
+var Group = new GraphQLObjectType({
+  name: "Group",
+  description: "Object representation of Group",
+  fields: () => {
+    return {
+      Id: {
+        type: GraphQLInt,
+        resolve(Group) {
+          return Group.Id;
+        }
+      },
+      Name: {
+        type: GraphQLString,
+        resolve(Group) {
+          return Group.Name;
+        }
+      },
+      Users: {
+        type: new GraphQLList(User),
+        resolve(Group) {
+          return Group.getUsers();
+        }
+      }
+    };
+  }
+});
+
+
 var Tercero = new GraphQLObjectType({
   name: "Tercero",
   description: "Object representation of Tercero",
@@ -110,6 +178,28 @@ var Query = new GraphQLObjectType({
           return "world";
         }
       },
+      Users: {
+        type: new GraphQLList(User),
+        args: {
+          Id: {type: GraphQLInt},
+          UserName: {type: GraphQLString},
+          Password: {type: GraphQLString},
+          Active: {type: GraphQLString}
+        },
+        resolve(root, args) {
+          return Db.models.User.findAll({where: args});
+        }
+      },
+      Groups: {
+        type: new GraphQLList(Group),
+        args: {
+          Id: {type: GraphQLInt},
+          Name: {type: GraphQLString}
+        },
+        resolve(root, args) {
+          return Db.models.Group.findAll({where: args});
+        }
+      },
       Terceros: {
         type: new GraphQLList(Tercero),
         args: {
@@ -142,6 +232,120 @@ var Mutation = new GraphQLObjectType({
   description: "Function to create stuf",
   fields: () => {
     return {
+      CreateUser: {
+        type: User,
+        args: {
+          UserName: {type: GraphQLString},
+          Password: {type: GraphQLString},
+          Active: {type: GraphQLString}
+        },
+        resolve(_, args) {
+          return Db.models.User.create({
+            UserName: args.UserName,
+            Password: args.Password,
+            Active: args.Active
+          });
+        }
+      },
+      UpdateUser: {
+        type: User,
+        args: {
+          Id: {type: GraphQLInt},
+          UserName: {type: GraphQLString},
+          Password: {type: GraphQLString},
+          Active: {type: GraphQLString}
+        },
+        resolve(_, args) {
+          return Db.models.User.findOne({
+            where: {Id: args.Id}
+          }).then( R => {
+            R.Password = args.Password,
+            R.Active = args.Active
+            R.save()
+            return R;
+          });
+        }
+      },
+      CreateGroup: {
+        type: Group,
+        args: {
+          Name: {type: GraphQLString},
+        },
+        resolve(_, args) {
+          return Db.models.Group.create({
+            Name: args.Name
+          });
+        }
+      },
+      UpdateGroup: {
+        type: Group,
+        args: {
+          Id: {type: GraphQLInt},
+          Name: {type: GraphQLString},
+        },
+        resolve(_, args) {
+          return Db.models.Group.findOne({
+            where: {Id: args.Id}
+          }).then (R => {
+            R.Name = args.Name;
+            R.save();
+            return R;
+          });
+        }
+      },
+      UserAddGroup: {
+        type: User,
+        args: {
+          UserId: {type: GraphQLInt},
+          GroupId: {type: GraphQLInt}
+        },
+        resolve(_, args) {
+          return Db.models.User.findOne({
+            where: {Id: args.UserId}
+          }).then(U => {
+            if (U !== null){
+              return Db.models.Group.findOne({
+                where: {Id: args.GroupId}
+              }).then(G => {
+                if (G !== null) {
+                  return U.addGroup(G).then(R => {
+                    return U;
+                  })
+                } else {
+                  return U;
+                }
+              })
+            } else {
+              return U;
+            }
+          });
+        }
+      },
+      UserRemoveGroup: {
+        type: User,
+        args: {
+          UserId: {type: GraphQLInt},
+          GroupId: {type: GraphQLInt},
+        },
+        resolve(_, args) {
+          return Db.models.User.findOne({
+            where: {Id: args.UserId}
+          }).then(U => {
+            if (U !== null){
+              return Db.models.Group.findOne({
+                where: {Id: args.GroupId}
+              }).then(G => {
+                if (G !== null) {
+                  U.removeGroup(G)
+                }
+                return U;
+              })
+            } else {
+              return U;
+            }
+          });
+        }
+      },
       CreateTercero: {
         type: Tercero,
         args: {

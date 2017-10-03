@@ -8,12 +8,34 @@ const Db = new Sequelize(`sqlite://${db}`);
 const User = Db.define('User', {
   Id: {type: Sequelize.INTEGER, primaryKey: true, autoIncrement: true},
   UserName: {type: Sequelize.STRING, unique: true},
-  Password: Sequelize.STRING
+  Password: Sequelize.STRING,
+  Active: Sequelize.STRING
 },
 {
   timestamps: false,
   freezeTableName: true
 });
+
+const Group = Db.define('Group', {
+  Id: {type: Sequelize.INTEGER, primaryKey: true, autoIncrement: true},
+  Name: {type: Sequelize.STRING, unique: true}
+},
+{
+  timestamps: false,
+  freezeTableName: true
+});
+
+const UserGroup = Db.define('UserGroup', {
+  UserId: {type: Sequelize.INTEGER, references: {model: User, key: 'Id'}},
+  GroupId: {type: Sequelize.INTEGER, references: {model: Group, key: 'Id'}}
+},
+{
+  timestamps: false,
+  freezeTableName: true
+});
+
+User.belongsToMany(Group, {through: 'UserGroup'});
+Group.belongsToMany(User, {through: 'UserGroup'});
 
 
 //############# contable ################

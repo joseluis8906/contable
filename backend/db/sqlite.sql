@@ -4,7 +4,7 @@ CREATE TABLE IF NOT EXISTS "User" (
   "Id" INTEGER PRIMARY KEY,
   "UserName" TEXT UNIQUE,
   "Password" TEXT,
-  "Active" BOOLEAN
+  "Active" TEXT
 );
 
 CREATE TABLE IF NOT EXISTS "Group" (
