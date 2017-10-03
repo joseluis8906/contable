@@ -1,0 +1,12 @@
+query Groups (
+  $Id: Int,
+  $Name: String
+) {
+  Groups (
+    Id: $Id,
+    Name: $Name
+  ) {
+    Id
+    Name
+  }
+}

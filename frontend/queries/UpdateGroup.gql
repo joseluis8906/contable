@@ -1,0 +1,12 @@
+mutation UpdateGroup (
+  $Id: Int,
+  $Name: String
+) {
+  UpdateGroup (
+    Id: $Id,
+    Name: $Name
+  ) {
+    Id
+    Name
+  }
+}

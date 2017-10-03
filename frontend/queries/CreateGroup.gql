@@ -1,0 +1,10 @@
+mutation CreateGroup (
+  $Name: String
+) {
+  CreateGroup (
+    Name: $Name
+  ) {
+    Id
+    Name
+  }
+}
