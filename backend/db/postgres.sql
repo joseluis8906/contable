@@ -36,3 +36,11 @@ CREATE TABLE IF NOT EXISTS "Tercero" (
   "Empleado" TEXT,
   UNIQUE ("TipoDeIdentificacion", "NumeroDeIdentificacion", "DigitoDeVerificacion")
 );
+
+CREATE TABLE IF NOT EXISTS "PUC" (
+  "Id" BIGSERIAL PRIMARY KEY,
+  "Type" TEXT,
+  "Code" TEXT,
+  "Name" TEXT,
+  UNIQUE("Type", "Code")
+);
