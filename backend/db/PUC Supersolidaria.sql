@@ -160,7 +160,7 @@ INSERT INTO "PUC"("Type", "Code", "Name")VALUES('Supersolidaria', '131030', 'OBR
 INSERT INTO "PUC"("Type", "Code", "Name")VALUES('Supersolidaria', '131035', 'CONTRATOS EN EJECUCION');
 INSERT INTO "PUC"("Type", "Code", "Name")VALUES('Supersolidaria', '131040', 'OTROS INVENTARIOS');
 INSERT INTO "PUC"("Type", "Code", "Name")VALUES('Supersolidaria', '131099', 'DETERIORO - BIENES TRANSFORMADOS POR LA ENTIDAD (CR)');
-INSERT INTO "PUC"("Type", "Code", "Name")VALUES('Supersolidaria', '13', 'CARTERA DE CRÉDITOS');
+INSERT INTO "PUC"("Type", "Code", "Name")VALUES('Supersolidaria', '14', 'CARTERA DE CRÉDITOS');
 INSERT INTO "PUC"("Type", "Code", "Name")VALUES('Supersolidaria', '1404', 'CREDITOS DE VIVIENDA - CON LIBRANZA');
 INSERT INTO "PUC"("Type", "Code", "Name")VALUES('Supersolidaria', '140405', 'CATEGORIA A RIESGO NORMAL');
 INSERT INTO "PUC"("Type", "Code", "Name")VALUES('Supersolidaria', '140410', 'CATEGORIA B RIESGO ACEPTABLE');
