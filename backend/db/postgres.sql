@@ -2,11 +2,23 @@ CREATE TABLE IF NOT EXISTS "User" (
   "Id" BIGSERIAL PRIMARY KEY,
   "UserName" TEXT UNIQUE,
   "Password" TEXT,
-  "Active" BOOLEAN
+  "Active" TEXT
 );
 
+CREATE TABLE IF NOT EXISTS "Group" (
+  "Id" BIGSERIAL PRIMARY KEY,
+  "Name" TEXT UNIQUE
+);
+
+CREATE TABLE IF NOT EXISTS "UserGroup" (
+  "UserId" BIGINT REFERENCES "User"("Id") ON DELETE CASCADE ON UPDATE CASCADE,
+  "GroupId" BIGINT REFERENCES "Group"("Id") ON DELETE CASCADE ON UPDATE CASCADE,
+  PRIMARY KEY ("UserId", "GroupId")
+);
+
+/*empresa*/
 CREATE TABLE IF NOT EXISTS "Tercero" (
-  "Id" INTEGER PRIMARY KEY,
+  "Id" BIGSERIAL PRIMARY KEY,
   "TipoDeIdentificacion" TEXT NOT NULL,
   "NumeroDeIdentificacion" TEXT NOT NULL,
   "DigitoDeVerificacion" TEXT,
@@ -19,5 +31,8 @@ CREATE TABLE IF NOT EXISTS "Tercero" (
   "CodigoDepartamento" TEXT,
   "CodigoMunicipio" TEXT,
   "PaisDeResidencia" TEXT,
-  UNIQUE ("TipoDeIdentificacion", "NumeroDeIdentificacion")
+  "Cliente" TEXT,
+  "Proveedor" TEXT,
+  "Empleado" TEXT,
+  UNIQUE ("TipoDeIdentificacion", "NumeroDeIdentificacion", "DigitoDeVerificacion")
 );

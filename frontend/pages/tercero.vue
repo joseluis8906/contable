@@ -369,7 +369,7 @@ export default {
       this.PaisDeResidencia = null
     },
     LoadTercero (Terceros) {
-      console.log (Terceros)
+      //console.log (Terceros)
       for (let i=0; i<Terceros.length; i++) {
         if (
           this.TipoDeIdentificacion === Terceros[i].TipoDeIdentificacion

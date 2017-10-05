@@ -1,9 +1,19 @@
 import Path from 'path';
 import Sequelize from 'sequelize';
 
-var db = Path.resolve(__dirname, '../../db/Db.sqlite');
+//var db = Path.resolve(__dirname, '../../db/Db.sqlite');
+//const Db = new Sequelize(`sqlite://${db}`);
 
-const Db = new Sequelize(`sqlite://${db}`);
+const Db = new Sequelize('unixjs01', 'unixjs', 'K3J9 8LMN 02F3 B3LW', {
+  host: 'localhost',
+  dialect: 'postgres',
+  pool: {
+    max: 5,
+    min: 0,
+    idle: 10000
+  }
+});
+
 
 const User = Db.define('User', {
   Id: {type: Sequelize.INTEGER, primaryKey: true, autoIncrement: true},
@@ -64,11 +74,11 @@ const Tercero = Db.define('Tercero', {
 //open connection
 Db.authenticate().then(() => {
   console.log('Db conection success');
-  Db.query("PRAGMA foreign_keys=ON").spread( (Result, Metadata) => {
+  /*Db.query("PRAGMA foreign_keys=ON").spread( (Result, Metadata) => {
     Db.query("PRAGMA foreign_keys").spread( (Result, Metadata) => {
       console.log(Result);
     });
-  });
+  });*/
 }).catch(Err => {
   console.log('Db conection failed');
 });
