@@ -25,63 +25,75 @@ v-layout( align-center justify-center )
       v-card-text
         v-layout( row wrap)
           v-flex( xs12 )
-            v-select( v-bind:items="ItemsDeIdentificacion"
-                      v-model="TipoDeIdentificacion"
-                      label="Tipo de Identificación"
-                      item-value="value"
-                      item-text="text"
+            v-menu( lazy
+                    :close-on-content-click="true"
+                    v-model="menu1"
+                    transition="scale-transition"
+                    offset-y
+                    full-width
+                    :nudge-left="40"
+                    max-width="290px" )
+
+              v-text-field( slot="activator"
+                            label="Fecha"
+                            v-model="Fecha"
+                            readonly )
+
+              v-date-picker( :months="months"
+                           :days="days"
+                           first-day-of-week="D"
+                           :header-date-format="({ monthName, year }) => { return `${monthName} ${year}` }"
+                           v-model="Fecha"
+                           no-title
+                           dark )
+                template( scope="{ save, cancel }" )
+                  v-card-actions
+                    v-btn( dark warning @click.native="Fecha=null" ) Limpiar
+
+            v-select( v-bind:items="ItemsTercero"
+                      v-model="Tercero"
+                      label="Tercero"
+                      item-value="text"
                       dark )
 
-            v-text-field( label="Numero de Identificación" v-model="NumeroDeIdentificacion" dark )
+            v-data-table(v-bind:headers="headers"
+                        :items="ItemsCausacion"
+                        hide-actions
+                        class="elevation-5 grey lighten-1 grey--text text--darken-4" )
 
-            v-text-field( label="Dígito de Verificación" v-model="DigitoDeVerificacion" dark )
+              template(slot="headers" scope="props")
+                th(v-for="header in props.headers" :key="header"
+                  class="text-xs-center") {{ header.text }}
 
-            v-text-field( label="Primer Apellido" v-model="PrimerApellido" dark )
+              template(slot="items" scope="props")
+                td(class="text-xs-center" :style="{minWidth: ''+(props.item.Codigo.length*10)+'px'}") {{ props.item.Codigo }}
+                td(class="text-xs-center" :style="{minWidth: ''+(props.item.Nombre.length*10)+'px'}") {{ props.item.Nombre }}
+                td(class="text-xs-center" :style="{minWidth: ''+(props.item.Monto.length*10)+'px'}") {{ props.item.Monto | currency('$', 0) }}
+                td(class="text-xs-center" :style="{minWidth: ''+(props.item.Monto.length*10)+'px'}")
+                  v-btn( fab
+                         dark
+                         small
+                         error
+                         style="width: 16px; height:16px"
+                         @click.native="eliminar(props.item)")
+                    v-icon(dark) remove
 
-            v-text-field( label="Segundo Apellido" v-model="SegundoApellido" dark )
-
-            v-text-field( label="Primer Nombre" v-model="PrimerNombre" dark )
-
-            v-text-field( label="Otros Nombres" v-model="OtrosNombres" dark )
-
-            v-text-field( label="Razón Social" v-model="RazonSocial" dark )
-
-            v-text-field( label="Dirección" v-model="Direccion" dark )
-
-            v-select( v-bind:items="ItemsDepartamento"
-                      v-model="CodigoDepartamento"
-                      label="Departamento"
-                      item-value="codigo"
-                      item-text="nombre"
+            v-select( v-bind:items="ItemsCuentas"
+                      v-model="Cuenta"
+                      label="Cuenta"
+                      item-text="Nombre"
+                      item-value="Cuenta"
+                      class="mt-5"
                       dark )
 
-            v-select( v-bind:items="ItemsMunicipio"
-                      v-model="CodigoMunicipio"
-                      label="Ciudad"
-                      item-value="codigo"
-                      item-text="nombre"
-                      dark )
+            v-money(label="Monto" v-model="Monto" maskType="currency")
 
-            v-select( v-bind:items="ItemsPais"
-                      v-model="PaisDeResidencia"
-                      label="Pais"
-                      item-value="codigo"
-                      item-text="nombre"
-                      dark )
-
-            v-switch( label="Cliente"
-                      v-model="Cliente" )
-
-            v-switch( label="Proveedor"
-                      v-model="Proveedor" )
-
-            v-switch( label="Empleado"
-                      v-model="Empleado" )
+            v-btn(fab dark class="indigo mt-0" @click.native="agregar")
+              v-icon(dark) add
 
       v-card-actions
         v-spacer
-        v-btn( dark @click.native="Reset" ) Cancelar
-        v-btn( dark primary @click.native="CreateOrUpdate" ) Guardar
+        v-btn( dark warning @click.native="Reset" ) Limpiar
 </template>
 
 <script>
@@ -90,6 +102,7 @@ import TERCEROS from '~/queries/Terceros.gql'
 import CREATE_TERCERO from '~/queries/CreateTercero.gql'
 import UPDATE_TERCERO from '~/queries/UpdateTercero.gql'
 
+import VMoney from '~/components/MonetaryInput.vue'
 
 export default {
   data: () => ({
@@ -99,6 +112,38 @@ export default {
       timeout: 6000,
       text: 'Cargando'
     },
+    menu1: false,
+    months: [
+      'Enero',
+      'Febrero',
+      'Marzo',
+      'Abril',
+      'Mayo',
+      'Junio',
+      'Julio',
+      'Agosto',
+      'Septiembre',
+      'Octubre',
+      'Noviembre',
+      'Diciembre'],
+    days: ['D', 'L', 'M', 'M', 'J', 'V', 'S'],
+    ItemsTercero: [],
+    Fecha: null,
+    Tercero: null,
+    headers: [
+      {text: 'Código', value: 'Codigo'},
+      {text: 'Nombre', value: 'Nombre'},
+      {text: 'Monto', value: 'Monto'},
+      {text: 'Eliminar', value: 'Eliminar'},
+    ],
+    ItemsCausacion: [
+      {Codigo: '1110', Nombre: 'Banco', Monto: 200000}
+    ],
+    ItemsCuentas: [
+      {Codigo: '1110', Nombre: 'Banco'}
+    ],
+    Cuenta: null,
+    Monto: null,
     Id: null,
     TipoDeIdentificacion: null,
     NumeroDeIdentificacion: null,
@@ -402,9 +447,11 @@ export default {
           this.PaisDeResidencia = null
         }
       }
-
     }
-  }
+  },
+  components: {
+    VMoney
+  },
 };
 
 

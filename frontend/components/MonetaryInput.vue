@@ -1,5 +1,6 @@
 <template lang="pug">
-  input( v-model="displayValue"
+  v-text-field( v-model="displayValue"
+          :label="label"
          @blur="handleInputState"
          @focus="handleInputState" )
 </template>
@@ -9,7 +10,7 @@
 const masks = {
   currency: {
     mask (value) {
-      return '$' + (value !== null ? value.toLocaleString() : ''.toLocaleString())
+      return (value !== null ? '$' + value.toLocaleString() : null)
     },
     unmask (value) {
       value = parseFloat(value.replace(/[^\d\.]/g, ""))
@@ -22,7 +23,8 @@ export default {
   props: {
     value: null,
     maskType: String,
-    focused: false
+    focused: false,
+    label: String
   },
   data: function() {
     return {
@@ -54,7 +56,7 @@ export default {
           return this.mask(this.value)
         }
       },
-      set: function(modifiedValue) {        
+      set: function(modifiedValue) {
         this.$emit('input', this.unmask(modifiedValue))
       }
     }
