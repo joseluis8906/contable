@@ -50,6 +50,9 @@ v-app(id="sandbox" :dark="dark" :light="!dark" standalone)
           { icon: 'person', text: 'Usuario', to: '/usuario' },
           { icon: 'group', text: 'Grupo', to: '/grupo' },
           { icon: 'group_work', text: 'Tercero', to: '/tercero' },
+          { icon: 'assignment_late', text: 'Causación', to: '/causacion' },
+          { icon: 'assignment', text: 'Pago', to: '/pago' },
+          { icon: 'book', text: 'Informe', to: '/informe' },
 
         ],
         title: 'Administración Contable'
