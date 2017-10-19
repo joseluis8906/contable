@@ -19,7 +19,9 @@
     "vue-apollo": "^2.1.0-beta.19",
     "vue-awesome-swiper": "^2.5.4",
     "vue-chartjs": "^2.7.2",
+    "vue-mqtt": "^2.0.1",
     "vue-server-renderer": "latest",
+    "vue2-filters": "^0.2.2",
     "vuetify": "^0.13.0"
   },
   "devDependencies": {
