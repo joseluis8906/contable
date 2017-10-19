@@ -3,7 +3,7 @@ module.exports = {
   ** Headers of the page
   */
   head: {
-    title: 'Gis',
+    title: 'Contable',
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
@@ -44,6 +44,8 @@ module.exports = {
   },
   plugins: [
     '~plugins/vuetify.js',
+    {src: '~plugins/vue-mqtt.js', ssr: false},
+    {src: '~plugins/vue2-filters.js', ssr: false},
     '~plugins/vue-awesome-swiper.js',
     {src: '~plugins/vue-chartjs.js', ssr: false},
     {src: '~plugins/apollo-client.js', injectAs: 'apolloProvider'}
@@ -52,5 +54,5 @@ module.exports = {
     'swiper/dist/css/swiper.css',
     { src: '~assets/style/app.styl', lang: 'styl' }
   ],
-  
+
 }
