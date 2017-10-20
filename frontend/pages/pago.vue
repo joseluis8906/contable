@@ -73,23 +73,10 @@ v-layout( align-center justify-center )
                   v-btn( fab
                          dark
                          small
-                         error
+                         success
                          style="width: 16px; height:16px"
                          @click.native="eliminar(props.item)")
-                    v-icon(dark) remove
-
-            v-select( v-bind:items="ItemsCuentas"
-                      v-model="Cuenta"
-                      label="Cuenta"
-                      item-text="Nombre"
-                      item-value="Cuenta"
-                      class="mt-5"
-                      dark )
-
-            v-money(label="Monto" v-model="Monto" maskType="currency")
-
-            v-btn(fab dark class="indigo mt-0" @click.native="agregar")
-              v-icon(dark) add
+                    v-icon(dark) check
 
       v-card-actions
         v-spacer
@@ -134,7 +121,7 @@ export default {
       {text: 'Código', value: 'Codigo'},
       {text: 'Nombre', value: 'Nombre'},
       {text: 'Monto', value: 'Monto'},
-      {text: 'Eliminar', value: 'Eliminar'},
+      {text: 'Pagar', value: 'Pagar'},
     ],
     ItemsCausacion: [
       {Codigo: '1110', Nombre: 'Banco', Monto: 200000}

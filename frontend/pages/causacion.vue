@@ -56,6 +56,10 @@ v-layout( align-center justify-center )
                       item-value="text"
                       dark )
 
+            v-text-field( label="Concepto"
+                          v-model="Concepto"
+                          multi-line )
+
             v-data-table(v-bind:headers="headers"
                         :items="ItemsCausacion"
                         hide-actions
@@ -66,6 +70,7 @@ v-layout( align-center justify-center )
                   class="text-xs-center") {{ header.text }}
 
               template(slot="items" scope="props")
+                td(class="text-xs-center" :style="{minWidth: ''+(props.item.No.length*10)+'px'}") {{ props.item.No }}
                 td(class="text-xs-center" :style="{minWidth: ''+(props.item.Codigo.length*10)+'px'}") {{ props.item.Codigo }}
                 td(class="text-xs-center" :style="{minWidth: ''+(props.item.Nombre.length*10)+'px'}") {{ props.item.Nombre }}
                 td(class="text-xs-center" :style="{minWidth: ''+(props.item.Monto.length*10)+'px'}") {{ props.item.Monto | currency('$', 0) }}
@@ -130,14 +135,16 @@ export default {
     ItemsTercero: [],
     Fecha: null,
     Tercero: null,
+    Concepto: null,
     headers: [
+      {text: 'Nº', value: 'No'},
       {text: 'Código', value: 'Codigo'},
       {text: 'Nombre', value: 'Nombre'},
       {text: 'Monto', value: 'Monto'},
       {text: 'Eliminar', value: 'Eliminar'},
     ],
     ItemsCausacion: [
-      {Codigo: '1110', Nombre: 'Banco', Monto: 200000}
+      {No: '01', Codigo: '1110', Nombre: 'Banco', Monto: 200000}
     ],
     ItemsCuentas: [
       {Codigo: '1110', Nombre: 'Banco'}

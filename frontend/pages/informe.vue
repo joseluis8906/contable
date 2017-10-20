@@ -20,63 +20,17 @@ v-layout( align-center justify-center )
       v-layout(row wrap pt-3 light-blue)
         v-flex( xs12 )
           h5(class="grey--text text--lighten-4 text-xs-center bold")
-            v-icon(ma) group
-            | Tercero
+            v-icon(ma) book
+            | Informe
       v-card-text
         v-layout( row wrap)
           v-flex( xs12 )
-            v-select( v-bind:items="ItemsDeIdentificacion"
-                      v-model="TipoDeIdentificacion"
-                      label="Tipo de Identificación"
+            v-select( v-bind:items="ItemsTipo"
+                      v-model="Tipo"
+                      label="Tipo"
                       item-value="value"
                       item-text="text"
                       dark )
-
-            v-text-field( label="Numero de Identificación" v-model="NumeroDeIdentificacion" dark )
-
-            v-text-field( label="Dígito de Verificación" v-model="DigitoDeVerificacion" dark )
-
-            v-text-field( label="Primer Apellido" v-model="PrimerApellido" dark )
-
-            v-text-field( label="Segundo Apellido" v-model="SegundoApellido" dark )
-
-            v-text-field( label="Primer Nombre" v-model="PrimerNombre" dark )
-
-            v-text-field( label="Otros Nombres" v-model="OtrosNombres" dark )
-
-            v-text-field( label="Razón Social" v-model="RazonSocial" dark )
-
-            v-text-field( label="Dirección" v-model="Direccion" dark )
-
-            v-select( v-bind:items="ItemsDepartamento"
-                      v-model="CodigoDepartamento"
-                      label="Departamento"
-                      item-value="codigo"
-                      item-text="nombre"
-                      dark )
-
-            v-select( v-bind:items="ItemsMunicipio"
-                      v-model="CodigoMunicipio"
-                      label="Ciudad"
-                      item-value="codigo"
-                      item-text="nombre"
-                      dark )
-
-            v-select( v-bind:items="ItemsPais"
-                      v-model="PaisDeResidencia"
-                      label="Pais"
-                      item-value="codigo"
-                      item-text="nombre"
-                      dark )
-
-            v-switch( label="Cliente"
-                      v-model="Cliente" )
-
-            v-switch( label="Proveedor"
-                      v-model="Proveedor" )
-
-            v-switch( label="Empleado"
-                      v-model="Empleado" )
 
       v-card-actions
         v-spacer
@@ -115,16 +69,16 @@ export default {
     Cliente: null,
     Proveedor: null,
     Empleado: null,
-    ItemsDeIdentificacion: [
-      {text: 'Cédula de ciudadanía', value: '13'},
-      {text: 'Tarjeta de extranjería', value: '21'},
-      {text: 'Cédula de extranjería', value: '22'},
-      {text: 'Nit', value: '31'},
-      {text: 'Identificación de extranjeros diferente al Nit asignado DIAN', value: '33'},
-      {text: 'Pasaporte', value: '41'},
-      {text: 'Documento de identificación extranjero', value: '42'},
-      {text: 'Sin identificación del exterior o para uso definido por la DIAN', value: '43'},
+    ItemsTipo: [
+      {text: 'Causación', value: '01'},
+      {text: 'Comprobante de Egreso', value: '02'},
+      {text: 'Comprobante de diario', value: '03'},
+      {text: 'Auxiliar Contable', value: '04'},
+      {text: 'Libro de Banco', value: '05'},
+      {text: 'Estado de Resultado', value: '06'},
+      {text: 'Balance General', value: '07'},
     ],
+    Tipo: null,
     ItemsDepartamento: [
       {nombre: 'Cesar', codigo: '20'},
     ],
