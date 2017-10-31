@@ -140,22 +140,22 @@ var Tercero = new GraphQLObjectType({
           return Tercero.Direccion;
         }
       },
-      CodigoDepartamento: {
+      DianPaisId: {
         type: GraphQLString,
         resolve(Tercero) {
-          return Tercero.CodigoDepartamento;
+          return Tercero.DianPaisId;
         }
       },
-      CodigoMunicipio: {
+      DianDepartamentoId: {
         type: GraphQLString,
         resolve(Tercero) {
-          return Tercero.CodigoMunicipio;
+          return Tercero.DianDepartamentoId;
         }
       },
-      PaisDeResidencia: {
+      DianMunicipioId: {
         type: GraphQLString,
         resolve(Tercero) {
-          return Tercero.PaisDeResidencia;
+          return Tercero.DianMunicipioId;
         }
       }
     };

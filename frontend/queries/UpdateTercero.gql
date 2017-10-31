@@ -1,5 +1,4 @@
 mutation UpdateTercero (
-  $Id: Int,
   $TipoDeIdentificacion: String,
   $NumeroDeIdentificacion: String,
   $DigitoDeVerificacion: String,
@@ -9,12 +8,11 @@ mutation UpdateTercero (
   $OtrosNombres: String,
   $RazonSocial: String,
   $Direccion: String,
-  $CodigoDepartamento: String,
-  $CodigoMunicipio: String,
-  $PaisDeResidencia: String
+  $DianPaisId: Int,
+  $DianDepartamentoId: Int,
+  $DianCiudadId: Int
 ) {
   UpdateTercero (
-    Id: $Id,
     TipoDeIdentificacion: $TipoDeIdentificacion,
     NumeroDeIdentificacion: $NumeroDeIdentificacion,
     DigitoDeVerificacion: $DigitoDeVerificacion,
@@ -24,9 +22,9 @@ mutation UpdateTercero (
     OtrosNombres: $OtrosNombres,
     RazonSocial: $RazonSocial,
     Direccion: $Direccion,
-    CodigoDepartamento: $CodigoDepartamento,
-    CodigoMunicipio: $CodigoMunicipio,
-    PaisDeResidencia: $PaisDeResidencia
+    DianPaisId: $DianPaisId
+    DianDepartamentoId: $DianDepartamentoId,
+    DianCiudadId: $DianCiudadId
   ){
     Id
     TipoDeIdentificacion
@@ -38,8 +36,8 @@ mutation UpdateTercero (
     OtrosNombres
     RazonSocial
     Direccion
-    CodigoDepartamento
-    CodigoMunicipio
-    PaisDeResidencia
+    DianPaisId
+    DianDepartamentoId
+    DianCiudadId
   }
 }

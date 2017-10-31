@@ -8,9 +8,9 @@ mutation CreateTercero (
   $OtrosNombres: String,
   $RazonSocial: String,
   $Direccion: String,
-  $CodigoDepartamento: String,
-  $CodigoMunicipio: String,
-  $PaisDeResidencia: String,
+  $DianPaisId: Int,
+  $DianDepartamentoId: Int,
+  $DianCiudadId: Int
 ) {
   CreateTercero (
     TipoDeIdentificacion: $TipoDeIdentificacion,
@@ -22,9 +22,9 @@ mutation CreateTercero (
     OtrosNombres: $OtrosNombres,
     RazonSocial: $RazonSocial,
     Direccion: $Direccion,
-    CodigoDepartamento: $CodigoDepartamento,
-    CodigoMunicipio: $CodigoMunicipio,
-    PaisDeResidencia: $PaisDeResidencia
+    DianPaisId: $DianPaisId
+    DianDepartamentoId: $DianDepartamentoId,
+    DianCiudadId: $DianCiudadId
   ){
     Id
     TipoDeIdentificacion
@@ -36,8 +36,8 @@ mutation CreateTercero (
     OtrosNombres
     RazonSocial
     Direccion
-    CodigoDepartamento
-    CodigoMunicipio
-    PaisDeResidencia
+    DianPaisId
+    DianDepartamentoId
+    DianCiudadId
   }
 }

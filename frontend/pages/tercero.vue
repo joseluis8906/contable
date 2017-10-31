@@ -15,7 +15,7 @@ v-layout( align-center justify-center )
       h6(class="grey--text text--lighten-4 mb-0") {{ snackbar.text }}
       v-icon autorenew
 
-  v-flex( xs12 mt-3 md8 lg6 )
+  v-flex( xs12 mt-3 )
     v-card
       v-layout(row wrap pt-3 light-blue)
         v-flex( xs12 )
@@ -34,8 +34,6 @@ v-layout( align-center justify-center )
 
             v-text-field( label="Numero de Identificación" v-model="NumeroDeIdentificacion" dark )
 
-            v-text-field( label="Dígito de Verificación" v-model="DigitoDeVerificacion" v-show="TipoDeIdentificacion==='31'" dark )
-
             v-text-field( label="Primer Apellido" v-model="PrimerApellido" dark )
 
             v-text-field( label="Segundo Apellido" v-model="SegundoApellido" dark )
@@ -47,6 +45,13 @@ v-layout( align-center justify-center )
             v-text-field( label="Razón Social" v-model="RazonSocial" dark )
 
             v-text-field( label="Dirección" v-model="Direccion" dark )
+
+            v-select( v-bind:items="ItemsPais"
+                      v-model="PaisDeResidencia"
+                      label="Pais"
+                      item-value="codigo"
+                      item-text="nombre"
+                      dark )
 
             v-select( v-bind:items="ItemsDepartamento"
                       v-model="CodigoDepartamento"
@@ -61,23 +66,6 @@ v-layout( align-center justify-center )
                       item-value="codigo"
                       item-text="nombre"
                       dark )
-
-            v-select( v-bind:items="ItemsPais"
-                      v-model="PaisDeResidencia"
-                      label="Pais"
-                      item-value="codigo"
-                      item-text="nombre"
-                      dark )
-
-            v-switch( label="Cliente"
-                      v-model="Cliente"
-                      disabled )
-
-            v-switch( label="Proveedor"
-                      v-model="Proveedor" )
-
-            v-switch( label="Empleado"
-                      v-model="Empleado" )
 
       v-card-actions
         v-spacer
@@ -103,7 +91,6 @@ export default {
     Id: null,
     TipoDeIdentificacion: null,
     NumeroDeIdentificacion: null,
-    DigitoDeVerificacion: null,
     PrimerApellido: null,
     SegundoApellido: null,
     PrimerNombre: null,
@@ -113,9 +100,6 @@ export default {
     CodigoDepartamento: null,
     CodigoMunicipio: null,
     PaisDeResidencia: null,
-    Cliente: true,
-    Proveedor: null,
-    Empleado: null,
     ItemsDeIdentificacion: [
       {text: 'Cédula de ciudadanía', value: '13'},
       {text: 'Tarjeta de extranjería', value: '21'},
@@ -149,8 +133,7 @@ export default {
       variables () {
         return {
           TipoDeIdentificacion: this.TipoDeIdentificacion,
-          NumeroDeIdentificacion: this.NumeroDeIdentificacion,
-          DigitoDeVerificacion: this.DigitoDeVerificacion
+          NumeroDeIdentificacion: this.NumeroDeIdentificacion
         }
       },
       loadingKey: 'loading',
@@ -172,7 +155,6 @@ export default {
       const Tercero = {
         TipoDeIdentificacion: this.TipoDeIdentificacion,
         NumeroDeIdentificacion: this.NumeroDeIdentificacion,
-        DigitoDeVerificacion: this.DigitoDeVerificacion,
         PrimerApellido: this.PrimerApellido,
         SegundoApellido: this.SegundoApellido,
         PrimerNombre: this.PrimerNombre,
@@ -258,7 +240,6 @@ export default {
         Id: this.Id,
         TipoDeIdentificacion: this.TipoDeIdentificacion,
         NumeroDeIdentificacion: this.NumeroDeIdentificacion,
-        DigitoDeVerificacion: this.DigitoDeVerificacion,
         PrimerApellido: this.PrimerApellido,
         SegundoApellido: this.SegundoApellido,
         PrimerNombre: this.PrimerNombre,
@@ -358,7 +339,6 @@ export default {
       this.Id = null
       this.TipoDeIdentificacion = null
       this.NumeroDeIdentificacion = null
-      this.DigitoDeVerificacion = null
       this.PrimerApellido = null
       this.SegundoApellido = null
       this.PrimerNombre = null
@@ -376,8 +356,6 @@ export default {
           this.TipoDeIdentificacion === Terceros[i].TipoDeIdentificacion
           &&
           this.NumeroDeIdentificacion === Terceros[i].NumeroDeIdentificacion
-          &&
-          this.DigitoDeVerificacion === Terceros[i].DigitoDeVerificacion
         ) {
           this.Id = Terceros[i].Id
           this.PrimerApellido = Terceros[i].PrimerApellido
