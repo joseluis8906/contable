@@ -21,10 +21,15 @@ v-layout( align-center justify-center )
         v-flex( xs12 )
           h5(class="grey--text text--lighten-4 text-xs-center bold")
             v-icon(ma) assignment_late
-            | Causacion
+            | Causación
       v-card-text
         v-layout( row wrap)
           v-flex( xs12 )
+
+            v-text-field( label="Número"
+                          value="0001" readonly)
+
+
             v-menu( lazy
                     :close-on-content-click="true"
                     v-model="menu1"
@@ -50,10 +55,13 @@ v-layout( align-center justify-center )
                   v-card-actions
                     v-btn( dark warning @click.native="Fecha=null" ) Limpiar
 
+
+
             v-select( v-bind:items="ItemsTercero"
                       v-model="Tercero"
                       label="Tercero"
                       item-value="text"
+                      item-text="text"
                       dark )
 
             v-text-field( label="Concepto"
@@ -132,7 +140,9 @@ export default {
       'Noviembre',
       'Diciembre'],
     days: ['D', 'L', 'M', 'M', 'J', 'V', 'S'],
-    ItemsTercero: [],
+    ItemsTercero: [
+      {text: "Libreria San Pablo", value: "22050501"}
+    ],
     Fecha: null,
     Tercero: null,
     Concepto: null,
@@ -144,10 +154,11 @@ export default {
       {text: 'Eliminar', value: 'Eliminar'},
     ],
     ItemsCausacion: [
-      {No: '01', Codigo: '1110', Nombre: 'Banco', Monto: 200000}
+      //{No: '01', Codigo: '1110', Nombre: 'Banco', Monto: 200000}
     ],
     ItemsCuentas: [
-      {Codigo: '1110', Nombre: 'Banco'}
+      {Codigo: '1110', Nombre: 'Banco'},
+      {Codigo: '5110', Nombre: 'Honorarios'}
     ],
     Cuenta: null,
     Monto: null,
@@ -201,7 +212,7 @@ export default {
         return {
           TipoDeIdentificacion: this.TipoDeIdentificacion,
           NumeroDeIdentificacion: this.NumeroDeIdentificacion,
-          DigitoDeVerificacion: this.DigitoDeVerificacion
+          DigitoDeVerificacion: this.DigitoDeVerificacionagregar
         }
       },
       loadingKey: 'loading',
@@ -212,6 +223,14 @@ export default {
     },
   },
   methods: {
+    agregar(){
+      //this.ItemsCausacion = []
+      let tmp = {No: '01', Codigo: this.Cuenta.Codigo, Nombre: this.Cuenta.Nombre, Monto: this.Monto}
+      this.ItemsCausacion.push(tmp)
+    },
+    eliminar(){
+      this.ItemsCausacion = []
+    },
     CreateOrUpdate () {
       if (this.Id === null) {
         this.Create();

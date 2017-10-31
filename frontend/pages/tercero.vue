@@ -34,7 +34,7 @@ v-layout( align-center justify-center )
 
             v-text-field( label="Numero de Identificación" v-model="NumeroDeIdentificacion" dark )
 
-            v-text-field( label="Dígito de Verificación" v-model="DigitoDeVerificacion" dark )
+            v-text-field( label="Dígito de Verificación" v-model="DigitoDeVerificacion" v-show="TipoDeIdentificacion==='31'" dark )
 
             v-text-field( label="Primer Apellido" v-model="PrimerApellido" dark )
 
@@ -70,7 +70,8 @@ v-layout( align-center justify-center )
                       dark )
 
             v-switch( label="Cliente"
-                      v-model="Cliente" )
+                      v-model="Cliente"
+                      disabled )
 
             v-switch( label="Proveedor"
                       v-model="Proveedor" )
@@ -112,7 +113,7 @@ export default {
     CodigoDepartamento: null,
     CodigoMunicipio: null,
     PaisDeResidencia: null,
-    Cliente: null,
+    Cliente: true,
     Proveedor: null,
     Empleado: null,
     ItemsDeIdentificacion: [

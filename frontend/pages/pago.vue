@@ -50,6 +50,11 @@ v-layout( align-center justify-center )
                   v-card-actions
                     v-btn( dark warning @click.native="Fecha=null" ) Limpiar
 
+            v-select( v-bind:items="ItemsTipo"
+                      v-model="Tipo"
+                      label="Tipo de Pago"
+                      dark )
+
             v-select( v-bind:items="ItemsTercero"
                       v-model="Tercero"
                       label="Tercero"
@@ -122,6 +127,10 @@ export default {
       {text: 'Nombre', value: 'Nombre'},
       {text: 'Monto', value: 'Monto'},
       {text: 'Pagar', value: 'Pagar'},
+    ],
+    ItemsTipo: [
+      'Cheque',
+      'Transacción Electrónica'
     ],
     ItemsCausacion: [
       {Codigo: '1110', Nombre: 'Banco', Monto: 200000}
