@@ -72,5 +72,4 @@ CREATE TABLE IF NOT EXISTS "CausacionEncabezado" (
   "Id" BIGSERIAL PRIMARY KEY,
   "Numero" TEXT UNIQUE,
   "Fecha" DATE,
-
 );
