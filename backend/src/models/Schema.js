@@ -5,7 +5,6 @@ import { GraphQLObjectType,
   GraphQLList,
   GraphQLSchema } from 'graphql';
 
-import Db from './Db.js';
 import { User, Users, CreateUser, UpdateUser, UserAddGroup, UserRemoveGroup } from './Types/User.js';
 import { Group, Groups, CreateGroup, UpdateGroup } from './Types/User.js';
 

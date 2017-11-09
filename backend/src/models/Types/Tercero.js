@@ -194,9 +194,9 @@ const UpdateTercero = {
 };
 
 
-export default {
-  Tercero: Tercero,
-  Terceros: Terceros,
-  CreateTercero: CreateTercero,
-  UpdateTercero: UpdateTercero
+export {
+  Tercero,
+  Terceros,
+  CreateTercero,
+  UpdateTercero
 }
