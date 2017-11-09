@@ -49,8 +49,67 @@ Group.belongsToMany(User, {through: 'UserGroup'});
 
 
 //############# contable ################
+//DianIdentificacion
+const DianIdentificacion = Db.define('DianIdentificacion', {
+  Id: {type: Sequelize.INTEGER, primaryKey: true, autoIncrement: true},
+  Codigo: Sequelize.STRING,
+  Nombre: Sequelize.STRING
+},
+{
+  timestamps: false,
+  freezeTableName: true
+});
 
-//Ente
+
+//DianPais
+const DianPais = Db.define('DianPais', {
+  Id: {type: Sequelize.INTEGER, primaryKey: true, autoIncrement: true},
+  Codigo: Sequelize.STRING,
+  Nombre: Sequelize.STRING
+},
+{
+  timestamps: false,
+  freezeTableName: true
+});
+
+
+//DianDepartamento
+const DianDepartamento = Db.define('DianDepartamento', {
+  Id: {type: Sequelize.INTEGER, primaryKey: true, autoIncrement: true},
+  Codigo: Sequelize.STRING,
+  Nombre: Sequelize.STRING
+},
+{
+  timestamps: false,
+  freezeTableName: true
+});
+
+
+//DianCiudad
+const DianCiudad = Db.define('DianCiudad', {
+  Id: {type: Sequelize.INTEGER, primaryKey: true, autoIncrement: true},
+  Codigo: Sequelize.STRING,
+  Nombre: Sequelize.STRING
+},
+{
+  timestamps: false,
+  freezeTableName: true
+});
+
+
+//Periodo
+const Periodo = Db.define('Periodo', {
+  Id: {type: Sequelize.INTEGER, primaryKey: true, autoIncrement: true},
+  Nombre: Sequelize.STRING,
+  Estado: Sequelize.STRING
+},
+{
+  timestamps: false,
+  freezeTableName: true
+});
+
+
+//Tercero
 const Tercero = Db.define('Tercero', {
   Id: {type: Sequelize.INTEGER, primaryKey: true, autoIncrement: true},
   TipoDeIdentificacion: Sequelize.STRING,
@@ -70,6 +129,199 @@ const Tercero = Db.define('Tercero', {
   timestamps: false,
   freezeTableName: true
 });
+
+
+//Cuenta
+const Cuenta = Db.define('Cuenta', {
+  Id: {type: Sequelize.INTEGER, primaryKey: true, autoIncrement: true},
+  Type: Sequelize.STRING,
+  Code: Sequelize.STRING,
+  Name: Sequelize.STRING,
+  TerceroId: {type: Sequelize.INTEGER, references: {model: Tercero, key: 'Id'}}
+},
+{
+  timestamps: false,
+  freezeTableName: true
+});
+
+Cuenta.belongsTo(Tercero);
+Tercero.hasMany(Cuenta);
+
+
+//Transaccion
+const Transaccion = Db.define('Transaccion', {
+  Id: {type: Sequelize.INTEGER, primaryKey: true, autoIncrement: true},
+  Tipo: Sequelize.STRING,
+  Numero: Sequelize.STRING,
+  Estado: Sequelize.STRING,
+},
+{
+  timestamps: false,
+  freezeTableName: true
+});
+
+
+//Ingreso
+const Ingreso = Db.define('Ingreso', {
+  Id: {type: Sequelize.INTEGER, primaryKey: true, autoIncrement: true},
+  Fecha: Sequelize.DATEONLY,
+  Numero: Sequelize.STRING,
+  PerdiodoId: {type: Sequelize.INTEGER, references: {model: Periodo, key: 'Id'}},
+  Concepto: Sequelize.STRING,
+  Total: Sequelize.DECIMAL
+},
+{
+  timestamps: false,
+  freezeTableName: true
+});
+
+Ingreso.belongsTo(Periodo);
+Periodo.hasMany(Ingreso);
+
+
+//IngresoItem
+const IngresoItem = Db.define('IngresoItem', {
+  IngresoId: {type: Sequelize.INTEGER, references: {model: Ingreso, key: 'Id'}, primaryKey: true},
+  CuentaDebeId: {type: Sequelize.INTEGER, references: {model: Cuenta, key: 'Id'}, primaryKey: true},
+  CuentaHaberId: {type: Sequelize.INTEGER, references: {model: Cuenta, key: 'Id'}, primaryKey: true},
+  Monto: Sequelize.DECIMAL
+},
+{
+  timestamps: false,
+  freezeTableName: true
+});
+
+IngresoItem.belongsTo(Ingreso);
+Ingreso.hasMany(IngresoItem);
+
+IngresoItem.belongsTo(Cuenta, {as: 'CuentaDebe', foreign_key: 'CuentaDebeId'});
+Cuenta.hasOne(IngresoItem, {foreign_key: 'CuentaDebeId'});
+
+IngresoItem.belongsTo(Cuenta, {as: 'CuentaHaber', foreign_key: 'CuentaHaberId'});
+Cuenta.hasOne(IngresoItem, {foreign_key: 'CuentaHaberId'});
+
+
+//Causacion
+const Causacion = Db.define('Causacion', {
+  Id: {type: Sequelize.INTEGER, primaryKey: true, autoIncrement: true},
+  Fecha: Sequelize.DATEONLY,
+  Numero: Sequelize.STRING,
+  PerdiodoId: {type: Sequelize.INTEGER, references: {model: Periodo, key: 'Id'}},
+  Concepto: Sequelize.STRING,
+  Total: Sequelize.DECIMAL
+},
+{
+  timestamps: false,
+  freezeTableName: true
+});
+
+Causacion.belongsTo(Periodo);
+Periodo.hasMany(Causacion);
+
+
+//CausacionItem
+const CausacionItem = Db.define('CausacionItem', {
+  Id: {type: Sequelize.INTEGER, primaryKey: true, autoIncrement: true},
+  CausacionId: {type: Sequelize.INTEGER, references: {model: Causacion, key: 'Id'}},
+  CuentaDebeId: {type: Sequelize.INTEGER, references: {model: Cuenta, key: 'Id'}},
+  CuentaHaberId: {type: Sequelize.INTEGER, references: {model: Cuenta, key: 'Id'}},
+  Monto: Sequelize.DECIMAL
+},
+{
+  timestamps: false,
+  freezeTableName: true
+});
+
+CausacionItem.belongsTo(Causacion);
+Causacion.hasMany(CausacionItem);
+
+CausacionItem.belongsTo(Cuenta, {as: 'CuentaDebe', foreign_key: 'CuentaDebeId'});
+Cuenta.hasOne(CausacionItem, {foreign_key: 'CuentaDebeId'});
+
+CausacionItem.belongsTo(Cuenta, {as: 'CuentaHaber', foreign_key: 'CuentaHaberId'});
+Cuenta.hasOne(CausacionItem, {foreign_key: 'CuentaHaberId'});
+
+
+//Pago
+const Pago = Db.define('Pago', {
+  Id: {type: Sequelize.INTEGER, primaryKey: true, autoIncrement: true},
+  Fecha: Sequelize.DATEONLY,
+  Numero: Sequelize.STRING,
+  PerdiodoId: {type: Sequelize.INTEGER, references: {model: Periodo, key: 'Id'}},
+  Concepto: Sequelize.STRING,
+  Total: Sequelize.DECIMAL
+},
+{
+  timestamps: false,
+  freezeTableName: true
+});
+
+Pago.belongsTo(Periodo);
+Periodo.hasMany(Pago);
+
+
+//PagoItem
+const PagoItem = Db.define('PagoItem', {
+  Id: {type: Sequelize.INTEGER, primaryKey: true, autoIncrement: true},
+  PagoId: {type: Sequelize.INTEGER, references: {model: Pago, key: 'Id'}},
+  CausacionItemId: {type: Sequelize.INTEGER, references: {model: CausacionItem, key: 'Id'}},
+  CuentaDebeId: {type: Sequelize.INTEGER, references: {model: Cuenta, key: 'Id'}},
+  Monto: Sequelize.DECIMAL
+},
+{
+  timestamps: false,
+  freezeTableName: true
+});
+
+PagoItem.belongsTo(Pago);
+Pago.hasMany(PagoItem);
+
+PagoItem.belongsTo(CausacionItem);
+CausacionItem.hasMany(PagoItem);
+
+PagoItem.belongsTo(Cuenta, {as: 'CuentaDebe', foreign_key: 'CuentaDebeId'});
+Cuenta.hasOne(PagoItem, {foreign_key: 'CuentaDebeId'});
+
+
+//Nota
+const Nota = Db.define('Nota', {
+  Id: {type: Sequelize.INTEGER, primaryKey: true, autoIncrement: true},
+  Fecha: Sequelize.DATEONLY,
+  Numero: Sequelize.STRING,
+  PerdiodoId: {type: Sequelize.INTEGER, references: {model: Periodo, key: 'Id'}},
+  Concepto: Sequelize.STRING,
+  Total: Sequelize.DECIMAL
+},
+{
+  timestamps: false,
+  freezeTableName: true
+});
+
+Nota.belongsTo(Periodo);
+Periodo.hasMany(Nota);
+
+
+//NotaItem
+const NotaItem = Db.define('NotaItem', {
+  NotaId: {type: Sequelize.INTEGER, references: {model: Nota, key: 'Id'}, primaryKey: true},
+  CuentaDebeId: {type: Sequelize.INTEGER, references: {model: Nota, key: 'Id'}, primaryKey: true},
+  CuentaHaberId: {type: Sequelize.INTEGER, references: {model: Nota, key: 'Id'}, primaryKey: true},
+  Monto: Sequelize.DECIMAL
+},
+{
+  timestamps: false,
+  freezeTableName: true
+});
+
+NotaItem.belongsTo(Nota);
+Nota.hasMany(NotaItem);
+
+NotaItem.belongsTo(Cuenta, {as: 'CuentaDebe', foreign_key: 'CuentaDebeId'});
+Cuenta.hasOne(NotaItem, {foreign_key: 'CuentaDebeId'});
+
+NotaItem.belongsTo(Cuenta, {as: 'CuentaHaber', foreign_key: 'CuentaHaberId'});
+Cuenta.hasOne(NotaItem, {foreign_key: 'CuentaHaberId'});
+
 
 //open connection
 Db.authenticate().then(() => {
