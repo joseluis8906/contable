@@ -16,21 +16,14 @@ CREATE TABLE IF NOT EXISTS "UserGroup" (
   PRIMARY KEY ("UserId", "GroupId")
 );
 
+
 /*empresa*/
-CREATE TABLE IF NOT EXISTS "PUC" (
-  "Id" BIGSERIAL PRIMARY KEY,
-  "Type" TEXT,
-  "Code" TEXT,
-  "Name" TEXT,
-  UNIQUE("Type", "Code")
-);
-
-
 CREATE TABLE IF NOT EXISTS "DianIdentificacion" (
   "Id" BIGSERIAL PRIMARY KEY,
   "Codigo" TEXT UNIQUE,
   "Nombre" TEXT
 );
+
 
 CREATE TABLE IF NOT EXISTS "DianPais" (
   "Id" BIGSERIAL PRIMARY KEY,
@@ -38,11 +31,13 @@ CREATE TABLE IF NOT EXISTS "DianPais" (
   "Nombre" TEXT
 );
 
+
 CREATE TABLE IF NOT EXISTS "DianDepartamento" (
   "Id" BIGSERIAL PRIMARY KEY,
   "Codigo" TEXT UNIQUE,
   "Nombre" TEXT
 );
+
 
 CREATE TABLE IF NOT EXISTS "DianCiudad" (
   "Id" BIGSERIAL PRIMARY KEY,
@@ -50,9 +45,35 @@ CREATE TABLE IF NOT EXISTS "DianCiudad" (
   "Nombre" TEXT
 );
 
+
+CREATE TABLE IF NOT EXISTS "Periodo" (
+  "Id" BIGSERIAL PRIMARY KEY,
+  "Nombre" TEXT UNIQUE,
+  "Estado" TEXT
+);
+
+CREATE TABLE IF NOT EXISTS "Cuenta" (
+  "Id" BIGSERIAL PRIMARY KEY,
+  "Type" TEXT,
+  "Code" TEXT,
+  "Name" TEXT,
+  "TerceroId" BIGINT REFERENCES "Tercero"("Id") ON DELETE CASCADE ON UPDATE CASCADE,
+  UNIQUE("Type", "Code")
+);
+
+
+CREATE TABLE IF NOT EXISTS "Transaccion" (
+  "Id" BIGSERIAL PRIMARY KEY,
+  "Tipo" TEXT,
+  "Numero" TEXT,
+  "Estado" TEXT,
+  UNIQUE("Tipo", "Numero")
+);
+
+
 CREATE TABLE IF NOT EXISTS "Tercero" (
   "Id" BIGSERIAL PRIMARY KEY,
-  "TipoDeIdentificacion" TEXT NOT NULL,
+  "DianIdentificacionId" BIGINT REFERENCES "DianIdentificacion"("Id") ON DELETE CASCADE ON UPDATE CASCADE,
   "NumeroDeIdentificacion" TEXT NOT NULL,
   "PrimerApellido" TEXT,
   "SegundoApellido" TEXT,
@@ -63,13 +84,83 @@ CREATE TABLE IF NOT EXISTS "Tercero" (
   "DianPaisId" BIGINT REFERENCES "DianPais"("Id") ON DELETE CASCADE ON UPDATE CASCADE,
   "DianDepartamentoId" BIGINT REFERENCES "DianDepartamento"("Id") ON DELETE CASCADE ON UPDATE CASCADE,
   "DianCiudadId" BIGINT REFERENCES "DianDepartamento"("Id") ON DELETE CASCADE ON UPDATE CASCADE,
-  UNIQUE ("TipoDeIdentificacion", "NumeroDeIdentificacion", "DigitoDeVerificacion")
+  UNIQUE ("DianIdentificacionId", "NumeroDeIdentificacion")
 );
 
 
-
-CREATE TABLE IF NOT EXISTS "CausacionEncabezado" (
+CREATE TABLE IF NOT EXISTS "Ingreso" (
   "Id" BIGSERIAL PRIMARY KEY,
-  "Numero" TEXT UNIQUE,
   "Fecha" DATE,
+  "Numero" TEXT UNIQUE,
+  "PeriodoId" BIGINT REFERENCES "Periodo"("Id") ON DELETE CASCADE ON UPDATE CASCADE,
+  "Concepto" TEXT,
+  "Total" DECIMAL
+);
+
+
+CREATE TABLE IF NOT EXISTS "IngresoItem" (
+  "IngresoId" BIGSERIAL REFERENCES "Ingreso"("Id") ON DELETE CASCADE ON UPDATE CASCADE,
+  "CuentaDebe" BIGINT REFERENCES "Cuenta"("Id") ON DELETE CASCADE ON UPDATE CASCADE,
+  "CuentaHaber" BIGINT REFERENCES "Cuenta"("Id") ON DELETE CASCADE ON UPDATE CASCADE,
+  "Monto" DECIMAL,
+  PRIMARY KEY ("IngresoId", "CuentaDebe", "CuentaHaber")
+);
+
+
+CREATE TABLE IF NOT EXISTS "Causacion" (
+  "Id" BIGSERIAL PRIMARY KEY,
+  "Fecha" DATE,
+  "Numero" TEXT UNIQUE,
+  "PeriodoId" BIGINT REFERENCES "Periodo"("Id") ON DELETE CASCADE ON UPDATE CASCADE,
+  "Concepto" TEXT,
+  "Total" DECIMAL
+);
+
+
+CREATE TABLE IF NOT EXISTS "CausacionItem" (
+  "CausacionId" BIGINT REFERENCES "Causacion"("Id") ON DELETE CASCADE ON UPDATE CASCADE,
+  "CuentaDebe" BIGINT REFERENCES "Cuenta"("Id") ON DELETE CASCADE ON UPDATE CASCADE,
+  "CuentaHaber" BIGINT REFERENCES "Cuenta"("Id") ON DELETE CASCADE ON UPDATE CASCADE,
+  "Monto" DECIMAL,
+  "Saldo" DECIMAL,
+  PRIMARY KEY ("CausacionId", "CuentaDebe", "CuentaHaber")
+);
+
+
+CREATE TABLE IF NOT EXISTS "Pago" (
+  "Id" BIGSERIAL PRIMARY KEY,
+  "Fecha" DATE,
+  "Numero" TEXT UNIQUE,
+  "PeriodoId" BIGINT REFERENCES "Periodo"("Id") ON DELETE CASCADE ON UPDATE CASCADE,
+  "Concepto" TEXT,
+  "Total" DECIMAL,
+  "TransaccionId" BIGINT REFERENCES "Transaccion"("Id") ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+
+CREATE TABLE IF NOT EXISTS "PagoItem" (
+  "PagoId" BIGINT REFERENCES "Pago"("Id") ON DELETE CASCADE ON UPDATE CASCADE,
+  "CausacionId" BIGINT REFERENCES "Causacion"("Id") ON DELETE CASCADE ON UPDATE CASCADE,
+  "CuentaDebe" BIGINT REFERENCES "Cuenta"("Id") ON DELETE CASCADE ON UPDATE CASCADE,
+  "Monto" DECIMAL,
+  PRIMARY KEY ("PagoId", "CausacionId", "CuentaDebe")
+);
+
+
+CREATE TABLE IF NOT EXISTS "Nota" (
+  "Id" BIGSERIAL PRIMARY KEY,
+  "Fecha" DATE,
+  "Numero" TEXT UNIQUE,
+  "PeriodoId" BIGINT REFERENCES "Periodo"("Id") ON DELETE CASCADE ON UPDATE CASCADE,
+  "Concepto" TEXT,
+  "Total" DECIMAL
+);
+
+
+CREATE TABLE IF NOT EXISTS "NotaItem" (
+  "NotaId" BIGSERIAL REFERENCES "Nota"("Id") ON DELETE CASCADE ON UPDATE CASCADE,
+  "CuentaDebe" BIGINT REFERENCES "Cuenta"("Id") ON DELETE CASCADE ON UPDATE CASCADE,
+  "CuentaHaber" BIGINT REFERENCES "Cuenta"("Id") ON DELETE CASCADE ON UPDATE CASCADE,
+  "Monto" DECIMAL,
+  PRIMARY KEY ("NotaId", "CuentaDebe", "CuentaHaber")
 );
