@@ -1,42 +1,58 @@
-query Terceros (
-  $Id: Int,
-  $TipoDeIdentificacion: String,
-  $NumeroDeIdentificacion: String,
-  $PrimerApellido: String,
-  $SegundoApellido: String,
-  $PrimerNombre: String,
-  $OtrosNombres: String,
-  $RazonSocial: String,
-  $Direccion: String,
-  $DianPaisId: Int,
-  $DianDepartamentoId: Int,
-  $DianCiudadId: Int
+query Terceros(
+  $Id: Int
+  $DianIdentificacionId: Int
+  $NumeroDeIdentificacion: String
+  $PrimerApellido: String
+	$SegundoApellido: String
+	$PrimerNombre: String
+	$OtrosNombres: String
+	$RazonSocial: String
+	$Direccion: String
+	$DianPaisId: Int
+	$DianDepartamentoId: Int
+	$DianCiudadId: Int
 ){
-  Terceros (
-    Id: $Id,
-    TipoDeIdentificacion: $TipoDeIdentificacion,
-    NumeroDeIdentificacion: $NumeroDeIdentificacion,
-    PrimerApellido: $PrimerApellido,
-    SegundoApellido: $SegundoApellido,
-    PrimerNombre: $PrimerNombre,
-    OtrosNombres: $OtrosNombres,
-    RazonSocial: $RazonSocial,
-    Direccion: $Direccion,
-    DianPaisId: $DianPaisId
-    DianDepartamentoId: $DianDepartamentoId,
-    DianCiudadId: $DianCiudadId
-  ) {
+  Terceros(
+    Id: $Id
+  	DianIdentificacionId: $DianIdentificacionId
+  	NumeroDeIdentificacion: $NumeroDeIdentificacion
+  	PrimerApellido: $PrimerApellido
+		SegundoApellido: $SegundoApellido
+		PrimerNombre: $PrimerNombre
+		OtrosNombres: $OtrosNombres
+		RazonSocial: $RazonSocial
+		Direccion: $Direccion
+		DianPaisId: $DianPaisId
+		DianDepartamentoId: $DianDepartamentoId
+		DianCiudadId: $DianCiudadId
+  ){
     Id
-    TipoDeIdentificacion
-    NumeroDeIdentificacion
-    PrimerApellido
-    SegundoApellido
-    PrimerNombre
-    OtrosNombres
-    RazonSocial
-    Direccion
-    DianPaisId
-    DianDepartamentoId
-    DianCiudadId
+  	DianIdentificacion{
+      Id
+      Codigo
+      Nombre
+    }
+  	NumeroDeIdentificacion
+  	PrimerApellido
+		SegundoApellido
+		PrimerNombre
+		OtrosNombres
+		RazonSocial
+		Direccion
+		DianPais{
+      Id
+      Codigo
+      Nombre
+    }
+		DianDepartamento{
+      Id
+      Codigo
+      Nombre
+    }
+		DianCiudad{
+      Id
+      Codigo
+      Nombre
+    }
   }
 }

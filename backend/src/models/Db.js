@@ -132,8 +132,8 @@ const Tercero = Db.define('Tercero', {
 Tercero.belongsTo(DianIdentificacion);
 DianIdentificacion.hasOne(Tercero);
 
-Tercero.belongsTo(DianPais);
-DianPais.hasOne(Tercero);
+Tercero.belongsTo(DianPais, {as: 'DianPais', foreignKey:'DianPaisId'});
+DianPais.hasOne(Tercero, {as: 'DianPais', foreignKey:'DianPaisId'});
 
 Tercero.belongsTo(DianDepartamento);
 DianDepartamento.hasOne(Tercero);

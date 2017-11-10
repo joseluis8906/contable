@@ -1,0 +1,13 @@
+mutation CreateDianIdentificacion(
+  $Codigo: String,
+  $Nombre: String
+){
+  CreateDianIdentificacion(
+    Codigo: $Codigo,
+    Nombre: $Nombre
+  ){
+    Id
+    Codigo
+    Nombre
+  }
+}

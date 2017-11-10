@@ -1,43 +1,58 @@
-mutation UpdateTercero (
-  $TipoDeIdentificacion: String,
-  $NumeroDeIdentificacion: String,
-  $DigitoDeVerificacion: String,
-  $PrimerApellido: String,
-  $SegundoApellido: String,
-  $PrimerNombre: String,
-  $OtrosNombres: String,
-  $RazonSocial: String,
-  $Direccion: String,
-  $DianPaisId: Int,
-  $DianDepartamentoId: Int,
-  $DianCiudadId: Int
-) {
-  UpdateTercero (
-    TipoDeIdentificacion: $TipoDeIdentificacion,
-    NumeroDeIdentificacion: $NumeroDeIdentificacion,
-    DigitoDeVerificacion: $DigitoDeVerificacion,
-    PrimerApellido: $PrimerApellido,
-    SegundoApellido: $SegundoApellido,
-    PrimerNombre: $PrimerNombre,
-    OtrosNombres: $OtrosNombres,
-    RazonSocial: $RazonSocial,
-    Direccion: $Direccion,
-    DianPaisId: $DianPaisId
-    DianDepartamentoId: $DianDepartamentoId,
-    DianCiudadId: $DianCiudadId
+mutation UpdateTercero(
+  $Id: Int
+  $DianIdentificacionId: Int
+  $NumeroDeIdentificacion: String
+  $PrimerApellido: String
+	$SegundoApellido: String
+	$PrimerNombre: String
+	$OtrosNombres: String
+	$RazonSocial: String
+	$Direccion: String
+	$DianPaisId: Int
+	$DianDepartamentoId: Int
+	$DianCiudadId: Int
+){
+  UpdateTercero(
+    Id: $Id
+  	DianIdentificacionId: $DianIdentificacionId
+  	NumeroDeIdentificacion: $NumeroDeIdentificacion
+  	PrimerApellido: $PrimerApellido
+		SegundoApellido: $SegundoApellido
+		PrimerNombre: $PrimerNombre
+		OtrosNombres: $OtrosNombres
+		RazonSocial: $RazonSocial
+		Direccion: $Direccion
+		DianPaisId: $DianPaisId
+		DianDepartamentoId: $DianDepartamentoId
+		DianCiudadId: $DianCiudadId
   ){
     Id
-    TipoDeIdentificacion
-    NumeroDeIdentificacion
-    DigitoDeVerificacion
-    PrimerApellido
-    SegundoApellido
-    PrimerNombre
-    OtrosNombres
-    RazonSocial
-    Direccion
-    DianPaisId
-    DianDepartamentoId
-    DianCiudadId
+  	DianIdentificacion{
+      Id
+      Codigo
+      Nombre
+    }
+  	NumeroDeIdentificacion
+  	PrimerApellido
+		SegundoApellido
+		PrimerNombre
+		OtrosNombres
+		RazonSocial
+		Direccion
+		DianPais{
+     	Id
+    	Codigo
+     	Nombre
+    }
+		DianDepartamento{
+      Id
+      Codigo
+      Nombre
+    }
+		DianCiudad{
+      Id
+      Codigo
+      Nombre
+    }
   }
 }

@@ -11,6 +11,7 @@ import { DianPais } from './DianPais';
 import { DianDepartamento } from './DianDepartamento';
 import { DianCiudad } from './DianCiudad';
 
+
 const Tercero = new GraphQLObjectType({
   name: "Tercero",
   description: "Object representation of Tercero",
@@ -131,7 +132,7 @@ const Terceros = {
     Direccion: {type: GraphQLString},
     DianPaisId: {type: GraphQLInt},
     DianDepartamentoId: {type: GraphQLInt},
-    DianCiudad: {type: GraphQLInt}
+    DianCiudadId: {type: GraphQLInt}
   },
   resolve(root, args) {
     return Db.models.Tercero.findAll({where: args});
@@ -156,7 +157,7 @@ const CreateTercero = {
   },
   resolve(_, args) {
     return Db.models.Tercero.create({
-      DianIdentificacionId: args.TipoDeIdentificacionId,
+      DianIdentificacionId: args.DianIdentificacionId,
       NumeroDeIdentificacion: args.NumeroDeIdentificacion,
       PrimerApellido: args.PrimerApellido,
       SegundoApellido: args.SegundoApellido,
@@ -170,6 +171,7 @@ const CreateTercero = {
     });
   }
 };
+
 
 const UpdateTercero = {
   type: Tercero,
