@@ -5,7 +5,8 @@ import { GraphQLObjectType,
   GraphQLList } from 'graphql';
 
 
-import Db from '../Db.js';
+import Db from '../Db';
+import {DianIdentificacion} from './DianIdentificacion'
 
 
 const Tercero = new GraphQLObjectType({
@@ -19,22 +20,16 @@ const Tercero = new GraphQLObjectType({
           return Tercero.Id;
         }
       },
-      TipoDeIdentificacion: {
-        type: GraphQLString,
+      DianIdentificacionId: {
+        type: GraphQLInt,
         resolve(Tercero) {
-          return Tercero.TipoDeIdentificacion;
+          return Tercero.DianIdentificacionId;
         }
       },
       NumeroDeIdentificacion: {
         type: GraphQLString,
         resolve(Tercero) {
           return Tercero.NumeroDeIdentificacion;
-        }
-      },
-      DigitoDeVerificacion: {
-        type: GraphQLString,
-        resolve(Tercero) {
-          return Tercero.DigitoDeVerificacion;
         }
       },
       PrimerApellido: {
@@ -85,15 +80,22 @@ const Tercero = new GraphQLObjectType({
           return Tercero.DianDepartamentoId;
         }
       },
-      DianMunicipioId: {
+      DianCiudadId: {
         type: GraphQLString,
         resolve(Tercero) {
           return Tercero.DianMunicipioId;
+        }
+      },
+      DianIdentificacion: {
+        type: DianIdentificacion,
+        resolve(Tercero) {
+          return Tercero.getDianIdentificacion();
         }
       }
     };
   }
 });
+
 
 const Terceros: {
   type: new GraphQLList(Tercero),

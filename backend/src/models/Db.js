@@ -129,6 +129,18 @@ const Tercero = Db.define('Tercero', {
   freezeTableName: true
 });
 
+Tercero.belongsTo(DianIdentificacion);
+DianIdentificacion.hasMany(Tercero);
+
+Tercero.belongsTo(DianPais);
+DianPais.hasMany(Tercero);
+
+Tercero.belongsTo(DianDepartamento);
+DianDepartamento.hasMany(Tercero);
+
+Tercero.belongsTo(DianCiudad);
+DianCiudad.hasMany(Tercero);
+
 
 //Cuenta
 const Cuenta = Db.define('Cuenta', {

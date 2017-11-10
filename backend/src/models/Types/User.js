@@ -4,8 +4,8 @@ import { GraphQLObjectType,
   GraphQLFloat,
   GraphQLList } from 'graphql';
 
-import Db from '../Db.js';
-import {Group} from './Group.js';
+import Db from '../Db';
+import {Group} from './Group';
 
 const User = new GraphQLObjectType({
   name: "User",

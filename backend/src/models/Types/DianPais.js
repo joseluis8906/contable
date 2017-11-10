@@ -4,7 +4,7 @@ import { GraphQLObjectType,
   GraphQLFloat,
   GraphQLList } from 'graphql';
 
-import Db from '../Db.js';
+import Db from '../Db';
 
 const DianPais = new GraphQLObjectType({
   name: "DianPais",
