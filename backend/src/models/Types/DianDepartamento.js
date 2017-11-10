@@ -6,7 +6,7 @@ import { GraphQLObjectType,
 
 import Db from '../Db.js';
 
-const DianPais = new GraphQLObjectType({
+const DianDepartamento = new GraphQLObjectType({
   name: "DianDepartamento",
   description: "Object representation of DianDepartamento",
   fields: () => {
