@@ -130,16 +130,16 @@ const Tercero = Db.define('Tercero', {
 });
 
 Tercero.belongsTo(DianIdentificacion);
-DianIdentificacion.hasMany(Tercero);
+DianIdentificacion.hasOne(Tercero);
 
 Tercero.belongsTo(DianPais);
-DianPais.hasMany(Tercero);
+DianPais.hasOne(Tercero);
 
 Tercero.belongsTo(DianDepartamento);
-DianDepartamento.hasMany(Tercero);
+DianDepartamento.hasOne(Tercero);
 
 Tercero.belongsTo(DianCiudad);
-DianCiudad.hasMany(Tercero);
+DianCiudad.hasOne(Tercero);
 
 
 //Cuenta

@@ -5,13 +5,14 @@ import { GraphQLObjectType,
   GraphQLList,
   GraphQLSchema } from 'graphql';
 
-import { User, Users, CreateUser, UpdateUser, UserAddGroup, UserRemoveGroup } from './Types/User.js';
-import { Group, Groups, CreateGroup, UpdateGroup } from './Types/Group.js';
-import { DianIdentificacion, DianIdentificaciones, CreateDianIdentificacion, UpdateDianIdentificacion } from './Types/DianIdentificacion.js';
-import { DianPais, DianPaises, CreateDianPais, UpdateDianPais } from './Types/DianPais.js';
-import { DianDepartamento, DianDepartamentos, CreateDianDepartamento, UpdateDianDepartamento } from './Types/DianDepartamento.js';
-import { DianCiudad, DianCiudades, CreateDianCiudad, UpdateDianCiudad } from './Types/DianCiudad.js';
-import { Periodo, Periodos, CreatePeriodo, UpdatePeriodo } from './Types/Periodo.js';
+import { User, Users, CreateUser, UpdateUser, UserAddGroup, UserRemoveGroup } from './Types/User';
+import { Group, Groups, CreateGroup, UpdateGroup } from './Types/Group';
+import { DianIdentificacion, DianIdentificaciones, CreateDianIdentificacion, UpdateDianIdentificacion } from './Types/DianIdentificacion';
+import { DianPais, DianPaises, CreateDianPais, UpdateDianPais } from './Types/DianPais';
+import { DianDepartamento, DianDepartamentos, CreateDianDepartamento, UpdateDianDepartamento } from './Types/DianDepartamento';
+import { DianCiudad, DianCiudades, CreateDianCiudad, UpdateDianCiudad } from './Types/DianCiudad';
+import { Periodo, Periodos, CreatePeriodo, UpdatePeriodo } from './Types/Periodo';
+import { Tercero, Terceros, CreateTercero, UpdateTercero } from './Types/Tercero';
 
 //Query
 var Query = new GraphQLObjectType({
@@ -33,6 +34,7 @@ var Query = new GraphQLObjectType({
       DianDepartamentos,
       DianCiudades,
       Periodos,
+      Terceros,
     }
   }
 });
@@ -60,6 +62,8 @@ var Mutation = new GraphQLObjectType({
       UpdateDianCiudad,
       CreatePeriodo,
       UpdatePeriodo,
+      CreateTercero,
+      UpdateTercero,
     };
   }
 });

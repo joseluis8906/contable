@@ -6,8 +6,10 @@ import { GraphQLObjectType,
 
 
 import Db from '../Db';
-import {DianIdentificacion} from './DianIdentificacion'
-
+import { DianIdentificacion } from './DianIdentificacion';
+import { DianPais } from './DianPais';
+import { DianDepartamento } from './DianDepartamento';
+import { DianCiudad } from './DianCiudad';
 
 const Tercero = new GraphQLObjectType({
   name: "Tercero",
@@ -69,21 +71,21 @@ const Tercero = new GraphQLObjectType({
         }
       },
       DianPaisId: {
-        type: GraphQLString,
+        type: GraphQLInt,
         resolve(Tercero) {
           return Tercero.DianPaisId;
         }
       },
       DianDepartamentoId: {
-        type: GraphQLString,
+        type: GraphQLInt,
         resolve(Tercero) {
           return Tercero.DianDepartamentoId;
         }
       },
       DianCiudadId: {
-        type: GraphQLString,
+        type: GraphQLInt,
         resolve(Tercero) {
-          return Tercero.DianMunicipioId;
+          return Tercero.DianCiudadId;
         }
       },
       DianIdentificacion: {
@@ -91,28 +93,45 @@ const Tercero = new GraphQLObjectType({
         resolve(Tercero) {
           return Tercero.getDianIdentificacion();
         }
+      },
+      DianPais: {
+        type: DianPais,
+        resolve(Tercero) {
+          return Tercero.getDianPais();
+        }
+      },
+      DianDepartamento: {
+        type: DianDepartamento,
+        resolve(Tercero) {
+          return Tercero.getDianDepartamento();
+        }
+      },
+      DianCiudad: {
+        type: DianCiudad,
+        resolve(Tercero) {
+          return Tercero.getDianCiudad();
+        }
       }
     };
   }
 });
 
 
-const Terceros: {
+const Terceros = {
   type: new GraphQLList(Tercero),
   args: {
     Id: {type: GraphQLInt},
-    TipoDeIdentificacion: {type: GraphQLString},
+    DianIdentificacionId: {type: GraphQLInt},
     NumeroDeIdentificacion: {type: GraphQLString},
-    DigitoDeVerificacion: {type: GraphQLString},
     PrimerApellido: {type: GraphQLString},
     SegundoApellido: {type: GraphQLString},
     PrimerNombre: {type: GraphQLString},
     OtrosNombres: {type: GraphQLString},
     RazonSocial: {type: GraphQLString},
     Direccion: {type: GraphQLString},
-    CodigoDepartamento: {type: GraphQLString},
-    CodigoMunicipio: {type: GraphQLString},
-    PaisDeResidencia: {type: GraphQLString}
+    DianPaisId: {type: GraphQLInt},
+    DianDepartamentoId: {type: GraphQLInt},
+    DianCiudad: {type: GraphQLInt}
   },
   resolve(root, args) {
     return Db.models.Tercero.findAll({where: args});
@@ -123,33 +142,31 @@ const Terceros: {
 const CreateTercero = {
   type: Tercero,
   args: {
-    TipoDeIdentificacion: {type: GraphQLString},
+    DianIdentificacionId: {type: GraphQLInt},
     NumeroDeIdentificacion: {type: GraphQLString},
-    DigitoDeVerificacion: {type: GraphQLString},
     PrimerApellido: {type: GraphQLString},
     SegundoApellido: {type: GraphQLString},
     PrimerNombre: {type: GraphQLString},
     OtrosNombres: {type: GraphQLString},
     RazonSocial: {type: GraphQLString},
     Direccion: {type: GraphQLString},
-    CodigoDepartamento: {type: GraphQLString},
-    CodigoMunicipio: {type: GraphQLString},
-    PaisDeResidencia: {type: GraphQLString}
+    DianPaisId: {type: GraphQLInt},
+    DianDepartamentoId: {type: GraphQLInt},
+    DianCiudadId: {type: GraphQLInt}
   },
   resolve(_, args) {
     return Db.models.Tercero.create({
-      TipoDeIdentificacion: args.TipoDeIdentificacion,
+      DianIdentificacionId: args.TipoDeIdentificacionId,
       NumeroDeIdentificacion: args.NumeroDeIdentificacion,
-      DigitoDeVerificacion: args.DigitoDeVerificacion,
       PrimerApellido: args.PrimerApellido,
       SegundoApellido: args.SegundoApellido,
       PrimerNombre: args.PrimerNombre,
       OtrosNombres: args.OtrosNombres,
       RazonSocial: args.RazonSocial,
       Direccion: args.Direccion,
-      CodigoDepartamento: args.CodigoDepartamento,
-      CodigoMunicipio: args.CodigoMunicipio,
-      PaisDeResidencia: args.PaisDeResidencia
+      DianPaisId: args.DianPaisId,
+      DianDepartamentoId: args.DianDepartamentoId,
+      DianCiudadId: args.DianCiudadId,
     });
   }
 };
@@ -158,36 +175,34 @@ const UpdateTercero = {
   type: Tercero,
   args: {
     Id: {type: GraphQLInt},
-    TipoDeIdentificacion: {type: GraphQLString},
+    DianIdentificacionId: {type: GraphQLInt},
     NumeroDeIdentificacion: {type: GraphQLString},
-    DigitoDeVerificacion: {type: GraphQLString},
     PrimerApellido: {type: GraphQLString},
     SegundoApellido: {type: GraphQLString},
     PrimerNombre: {type: GraphQLString},
     OtrosNombres: {type: GraphQLString},
     RazonSocial: {type: GraphQLString},
     Direccion: {type: GraphQLString},
-    CodigoDepartamento: {type: GraphQLString},
-    CodigoMunicipio: {type: GraphQLString},
-    PaisDeResidencia: {type: GraphQLString}
+    DianPaisId: {type: GraphQLInt},
+    DianDepartamentoId: {type: GraphQLInt},
+    DianCiudadId: {type: GraphQLInt}
   },
   resolve(_, args) {
     return Db.models.Tercero.findOne({
       where: {Id: args.Id}
     }).then(R => {
       if (R !== null) {
-        R.TipoDeIdentificacion = args.TipoDeIdentificacion;
+        R.DianIdentificacionId = args.DianIdentificacionId;
         R.NumeroDeIdentificacion = args.NumeroDeIdentificacion;
-        R.DigitoDeVerificacion = args.DigitoDeVerificacion;
         R.PrimerApellido = args.PrimerApellido;
         R.SegundoApellido = args.SegundoApellido;
         R.PrimerNombre = args.PrimerNombre;
         R.OtrosNombres = args.OtrosNombres;
         R.RazonSocial = args.RazonSocial;
         R.Direccion = args.Direccion;
-        R.CodigoDepartamento = args.CodigoDepartamento;
-        R.CodigoMunicipio = args.CodigoMunicipio;
-        R.PaisDeResidencia = args.PaisDeResidencia;
+        R.DianPaisId = args.DianPaisId;
+        R.DianDepartamentoId = args.DianDepartamentoId;
+        R.DianCiudadId = args.DianCiudadId;
         R.save();
       }
       return R;
