@@ -1,0 +1,30 @@
+query Cuentas(
+  $Id: Int
+  $Type: String
+  $Code: String
+  $Name: String
+){
+  Cuentas(
+    Id: $Id
+    Type: $Type
+    Code: $Code
+    Name: $Name
+  ){
+    Id
+    Type
+    Code
+    Name
+    Tercero {
+      Id
+      DianIdentificacion{
+        Id
+        Codigo
+        Nombre
+      }
+      NumeroDeIdentificacion
+      PrimerApellido
+      PrimerNombre
+      RazonSocial
+    }
+  }
+}

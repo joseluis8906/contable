@@ -1,0 +1,28 @@
+mutation CreateCuenta(
+  $Type: String
+  $Code: String
+  $Name: String
+){
+  CreateCuenta(
+    Type: $Type
+    Code: $Code
+    Name: $Name
+  ){
+    Id
+    Type
+    Code
+    Name
+    Tercero {
+      Id
+      DianIdentificacion{
+        Id
+        Codigo
+        Nombre
+      }
+      NumeroDeIdentificacion
+      PrimerApellido
+      PrimerNombre
+      RazonSocial
+    }
+  }
+}

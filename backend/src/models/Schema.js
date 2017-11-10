@@ -13,6 +13,8 @@ import { DianDepartamento, DianDepartamentos, CreateDianDepartamento, UpdateDian
 import { DianCiudad, DianCiudades, CreateDianCiudad, UpdateDianCiudad } from './Types/DianCiudad';
 import { Periodo, Periodos, CreatePeriodo, UpdatePeriodo } from './Types/Periodo';
 import { Tercero, Terceros, CreateTercero, UpdateTercero } from './Types/Tercero';
+import { Cuenta, Cuentas, CreateCuenta, UpdateCuenta } from './Types/Cuenta';
+
 
 //Query
 var Query = new GraphQLObjectType({
@@ -35,6 +37,7 @@ var Query = new GraphQLObjectType({
       DianCiudades,
       Periodos,
       Terceros,
+      Cuentas,
     }
   }
 });
@@ -64,6 +67,8 @@ var Mutation = new GraphQLObjectType({
       UpdatePeriodo,
       CreateTercero,
       UpdateTercero,
+      CreateCuenta,
+      UpdateCuenta,
     };
   }
 });
