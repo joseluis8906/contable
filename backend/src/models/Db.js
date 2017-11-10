@@ -260,7 +260,8 @@ const Pago = Db.define('Pago', {
   Numero: Sequelize.STRING,
   PerdiodoId: {type: Sequelize.INTEGER, references: {model: Periodo, key: 'Id'}},
   Concepto: Sequelize.STRING,
-  Total: Sequelize.DECIMAL
+  Total: Sequelize.DECIMAL,
+  TransaccionId: {type: Sequelize.INTEGER, references: {model: Transaccion, key: 'Id'}},
 },
 {
   timestamps: false,
@@ -269,6 +270,9 @@ const Pago = Db.define('Pago', {
 
 Pago.belongsTo(Periodo);
 Periodo.hasMany(Pago);
+
+Pago.belongsTo(Transaccion);
+Transaccion.hasOne(Pago);
 
 
 //PagoItem
