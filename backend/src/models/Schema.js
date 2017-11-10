@@ -10,6 +10,8 @@ import { Group, Groups, CreateGroup, UpdateGroup } from './Types/Group.js';
 import { DianIdentificacion, DianIdentificaciones, CreateDianIdentificacion, UpdateDianIdentificacion } from './Types/DianIdentificacion.js';
 import { DianPais, DianPaises, CreateDianPais, UpdateDianPais } from './Types/DianPais.js';
 import { DianDepartamento, DianDepartamentos, CreateDianDepartamento, UpdateDianDepartamento } from './Types/DianDepartamento.js';
+import { DianCiudad, DianCiudades, CreateDianCiudad, UpdateDianCiudad } from './Types/DianCiudad.js';
+import { Periodo, Periodos, CreatePeriodo, UpdatePeriodo } from './Types/Periodo.js';
 
 //Query
 var Query = new GraphQLObjectType({
@@ -29,6 +31,8 @@ var Query = new GraphQLObjectType({
       DianIdentificaciones,
       DianPaises,
       DianDepartamentos,
+      DianCiudades,
+      Periodos,
     }
   }
 });
@@ -46,10 +50,16 @@ var Mutation = new GraphQLObjectType({
       UserRemoveGroup,
       CreateGroup,
       UpdateGroup,
+      CreateDianIdentificacion,
+      UpdateDianIdentificacion,
       CreateDianPais,
       UpdateDianPais,
       CreateDianDepartamento,
       UpdateDianDepartamento,
+      CreateDianCiudad,
+      UpdateDianCiudad,
+      CreatePeriodo,
+      UpdatePeriodo,
     };
   }
 });

@@ -112,18 +112,17 @@ const Periodo = Db.define('Periodo', {
 //Tercero
 const Tercero = Db.define('Tercero', {
   Id: {type: Sequelize.INTEGER, primaryKey: true, autoIncrement: true},
-  TipoDeIdentificacion: Sequelize.STRING,
+  DianIdentificacionId: {type: Sequelize.INTEGER, references: {model: DianIdentificacion, key: 'Id'}},
   NumeroDeIdentificacion: Sequelize.STRING,
-  DigitoDeVerificacion: Sequelize.STRING,
   PrimerApellido: Sequelize.STRING,
   SegundoApellido: Sequelize.STRING,
   PrimerNombre: Sequelize.STRING,
   OtrosNombres: Sequelize.STRING,
   RazonSocial: Sequelize.STRING,
   Direccion: Sequelize.STRING,
-  CodigoDepartamento: Sequelize.STRING,
-  CodigoMunicipio: Sequelize.STRING,
-  PaisDeResidencia: Sequelize.STRING
+  DianPaisId: {type: Sequelize.INTEGER, references: {model: DianPais, key: 'Id'}},
+  DianDepartamentoId: {type: Sequelize.INTEGER, references: {model: DianDepartamento, key: 'Id'}},
+  DianCiudadId: {type: Sequelize.INTEGER, references: {model: DianCiudad, key: 'Id'}}
 },
 {
   timestamps: false,
