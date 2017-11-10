@@ -1,0 +1,15 @@
+query DianCiudades(
+  $Id: Int,
+  $Codigo: String,
+  $Nombre: String
+){
+  DianCiudades(
+    Id: $Id,
+    Codigo: $Codigo,
+    Nombre: $Nombre
+  ){
+    Id
+    Codigo
+    Nombre
+  }
+}

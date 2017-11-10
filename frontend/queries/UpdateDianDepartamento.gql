@@ -1,0 +1,15 @@
+mutation UpdateDianDepartamento(
+	$Id: Int,
+  $Codigo: String,
+  $Nombre: String
+){
+  UpdateDianDepartamento(
+    Id: $Id,
+    Codigo: $Codigo,
+    Nombre: $Nombre
+  ){
+    Id
+    Codigo
+    Nombre
+  }
+}

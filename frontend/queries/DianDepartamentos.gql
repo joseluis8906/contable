@@ -1,0 +1,15 @@
+query DianDepartamentos(
+  $Id: Int,
+  $Codigo: String,
+  $Nombre: String
+){
+  DianDepartamentos(
+    Id: $Id,
+    Codigo: $Codigo,
+    Nombre: $Nombre
+  ){
+    Id
+    Codigo
+    Nombre
+  }
+}

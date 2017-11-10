@@ -1,0 +1,15 @@
+query DianPaises(
+  $Id: Int,
+  $Codigo: String,
+  $Nombre: String
+){
+  DianPaises(
+    Id: $Id,
+    Codigo: $Codigo,
+    Nombre: $Nombre
+  ){
+    Id
+    Codigo
+    Nombre
+  }
+}

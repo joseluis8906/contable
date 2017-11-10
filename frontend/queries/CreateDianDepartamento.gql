@@ -1,0 +1,13 @@
+mutation CreateDianDepartamento(
+  $Codigo: String,
+  $Nombre: String
+){
+  CreateDianDepartamento(
+    Codigo: $Codigo,
+    Nombre: $Nombre
+  ){
+    Id
+    Codigo
+    Nombre
+  }
+}

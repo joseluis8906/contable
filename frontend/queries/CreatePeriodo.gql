@@ -1,0 +1,13 @@
+mutation CreatePeriodo(
+  $Nombre: String,
+  $Estado: String
+){
+  CreatePeriodo(
+    Nombre: $Nombre,
+    Estado: $Estado
+  ){
+    Id
+    Nombre
+    Estado
+  }
+}

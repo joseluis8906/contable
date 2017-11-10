@@ -1,0 +1,15 @@
+query Periodos(
+  $Id: Int,
+  $Nombre: String,
+  $Estado: String
+){
+  Periodos(
+    Id: $Id,
+    Nombre: $Nombre,
+    Estado: $Estado
+  ){
+    Id
+    Nombre
+    Estado
+  }
+}

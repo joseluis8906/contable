@@ -1,0 +1,15 @@
+mutation UpdateDianIdentificacion(
+	$Id: Int,
+  $Codigo: String,
+  $Nombre: String
+){
+  UpdateDianIdentificacion(
+    Id: $Id,
+    Codigo: $Codigo,
+    Nombre: $Nombre
+  ){
+    Id
+    Codigo
+    Nombre
+  }
+}

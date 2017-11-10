@@ -1,0 +1,13 @@
+mutation CreateDianPais(
+  $Codigo: String,
+  $Nombre: String
+){
+  CreateDianPais(
+    Codigo: $Codigo,
+    Nombre: $Nombre
+  ){
+    Id
+    Codigo
+    Nombre
+  }
+}

@@ -1,0 +1,15 @@
+mutation UpdateDianCiudad(
+	$Id: Int,
+  $Codigo: String,
+  $Nombre: String
+){
+  UpdateDianCiudad(
+    Id: $Id,
+    Codigo: $Codigo,
+    Nombre: $Nombre
+  ){
+    Id
+    Codigo
+    Nombre
+  }
+}

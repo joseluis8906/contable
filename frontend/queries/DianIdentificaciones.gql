@@ -1,0 +1,15 @@
+query DianIdentificaciones(
+  $Id: Int,
+  $Codigo: String,
+  $Nombre: String
+){
+  DianIdentificaciones(
+    Id: $Id,
+    Codigo: $Codigo,
+    Nombre: $Nombre
+  ){
+    Id
+    Codigo
+    Nombre
+  }
+}
