@@ -1,0 +1,18 @@
+query Transacciones(
+  $Id: Int
+  $Tipo: String
+  $Numero: String
+  $Estado: String
+){
+	Transacciones(
+  	Id: $Id
+    Tipo: $Tipo
+    Numero: $Numero
+    Estado: $Estado
+  ){
+    Id
+    Tipo
+    Numero
+    Estado
+  }
+}

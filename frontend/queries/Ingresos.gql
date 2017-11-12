@@ -1,0 +1,44 @@
+query Ingresos(
+  $Id: Int
+  $Fecha: String
+  $Numero: String
+  $PeriodoId: Int
+  $Concepto: String
+  $Total: Float
+){
+  Ingresos(
+    Id: $Id
+    Fecha: $Fecha
+    Numero: $Numero
+    PeriodoId: $PeriodoId
+    Concepto: $Concepto
+    Total: $Total
+  ){
+    Id
+    Fecha
+    Numero
+    Concepto
+    Total
+    Periodo {
+      Id
+      Nombre
+      Estado
+    }
+    Items {
+      Id
+      CuentaDebe {
+        Id
+        Type
+        Code
+        Name
+      }
+      CuentaHaber {
+        Id
+        Type
+        Code
+        Name
+      }
+      Monto
+    }
+  }
+}

@@ -1,0 +1,16 @@
+mutation CreateTransaccion(
+  $Tipo: String
+  $Numero: String
+  $Estado: String
+){
+	CreateTransaccion(
+    Tipo: $Tipo
+    Numero: $Numero
+    Estado: $Estado
+  ){
+    Id
+    Tipo
+    Numero
+    Estado
+  }
+}

@@ -1,0 +1,18 @@
+mutation UpdateTransaccion(
+  $Id: Int
+  $Tipo: String
+  $Numero: String
+  $Estado: String
+){
+	UpdateTransaccion(
+    Id: $Id
+    Tipo: $Tipo
+    Numero: $Numero
+    Estado: $Estado
+  ){
+    Id
+    Tipo
+    Numero
+    Estado
+  }
+}

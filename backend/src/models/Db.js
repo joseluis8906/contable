@@ -177,7 +177,7 @@ const Ingreso = Db.define('Ingreso', {
   Id: {type: Sequelize.INTEGER, primaryKey: true, autoIncrement: true},
   Fecha: Sequelize.DATEONLY,
   Numero: Sequelize.STRING,
-  PerdiodoId: {type: Sequelize.INTEGER, references: {model: Periodo, key: 'Id'}},
+  PeriodoId: {type: Sequelize.INTEGER, references: {model: Periodo, key: 'Id'}},
   Concepto: Sequelize.STRING,
   Total: Sequelize.DECIMAL
 },
@@ -192,9 +192,10 @@ Periodo.hasMany(Ingreso);
 
 //IngresoItem
 const IngresoItem = Db.define('IngresoItem', {
-  IngresoId: {type: Sequelize.INTEGER, references: {model: Ingreso, key: 'Id'}, primaryKey: true},
-  CuentaDebeId: {type: Sequelize.INTEGER, references: {model: Cuenta, key: 'Id'}, primaryKey: true},
-  CuentaHaberId: {type: Sequelize.INTEGER, references: {model: Cuenta, key: 'Id'}, primaryKey: true},
+  Id: {type: Sequelize.INTEGER, primaryKey: true, autoIncrement: true},
+  IngresoId: {type: Sequelize.INTEGER, references: {model: Ingreso, key: 'Id'}},
+  CuentaDebeId: {type: Sequelize.INTEGER, references: {model: Cuenta, key: 'Id'}},
+  CuentaHaberId: {type: Sequelize.INTEGER, references: {model: Cuenta, key: 'Id'}},
   Monto: Sequelize.DECIMAL
 },
 {
@@ -318,6 +319,7 @@ Periodo.hasMany(Nota);
 
 //NotaItem
 const NotaItem = Db.define('NotaItem', {
+  Id: {type: Sequelize.INTEGER, primaryKey: true, autoIncrement: true},
   NotaId: {type: Sequelize.INTEGER, references: {model: Nota, key: 'Id'}, primaryKey: true},
   CuentaDebeId: {type: Sequelize.INTEGER, references: {model: Nota, key: 'Id'}, primaryKey: true},
   CuentaHaberId: {type: Sequelize.INTEGER, references: {model: Nota, key: 'Id'}, primaryKey: true},
