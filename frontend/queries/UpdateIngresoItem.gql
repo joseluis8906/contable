@@ -1,0 +1,28 @@
+mutation UpdateIngresoItem(
+  $Id: Int
+  $CuentaDebeId: Int
+  $CuentaHaberId: Int
+  $Monto: Float
+){
+  UpdateIngresoItem(
+    Id: $Id
+    CuentaDebeId: $CuentaDebeId
+    CuentaHaberId: $CuentaHaberId
+    Monto: $Float
+  ){
+    Id
+    CuentaDebe {
+      Id
+      Type
+      Code
+      Name
+    }
+    CuentaHaber {
+      Id
+      Type
+      Code
+      Name
+    }
+    Monto
+  }
+}

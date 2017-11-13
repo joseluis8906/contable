@@ -218,7 +218,7 @@ const Causacion = Db.define('Causacion', {
   Id: {type: Sequelize.INTEGER, primaryKey: true, autoIncrement: true},
   Fecha: Sequelize.DATEONLY,
   Numero: Sequelize.STRING,
-  PerdiodoId: {type: Sequelize.INTEGER, references: {model: Periodo, key: 'Id'}},
+  PeriodoId: {type: Sequelize.INTEGER, references: {model: Periodo, key: 'Id'}},
   Concepto: Sequelize.STRING,
   Total: Sequelize.DECIMAL
 },
@@ -259,7 +259,7 @@ const Pago = Db.define('Pago', {
   Id: {type: Sequelize.INTEGER, primaryKey: true, autoIncrement: true},
   Fecha: Sequelize.DATEONLY,
   Numero: Sequelize.STRING,
-  PerdiodoId: {type: Sequelize.INTEGER, references: {model: Periodo, key: 'Id'}},
+  PeriodoId: {type: Sequelize.INTEGER, references: {model: Periodo, key: 'Id'}},
   Concepto: Sequelize.STRING,
   Total: Sequelize.DECIMAL,
   TransaccionId: {type: Sequelize.INTEGER, references: {model: Transaccion, key: 'Id'}},

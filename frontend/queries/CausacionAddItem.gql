@@ -1,0 +1,36 @@
+mutation CausacionAddItem(
+  $CausacionId: Int
+  $CuentaDebeId: Int
+  $CuentaHaberId: Int
+  $Monto: Float
+){
+  CausacionAddItem(
+    CausacionId: $CausacionId
+    CuentaDebeId: $CuentaDebeId
+    CuentaHaberId: $CuentaHaberId
+    Monto: $Monto
+  ){
+  	Id
+    Fecha
+    Numero
+    PeriodoId
+    Concepto
+    Total
+    Items {
+      Id
+      CuentaDebe {
+        Id
+        Type
+        Code
+        Name
+      }
+      CuentaHaber {
+        Id
+        Type
+        Code
+        Name
+      }
+      Monto
+    }
+  }
+}

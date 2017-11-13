@@ -16,6 +16,7 @@ import { Tercero, Terceros, CreateTercero, UpdateTercero } from './Types/Tercero
 import { Cuenta, Cuentas, CreateCuenta, UpdateCuenta } from './Types/Cuenta';
 import { Transaccion, Transacciones, CreateTransaccion, UpdateTransaccion } from './Types/Transaccion';
 import { Ingreso, Ingresos, CreateIngreso, UpdateIngreso, IngresoItem, UpdateIngresoItem, IngresoAddItem, IngresoRemoveItem } from './Types/Ingreso';
+import { Causacion, Causaciones, CreateCausacion, UpdateCausacion, CausacionItem, UpdateCausacionItem, CausacionAddItem, CausacionRemoveItem } from './Types/Causacion';
 
 
 //Query
@@ -42,6 +43,7 @@ var Query = new GraphQLObjectType({
       Cuentas,
       Transacciones,
       Ingresos,
+      Causaciones,
     }
   }
 });
@@ -80,6 +82,11 @@ var Mutation = new GraphQLObjectType({
       UpdateIngresoItem,
       IngresoAddItem,
       IngresoRemoveItem,
+      CreateCausacion,
+      UpdateCausacion,
+      UpdateCausacionItem,
+      CausacionAddItem,
+      CausacionRemoveItem,
     };
   }
 });

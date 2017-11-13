@@ -1,0 +1,32 @@
+mutation CausacionRemoveItem(
+  $CausacionId: Int
+  $CausacionItemId: Int
+){
+  CausacionRemoveItem(
+    CausacionId: $CausacionId
+    CausacionItemId: $CausacionItemId
+  ){
+  	Id
+    Fecha
+    Numero
+    PeriodoId
+    Concepto
+    Total
+    Items {
+      Id
+      CuentaDebe {
+        Id
+        Type
+        Code
+        Name
+      }
+      CuentaHaber {
+        Id
+        Type
+        Code
+        Name
+      }
+      Monto
+    }
+  }
+}
