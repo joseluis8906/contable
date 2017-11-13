@@ -199,9 +199,6 @@ const IngresoAddItem = {
       CuentaHaberId: args.CuentaHaberId,
       Monto: args.Monto,
     }).then(RC => {
-      //return Db.models.Ingreso.findOne({
-      //  where: {Id: args.IngresoId}
-      //});
       return RC.getIngreso();
     });
   }
@@ -218,14 +215,12 @@ const IngresoRemoveItem = {
     return Db.models.IngresoItem.findOne({
       where: {Id: args.IngresoItemId}
     }).then(It => {
-      It.destroy();
-      return Db.models.Ingreso.findOne({
-        where: {Id: args.IngresoId}
-      }).then(I => {
-        return I
+      return It.destroy().then(() => {
+        return Db.models.Ingreso.findOne({
+          where: {Id: args.IngresoId}
+        });
       });
     });
-
   }
 };
 
