@@ -1,0 +1,28 @@
+mutation UpdateCausacionItem(
+  $Id: Int
+  $CuentaDebeId: Int
+  $CuentaHaberId: Int
+  $Monto: Float
+){
+  UpdateCausacionItem(
+    Id: $Id
+    CuentaDebeId: $CuentaDebeId
+    CuentaHaberId: $CuentaHaberId
+    Monto: $Float
+  ){
+    Id
+    CuentaDebe {
+      Id
+      Type
+      Code
+      Name
+    }
+    CuentaHaber {
+      Id
+      Type
+      Code
+      Name
+    }
+    Monto
+  }
+}
