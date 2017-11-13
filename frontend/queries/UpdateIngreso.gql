@@ -1,0 +1,40 @@
+mutation UpdateIngreso(
+  $Id: Int
+  $Fecha: String
+  $Numero: String
+  $PeriodoId: Int
+  $Concepto: String
+  $Total: Float
+) {
+  UpdateIngreso(
+    Id: $Id
+    Fecha: $Fecha
+    Numero: $Numero
+    PeriodoId: $PeriodoId
+    Concepto: $Concepto
+    Total: $Total
+  ){
+    Id
+    Fecha
+    Numero
+    PeriodoId
+    Concepto
+    Total
+    Items {
+      Id
+      CuentaDebe {
+        Id
+        Type
+        Code
+        Name
+      }
+      CuentaHaber {
+        Id
+        Type
+        Code
+        Name
+      }
+      Monto
+    }
+  }
+}
