@@ -206,11 +206,11 @@ const IngresoItem = Db.define('IngresoItem', {
 IngresoItem.belongsTo(Ingreso);
 Ingreso.hasMany(IngresoItem);
 
-IngresoItem.belongsTo(Cuenta, {as: 'CuentaDebe', foreign_key: 'CuentaDebeId'});
-Cuenta.hasOne(IngresoItem, {foreign_key: 'CuentaDebeId'});
+IngresoItem.belongsTo(Cuenta, {as: 'CuentaDebe', foreignKey: 'CuentaDebeId'});
+Cuenta.hasOne(IngresoItem, {foreignKey: 'CuentaDebeId'});
 
-IngresoItem.belongsTo(Cuenta, {as: 'CuentaHaber', foreign_key: 'CuentaHaberId'});
-Cuenta.hasOne(IngresoItem, {foreign_key: 'CuentaHaberId'});
+IngresoItem.belongsTo(Cuenta, {as: 'CuentaHaber', foreignKey: 'CuentaHaberId'});
+Cuenta.hasOne(IngresoItem, {foreignKey: 'CuentaHaberId'});
 
 
 //Causacion
@@ -247,11 +247,11 @@ const CausacionItem = Db.define('CausacionItem', {
 CausacionItem.belongsTo(Causacion);
 Causacion.hasMany(CausacionItem);
 
-CausacionItem.belongsTo(Cuenta, {as: 'CuentaDebe', foreign_key: 'CuentaDebeId'});
-Cuenta.hasOne(CausacionItem, {foreign_key: 'CuentaDebeId'});
+CausacionItem.belongsTo(Cuenta, {as: 'CuentaDebe', foreignKey: 'CuentaDebeId'});
+Cuenta.hasOne(CausacionItem, {foreignKey: 'CuentaDebeId'});
 
-CausacionItem.belongsTo(Cuenta, {as: 'CuentaHaber', foreign_key: 'CuentaHaberId'});
-Cuenta.hasOne(CausacionItem, {foreign_key: 'CuentaHaberId'});
+CausacionItem.belongsTo(Cuenta, {as: 'CuentaHaber', foreignKey: 'CuentaHaberId'});
+Cuenta.hasOne(CausacionItem, {foreignKey: 'CuentaHaberId'});
 
 
 //Pago
@@ -295,8 +295,8 @@ Pago.hasMany(PagoItem);
 PagoItem.belongsTo(CausacionItem);
 CausacionItem.hasMany(PagoItem);
 
-PagoItem.belongsTo(Cuenta, {as: 'CuentaDebe', foreign_key: 'CuentaDebeId'});
-Cuenta.hasOne(PagoItem, {foreign_key: 'CuentaDebeId'});
+PagoItem.belongsTo(Cuenta, {as: 'CuentaDebe', foreignKey: 'CuentaDebeId'});
+Cuenta.hasOne(PagoItem, {foreignKey: 'CuentaDebeId'});
 
 
 //Nota
@@ -333,11 +333,11 @@ const NotaItem = Db.define('NotaItem', {
 NotaItem.belongsTo(Nota);
 Nota.hasMany(NotaItem);
 
-NotaItem.belongsTo(Cuenta, {as: 'CuentaDebe', foreign_key: 'CuentaDebeId'});
-Cuenta.hasOne(NotaItem, {foreign_key: 'CuentaDebeId'});
+NotaItem.belongsTo(Cuenta, {as: 'CuentaDebe', foreignKey: 'CuentaDebeId'});
+Cuenta.hasOne(NotaItem, {foreignKey: 'CuentaDebeId'});
 
-NotaItem.belongsTo(Cuenta, {as: 'CuentaHaber', foreign_key: 'CuentaHaberId'});
-Cuenta.hasOne(NotaItem, {foreign_key: 'CuentaHaberId'});
+NotaItem.belongsTo(Cuenta, {as: 'CuentaHaber', foreignKey: 'CuentaHaberId'});
+Cuenta.hasOne(NotaItem, {foreignKey: 'CuentaHaberId'});
 
 
 //open connection

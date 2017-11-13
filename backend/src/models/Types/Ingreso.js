@@ -100,15 +100,21 @@ const IngresoItem = new GraphQLObjectType({
           return IngresoItem.Monto;
         }
       },
+      Ingreso: {
+        type: Ingreso,
+        resolve(IngresoItem) {
+          return IngresoItem.getIngreso();
+        }
+      },
       CuentaDebe: {
         type: Cuenta,
-        resolve(Ingreso) {
+        resolve(IngresoItem) {
           return IngresoItem.getCuentaDebe();
         }
       },
       CuentaHaber: {
         type: Cuenta,
-        resolve(Ingreso) {
+        resolve(IngresoItem) {
           return IngresoItem.getCuentaHaber();
         }
       },
@@ -188,18 +194,16 @@ const IngresoAddItem = {
   },
   resolve(_, args) {
     return Db.models.IngresoItem.create({
+      IngresoId: args.IngresoId,
       CuentaDebeId: args.CuentaDebeId,
       CuentaHaberId: args.CuentaHaberId,
       Monto: args.Monto,
     }).then(RC => {
-      return Db.models.Ingreso.findOne({
-        where: {Id: args.Id}
-      }).then (RF => {
-        RF.addIngresoItem(RC)
-        RF.save();
-        return RF;
-      });
-    })
+      //return Db.models.Ingreso.findOne({
+      //  where: {Id: args.IngresoId}
+      //});
+      return RC.getIngreso();
+    });
   }
 };
 
@@ -211,17 +215,17 @@ const IngresoRemoveItem = {
     IngresoItemId: {type: GraphQLInt},
   },
   resolve(_, args) {
-    return Db.models.Ingreso.findOne({
-      where: {Id: args.IngresoId}
-    }).then (I => {
-      return Db.models.IngresoItem.findOne({
-        where: {Id: args.IngresoItemId}
-      }).then(IT => {
-        return I.removeIngresoItem(IT).then(() => {
-          return I;
-        });
+    return Db.models.IngresoItem.findOne({
+      where: {Id: args.IngresoItemId}
+    }).then(It => {
+      It.destroy();
+      return Db.models.Ingreso.findOne({
+        where: {Id: args.IngresoId}
+      }).then(I => {
+        return I
       });
     });
+
   }
 };
 
