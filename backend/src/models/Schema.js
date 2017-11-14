@@ -94,6 +94,11 @@ var Mutation = new GraphQLObjectType({
       UpdatePagoItem,
       PagoAddItem,
       PagoRemoveItem,
+      CreateNota,
+      UpdateNota,
+      UpdateNotaItem,
+      NotaAddItem,
+      NotaRemoveItem,
     };
   }
 });
