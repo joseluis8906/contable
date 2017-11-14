@@ -18,6 +18,7 @@ import { Transaccion, Transacciones, CreateTransaccion, UpdateTransaccion } from
 import { Ingreso, Ingresos, CreateIngreso, UpdateIngreso, IngresoItem, UpdateIngresoItem, IngresoAddItem, IngresoRemoveItem } from './Types/Ingreso';
 import { Causacion, Causaciones, CreateCausacion, UpdateCausacion, CausacionItem, UpdateCausacionItem, CausacionAddItem, CausacionRemoveItem } from './Types/Causacion';
 import { Pago, Pagos, CreatePago, UpdatePago, PagoItem, UpdatePagoItem, PagoAddItem, PagoRemoveItem } from './Types/Pago';
+import { Nota, Notas, CreateNota, UpdateNota, NotaItem, UpdateNotaItem, NotaAddItem, NotaRemoveItem } from './Types/Nota';
 
 
 //Query
@@ -46,6 +47,7 @@ var Query = new GraphQLObjectType({
       Ingresos,
       Causaciones,
       Pagos,
+      Notas,
     }
   }
 });
