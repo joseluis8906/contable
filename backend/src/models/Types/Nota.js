@@ -122,7 +122,7 @@ const NotaItem = new GraphQLObjectType({
   }
 });
 
-const Notaes = {
+const Notas = {
   type: new GraphQLList(Nota),
   args: {
     Id: {type: GraphQLInt},
@@ -248,7 +248,7 @@ const NotaRemoveItem = {
 
 export {
   Nota,
-  Notaes,
+  Notas,
   CreateNota,
   UpdateNota,
   NotaItem,
