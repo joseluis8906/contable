@@ -17,6 +17,7 @@ import { Cuenta, Cuentas, CreateCuenta, UpdateCuenta } from './Types/Cuenta';
 import { Transaccion, Transacciones, CreateTransaccion, UpdateTransaccion } from './Types/Transaccion';
 import { Ingreso, Ingresos, CreateIngreso, UpdateIngreso, IngresoItem, UpdateIngresoItem, IngresoAddItem, IngresoRemoveItem } from './Types/Ingreso';
 import { Causacion, Causaciones, CreateCausacion, UpdateCausacion, CausacionItem, UpdateCausacionItem, CausacionAddItem, CausacionRemoveItem } from './Types/Causacion';
+import { Pago, Pagos, CreatePago, UpdatePago, PagoItem, UpdatePagoItem, PagoAddItem, PagoRemoveItem } from './Types/Pago';
 
 
 //Query
@@ -44,6 +45,7 @@ var Query = new GraphQLObjectType({
       Transacciones,
       Ingresos,
       Causaciones,
+      Pagos,
     }
   }
 });
@@ -87,6 +89,11 @@ var Mutation = new GraphQLObjectType({
       UpdateCausacionItem,
       CausacionAddItem,
       CausacionRemoveItem,
+      CreatePago,
+      UpdatePago,
+      UpdatePagoItem,
+      PagoAddItem,
+      PagoRemoveItem,
     };
   }
 });
