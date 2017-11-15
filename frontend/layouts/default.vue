@@ -49,6 +49,7 @@ v-app(id="sandbox" :dark="dark" :light="!dark" standalone)
         items: [
           { icon: 'person', text: 'Usuario', to: '/usuario' },
           { icon: 'group', text: 'Grupo', to: '/grupo' },
+          { icon: 'assignment', text: 'Cuenta', to: '/cuenta' },
           { icon: 'group_work', text: 'Tercero', to: '/tercero' },
           { icon: 'assignment_late', text: 'Causación', to: '/causacion' },
           { icon: 'assignment', text: 'Pago', to: '/pago' },
