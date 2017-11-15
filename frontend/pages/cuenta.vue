@@ -48,23 +48,23 @@ v-layout( align-center justify-center )
             v-icon search
             h6(class="body-2 grey--text text--lighten-4") Listar
 
-      v-tabs-content(id="tab-1")
-        v-card-text
-          v-layout( row wrap)
-            v-flex( xs12 )
-              v-text-field( label="Codigo" v-model="Cuenta.Code" dark )
-              v-text-field( label="Nombre" v-model="Cuenta.Name" dark )
-              v-text-field( label="Tipo" v-model="Cuenta.Type" dark )
+        v-tabs-content(id="tab-1")
+          v-card-text
+            v-layout( row wrap)
+              v-flex( xs12 )
+                v-text-field( label="Codigo" v-model="Cuenta.Code" dark )
+                v-text-field( label="Nombre" v-model="Cuenta.Name" dark )
+                v-text-field( label="Tipo" v-model="Cuenta.Type" dark )
 
-        v-card-actions
-          v-spacer
-          v-btn( dark @click.native="Reset" ) Cancelar
-          v-btn( dark primary @click.native="CreateOrUpdate" ) Guardar
+          v-card-actions
+            v-spacer
+            v-btn( dark @click.native="Reset" ) Cancelar
+            v-btn( dark primary @click.native="CreateOrUpdate" ) Guardar
 
-      v-tabs-content(id="tab-2")
-        v-card-text
-          v-layout( row wrap)
-            v-flex( xs12 )
+        v-tabs-content(id="tab-2")
+          v-card-text
+            v-layout( row wrap)
+              v-flex( xs12 )
 </template>
 
 <script>
@@ -87,6 +87,7 @@ export default {
       Code: null,
       Name: null
     },
+    TabActive: null,
     loading: 0
   }),
   beforeMount () {
@@ -123,6 +124,9 @@ export default {
     },
   },
   methods: {
+    Reset () {
+
+    }
   }
 };
 
