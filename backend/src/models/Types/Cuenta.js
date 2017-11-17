@@ -6,6 +6,7 @@ import { GraphQLObjectType,
 
 import Db from '../Db';
 import { Tercero } from './Tercero';
+import Sequelize from 'sequelize';
 
 const Cuenta = new GraphQLObjectType({
   name: "Cuenta",
@@ -59,6 +60,27 @@ const Cuentas = {
   }
 };
 
+const CuentasLike = {
+  type: new GraphQLList(Cuenta),
+  args: {
+    Code: {type: GraphQLString},
+    Type: {type: GraphQLString},
+    Length: {type: GraphQLInt},
+  },
+  resolve(root, args) {
+    console.log(args)
+    return Db.models.Cuenta.findAll({
+      where: [
+        Sequelize.where(Sequelize.fn('CHAR_LENGTH', Sequelize.col('Code')), args.Length ? args.Length : 1 ),
+        {
+          Type: args.Type ? args.Type : { $or: ["Comercial", "Supersolidaria"] },
+          Code: args.Code ? { $like: args.Code } : { $or: ["1", "2", "3", "4", "5", "6", "7", "8", "9"] },
+        },
+      ]
+    });
+  }
+};
+
 const CreateCuenta = {
   type: Cuenta,
   args: {
@@ -101,6 +123,7 @@ const UpdateCuenta = {
 export {
   Cuenta,
   Cuentas,
+  CuentasLike,
   CreateCuenta,
   UpdateCuenta
 }

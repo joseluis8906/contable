@@ -13,7 +13,7 @@ import { DianDepartamento, DianDepartamentos, CreateDianDepartamento, UpdateDian
 import { DianCiudad, DianCiudades, CreateDianCiudad, UpdateDianCiudad } from './Types/DianCiudad';
 import { Periodo, Periodos, CreatePeriodo, UpdatePeriodo } from './Types/Periodo';
 import { Tercero, Terceros, CreateTercero, UpdateTercero } from './Types/Tercero';
-import { Cuenta, Cuentas, CreateCuenta, UpdateCuenta } from './Types/Cuenta';
+import { Cuenta, Cuentas, CuentasLike, CreateCuenta, UpdateCuenta } from './Types/Cuenta';
 import { Transaccion, Transacciones, CreateTransaccion, UpdateTransaccion } from './Types/Transaccion';
 import { Ingreso, Ingresos, CreateIngreso, UpdateIngreso, IngresoItem, UpdateIngresoItem, IngresoAddItem, IngresoRemoveItem } from './Types/Ingreso';
 import { Causacion, Causaciones, CreateCausacion, UpdateCausacion, CausacionItem, UpdateCausacionItem, CausacionAddItem, CausacionRemoveItem } from './Types/Causacion';
@@ -43,6 +43,7 @@ var Query = new GraphQLObjectType({
       Periodos,
       Terceros,
       Cuentas,
+      CuentasLike,
       Transacciones,
       Ingresos,
       Causaciones,

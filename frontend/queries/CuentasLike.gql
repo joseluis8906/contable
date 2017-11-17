@@ -1,0 +1,28 @@
+query CuentasLike(
+  $Code: String
+  $Type: String
+  $Length: Int
+){
+  CuentasLike(
+    Code: $Code
+    Type: $Type
+    Length: $Length
+	){
+    Id
+    Type
+    Code
+    Name
+    Tercero {
+      Id
+      DianIdentificacion{
+        Id
+        Codigo
+        Nombre
+      }
+      NumeroDeIdentificacion
+      PrimerApellido
+      PrimerNombre
+      RazonSocial
+    }
+  }
+}

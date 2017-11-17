@@ -5,7 +5,6 @@ import VueApollo from 'vue-apollo';
 const networkInterface = createBatchingNetworkInterface({
     uri: '/backend/private/graphql',
     //credentials: 'same-origin',
-    dataIdFromObject: o => o.Id
 });
 
 networkInterface.use([{
@@ -14,16 +13,16 @@ networkInterface.use([{
       req.options.headers = {};  // Create the header object if needed.
     }
     req.options.headers['x-access-token'] = sessionStorage.getItem('x-access-token') ? sessionStorage.getItem('x-access-token') : null;
-    //console.log(req.options.headers);
     next();
   }
 }]);
 
 const apolloClient = new ApolloClient({
-    networkInterface
+    networkInterface,
+    dataIdFromObject: object => object.Id
 });
 
-Vue.use(VueApollo);
+Vue.use(VueApollo, {apolloClient});
 
 const apolloProvider = new VueApollo({
   defaultClient: apolloClient,
