@@ -58,7 +58,7 @@ v-layout( align-center justify-center )
           v-card-actions
             v-spacer
             v-btn( dark @click.native="Reset" ) Cancelar
-            v-btn( dark primary @click.native="CreateOrUpdate" ) Guardar
+            v-btn( dark primary @click.native="Guardar" ) Guardar
 
         v-tabs-content(id="tab-2")
           v-card-text
@@ -73,13 +73,17 @@ v-layout( align-center justify-center )
                           div(slot="header") <v-icon @click.stop="Editar(ItemGrupo)" class="editover">edit</v-icon> {{ ItemGrupo.Code }} - {{ ItemGrupo.Name }}
                           div(slot="default")
                             v-expansion-panel
-                              v-expansion-panel-content(v-for="(ItemCuenta, c) in ItemsCuenta" :key="c" @mousedown.native.stop="Buscar(ItemCuenta.Code)" class="blue darken-3" style="border-bottom: 1px solid #0545a0 !important")
+                              v-expansion-panel-content(v-for="(ItemCuenta, c) in ItemsCuenta" :key="c" @mousedown.native.stop="Buscar(ItemCuenta.Code)" class="lime darken-3" style="border-bottom: 1px solid #6e6d04 !important")
                                 div(slot="header" ) <v-icon @click.stop="Editar(ItemCuenta)" class="editover">edit</v-icon> {{ ItemCuenta.Code }} - {{ ItemCuenta.Name }}
                                 div(slot="default")
                                   v-expansion-panel
-                                    v-expansion-panel-content(v-for="(ItemSubcuenta, s) in ItemsSubcuenta" :key="s" class="lime darken-3" style="border-bottom: 1px solid #6e6d04 !important")
+                                    v-expansion-panel-content(v-for="(ItemSubcuenta, s) in ItemsSubcuenta" :key="s" @mousedown.native.stop="Buscar(ItemSubcuenta.Code)" class="blue darken-3" style="border-bottom: 1px solid #0545a0 !important")
                                       div(slot="header" ) <v-icon @click.stop="Editar(ItemSubcuenta)" class="editover">edit</v-icon> {{ ItemSubcuenta.Code }} - {{ ItemSubcuenta.Name }}
                                       div(slot="default")
+                                        v-expansion-panel
+                                          v-expansion-panel-content(v-for="(ItemAuxiliar, s) in ItemsAuxiliar" :key="s" class="brown darken-3" style="border-bottom: 1px solid #6e6d04 !important")
+                                            div(slot="header" ) <v-icon @click.stop="Editar(ItemAuxiliar)" class="editover">edit</v-icon> {{ ItemAuxiliar.Code }} - {{ ItemAuxiliar.Name }}
+                                            div(slot="default")
 </template>
 
 <script>
@@ -111,6 +115,7 @@ export default {
     ItemsGrupo: [],
     ItemsCuenta: [],
     ItemsSubcuenta: [],
+    ItemsAuxiliar: [],
     TabActive: null,
     loading: 0
   }),
@@ -128,7 +133,7 @@ export default {
     })
   },
   apollo: {
-    /*Cuentas: {
+    Cuentas: {
       query: CUENTAS,
       variables () {
         return {
@@ -140,6 +145,7 @@ export default {
       update (data) {
         if(data.Cuentas.length > 0){
           for(let i=0; i<data.Cuentas.length; i++){
+            this.Cuenta.Id = data.Cuentas[i].Id;
             this.Cuenta.Name = data.Cuentas[i].Name;
             this.Cuenta.Type = data.Cuentas[i].Type;
           }
@@ -150,7 +156,7 @@ export default {
           this.Cuenta.Name = null;
         }
       }
-    },*/
+    },
   },
   methods: {
     BuscarInicial () {
@@ -182,7 +188,7 @@ export default {
     Buscar (Code) {
 
       this.Code = Code;
-      let Length = this.Code.length;
+      var Length = this.Code.length;
 
       switch (Length) {
         case 1:
@@ -197,6 +203,10 @@ export default {
           this.Length = 6
           break;
 
+        case 6:
+          this.Length = 8
+          break;
+
         default:
           this.Length = 1
       }
@@ -206,7 +216,7 @@ export default {
       if(this.OldCode === this.Code){
         return
       }else {
-        //console.log('viejo: '+this.OldCode+' nuevo: '+this.Code)
+
         this.OldCode = this.Code
       }
 
@@ -220,7 +230,29 @@ export default {
         loadingKey: 'loading',
 
       }).then(res => {
-        console.log()
+
+        if(res.data.CuentasLike.length === 0){
+          switch (Length) {
+            case 2:
+              this.ItemsCuenta = []
+              this.ItemsSubcuenta = []
+              break;
+
+            case 4:
+              this.ItemsSubcuenta = []
+              this.Auxiliar = []
+              break;
+
+            case 6:
+              this.ItemsAuxiliar = []
+              break;
+
+            default:
+              return
+          }
+          return
+        }
+
         let length = res.data.CuentasLike.length > 0 ? res.data.CuentasLike[0].Code.length : 0
 
         switch (length) {
@@ -228,19 +260,26 @@ export default {
             this.ItemsGrupo = []
             this.ItemsCuenta = []
             this.ItemsSubcuenta = []
+            this.ItemsAuxiliar = []
             break;
 
           case 4:
             this.ItemsCuenta = []
             this.ItemsSubcuenta = []
+            this.ItemsAuxiliar = []
             break;
 
           case 6:
             this.ItemsSubcuenta = []
+            this.ItemsAuxiliar = []
+            break;
+
+          case 8:
+            this.ItemsAuxiliar = []
             break;
 
           default:
-            this.ItemsSubcuenta = []
+            this.ItemsAuxiliar = []
             return
         }
 
@@ -277,15 +316,112 @@ export default {
             this.ItemsSubcuenta.push(tmp)
           }
         }
+        else if(res.data.CuentasLike[0].Code.length === 8){
+          for(let i = 0; i<res.data.CuentasLike.length; i++){
+            let tmp = {
+              Id: res.data.CuentasLike[i].Id,
+              Type: res.data.CuentasLike[i].Type,
+              Code: res.data.CuentasLike[i].Code,
+              Name: res.data.CuentasLike[i].Name,
+            }
+            this.ItemsAuxiliar.push(tmp)
+          }
+        }
       })
 
     },
     Editar (Item) {
       this.TabActive = 'tab-1'
-      this.Cuenta = Item
+      this.Cuenta.Code = Item.Code
+      this.ItemsGrupo = []
+      this.ItemsCuenta = []
+      this.ItemsSubcuenta = []
+      this.ItemsAuxiliar = []
+    },
+    Guardar () {
+      const Cuenta = {
+        Id: this.Cuenta.Id,
+        Type: 'Supersolidaria',
+        Code: this.Cuenta.Code,
+        Name: this.Cuenta.Name,
+      }
+
+      this.Reset ();
+
+      if(!Cuenta.Id){
+
+        this.$apollo.mutate ({
+          mutation: CREATE_CUENTA,
+          variables: {
+            Type: 'Supersolidaria',
+            Code: Cuenta.Code,
+            Name: Cuenta.Name,
+          },
+          update: (store, { data: res }) => {
+            try{
+              const data = store.readQuery ({
+                query: CUENTAS,
+              });
+
+              data.Cuentas.push(res.CreateCuenta);
+
+              store.writeQuery({
+                query: CUENTAS,
+                data
+              })
+
+            }
+            catch(Err) {
+              console.log(Err)
+            }
+
+          }
+        }).then(() => {}).catch(Err => {
+          console.log(Err)
+        });
+
+      }
+      else{
+
+        this.$apollo.mutate ({
+          mutation: UPDATE_CUENTA,
+          variables: {
+            Id: Cuenta.Id,
+            Code: Cuenta.Code,
+            Name: Cuenta.Name,
+          },
+          update: (store, { data: res }) => {
+
+            try{
+              const data = store.readQuery ({
+                query: CUENTAS,
+              });
+
+              for (let i=0; i<data.Cuentas.length; i++) {
+                if (data.Cuentas[i].Id === res.UpdateCuenta.Id) {
+                  data.Cuentas[i] = res.UpdateCuenta
+                }
+              }
+
+              store.writeQuery({
+                query: CUENTAS,
+                data
+              })
+
+            }
+            catch(Err) {
+              console.log(Err)
+            }
+
+          }
+        }).then(() => {}).catch(Err => {
+          console.log(Err)
+        });
+      }
+
     },
     Reset () {
-
+      this.Cuenta.Code = null
     }
   }
 };
