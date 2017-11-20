@@ -52,5 +52,11 @@ mutation CreateTercero(
       Codigo
       Nombre
     }
+    Cuentas {
+      Id
+      Code
+      Name
+      Type
+    }
   }
 }

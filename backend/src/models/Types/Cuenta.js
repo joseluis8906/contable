@@ -40,7 +40,7 @@ const Cuenta = new GraphQLObjectType({
       Tercero: {
         type: Tercero,
         resolve(Cuenta) {
-          return Cuenta.getTercero()
+          return Cuenta.getTercero();
         }
       }
     };

@@ -54,5 +54,11 @@ query Terceros(
       Codigo
       Nombre
     }
+    Cuentas {
+      Id
+      Code
+      Name
+      Type
+    }
   }
 }

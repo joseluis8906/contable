@@ -10,6 +10,7 @@ import { DianIdentificacion } from './DianIdentificacion';
 import { DianPais } from './DianPais';
 import { DianDepartamento } from './DianDepartamento';
 import { DianCiudad } from './DianCiudad';
+import { Cuenta } from './Cuenta';
 
 
 const Tercero = new GraphQLObjectType({
@@ -111,6 +112,12 @@ const Tercero = new GraphQLObjectType({
         type: DianCiudad,
         resolve(Tercero) {
           return Tercero.getDianCiudad();
+        }
+      },
+      Cuentas: {
+        type: new GraphQLList(Cuenta),
+        resolve(Tercero) {
+          return Tercero.getCuentas();
         }
       }
     };
