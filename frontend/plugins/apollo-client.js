@@ -19,7 +19,7 @@ networkInterface.use([{
 
 const apolloClient = new ApolloClient({
     networkInterface,
-    dataIdFromObject: object => object.Id
+    dataIdFromObject: object => object.__typename+'_'+object.Id
 });
 
 Vue.use(VueApollo, {apolloClient});

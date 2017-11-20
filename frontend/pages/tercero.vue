@@ -22,63 +22,125 @@ v-layout( align-center justify-center )
           h5(class="grey--text text--lighten-4 text-xs-center bold")
             v-icon(ma) group_work
             | Tercero
-      v-card-text
-        v-layout( row wrap)
-          v-flex( xs12 )
-            v-select( v-bind:items="ItemsDeIdentificacion"
-                      v-model="TipoDeIdentificacion"
-                      label="Tipo de Identificación"
-                      item-value="value"
-                      item-text="text"
-                      dark )
 
-            v-text-field( label="Numero de Identificación" v-model="NumeroDeIdentificacion" dark )
+      v-tabs(dark fixed icons centered v-model="TabActive")
+        v-tabs-bar(slot="activators" class="light-blue darken-4")
+          v-tabs-slider(class="success")
+          v-tabs-item(href="#tab-1" @click.native="")
+            v-icon assignment
+            h6(class="body-2 grey--text text--lighten-4") Datos
 
-            v-text-field( label="Primer Apellido" v-model="PrimerApellido" dark )
+          v-tabs-item(href="#tab-2" @click.native="")
+            v-icon chrome_reader_mode
+            h6(class="body-2 grey--text text--lighten-4") Cuentas
 
-            v-text-field( label="Segundo Apellido" v-model="SegundoApellido" dark )
+        v-tabs-content(id="tab-1")
+          v-card-text
+            v-layout( row wrap)
+              v-flex( xs12 )
+                v-select( v-bind:items="ItemsDianIdentificacion"
+                          v-model="Tercero.DianIdentificacionId"
+                          label="Tipo de Identificación"
+                          item-value="Id"
+                          item-text="Nombre"
+                          dark )
 
-            v-text-field( label="Primer Nombre" v-model="PrimerNombre" dark )
+                v-text-field( label="Numero de Identificación" v-model="Tercero.NumeroDeIdentificacion" dark )
 
-            v-text-field( label="Otros Nombres" v-model="OtrosNombres" dark )
+                v-text-field( label="Primer Apellido" v-model="Tercero.PrimerApellido" dark )
 
-            v-text-field( label="Razón Social" v-model="RazonSocial" dark )
+                v-text-field( label="Segundo Apellido" v-model="Tercero.SegundoApellido" dark )
 
-            v-text-field( label="Dirección" v-model="Direccion" dark )
+                v-text-field( label="Primer Nombre" v-model="Tercero.PrimerNombre" dark )
 
-            v-select( v-bind:items="ItemsPais"
-                      v-model="PaisDeResidencia"
-                      label="Pais"
-                      item-value="codigo"
-                      item-text="nombre"
-                      dark )
+                v-text-field( label="Otros Nombres" v-model="Tercero.OtrosNombres" dark )
 
-            v-select( v-bind:items="ItemsDepartamento"
-                      v-model="CodigoDepartamento"
-                      label="Departamento"
-                      item-value="codigo"
-                      item-text="nombre"
-                      dark )
+                v-text-field( label="Razón Social" v-model="Tercero.RazonSocial" dark )
 
-            v-select( v-bind:items="ItemsMunicipio"
-                      v-model="CodigoMunicipio"
-                      label="Ciudad"
-                      item-value="codigo"
-                      item-text="nombre"
-                      dark )
+                v-text-field( label="Dirección" v-model="Tercero.Direccion" dark )
 
-      v-card-actions
-        v-spacer
-        v-btn( dark @click.native="Reset" ) Cancelar
-        v-btn( dark primary @click.native="CreateOrUpdate" ) Guardar
+                v-select( v-bind:items="ItemsDianPais"
+                          v-model="Tercero.DianPaisId"
+                          label="Pais"
+                          item-value="Id"
+                          item-text="Nombre"
+                          dark )
+
+                v-select( v-bind:items="ItemsDianDepartamento"
+                          v-model="Tercero.DianDepartamentoId"
+                          label="Departamento"
+                          item-value="Id"
+                          item-text="Nombre"
+                          dark )
+
+                v-select( v-bind:items="ItemsDianCiudad"
+                          v-model="Tercero.DianCiudadId"
+                          label="Ciudad"
+                          item-value="Id"
+                          item-text="Nombre"
+                          dark )
+
+          v-card-actions
+            v-spacer
+            v-btn( dark @click.native="Reset" ) Cancelar
+            v-btn( dark primary @click.native="CreateOrUpdate" ) Guardar
+
+        v-tabs-content(id="tab-2")
+          v-card-text
+            v-layout( row wrap)
+              v-flex( xs12 )
+                v-data-table( v-bind:headers="headers"
+                              v-bind:items="Tercero.Cuenta"
+                              class="elevation-5 grey lighten-1 grey--text text--darken-4" )
+
+                  template(slot="items" scope="props")
+                    td( style="border-left: 1px solid #999999" class="text-xs-center" ) {{ props.item.Numero }}
+                    td( style="border-left: 1px solid #999999" class="text-xs-center" ) {{ props.item.Code }}
+                    td( style="border-left: 1px solid #999999" class="text-xs-center" ) {{ props.item.Name }}
+                    td(style="border-left: 1px solid #999999" class="text-xs-center pl-1 pr-1")
+                      v-btn( fab
+                             dark
+                             small
+                             error
+                             style="width: 16px; height:16px"
+                             @click.native="eliminar(props.item)"
+                             :disabled="props.item.EliminarDisable")
+                        v-icon remove
+
+                v-expansion-panel
+                  v-expansion-panel-content(v-for="(ItemClase, cl) in ItemsClase" :key="cl" @mousedown.native.stop="Buscar(ItemClase.Code)")
+                    div(slot="header") <v-icon @click.stop="Editar(ItemClase)" class="editover">edit</v-icon> {{ ItemClase.Code }} - {{ ItemClase.Name }}
+                    div(slot="default")
+                      v-expansion-panel
+                        v-expansion-panel-content(v-for="(ItemGrupo, g) in ItemsGrupo" :key="g" @mousedown.native.stop="Buscar(ItemGrupo.Code)" class="teal darken-3" style="border-bottom: 1px solid #00493c !important")
+                          div(slot="header") <v-icon @click.stop="Editar(ItemGrupo)" class="editover">edit</v-icon> {{ ItemGrupo.Code }} - {{ ItemGrupo.Name }}
+                          div(slot="default")
+                            v-expansion-panel
+                              v-expansion-panel-content(v-for="(ItemCuenta, c) in ItemsCuenta" :key="c" @mousedown.native.stop="Buscar(ItemCuenta.Code)" class="lime darken-3" style="border-bottom: 1px solid #6e6d04 !important")
+                                div(slot="header" ) <v-icon @click.stop="Editar(ItemCuenta)" class="editover">edit</v-icon> {{ ItemCuenta.Code }} - {{ ItemCuenta.Name }}
+                                div(slot="default")
+                                  v-expansion-panel
+                                    v-expansion-panel-content(v-for="(ItemSubcuenta, s) in ItemsSubcuenta" :key="s" @mousedown.native.stop="Buscar(ItemSubcuenta.Code)" class="blue darken-3" style="border-bottom: 1px solid #0545a0 !important")
+                                      div(slot="header" ) <v-icon @click.stop="Editar(ItemSubcuenta)" class="editover">edit</v-icon> {{ ItemSubcuenta.Code }} - {{ ItemSubcuenta.Name }}
+                                      div(slot="default")
+                                        v-expansion-panel
+                                          v-expansion-panel-content(v-for="(ItemAuxiliar, s) in ItemsAuxiliar" :key="s" class="brown darken-3" style="border-bottom: 1px solid #6e6d04 !important")
+                                            div(slot="header" ) <v-icon @click.stop="Editar(ItemAuxiliar)" class="editover">edit</v-icon> {{ ItemAuxiliar.Code }} - {{ ItemAuxiliar.Name }}
+                                            div(slot="default")
 </template>
 
 <script>
+
+import DIAN_IDENTIFICACIONES from '~/queries/DianIdentificaciones.gql'
+import DIAN_PAISES from '~/queries/DianPaises.gql'
+import DIAN_DEPARTAMENTOS from '~/queries/DianDepartamentos.gql'
+import DIAN_CIUDADES from '~/queries/DianCiudades.gql'
 
 import TERCEROS from '~/queries/Terceros.gql'
 import CREATE_TERCERO from '~/queries/CreateTercero.gql'
 import UPDATE_TERCERO from '~/queries/UpdateTercero.gql'
 
+import CUENTAS from '~/queries/Cuentas.gql'
 
 export default {
   data: () => ({
@@ -88,38 +150,39 @@ export default {
       timeout: 6000,
       text: 'Cargando'
     },
-    Id: null,
-    TipoDeIdentificacion: null,
-    NumeroDeIdentificacion: null,
-    PrimerApellido: null,
-    SegundoApellido: null,
-    PrimerNombre: null,
-    OtrosNombres: null,
-    RazonSocial: null,
-    Direccion: null,
-    CodigoDepartamento: null,
-    CodigoMunicipio: null,
-    PaisDeResidencia: null,
-    ItemsDeIdentificacion: [
-      {text: 'Cédula de ciudadanía', value: '13'},
-      {text: 'Tarjeta de extranjería', value: '21'},
-      {text: 'Cédula de extranjería', value: '22'},
-      {text: 'Nit', value: '31'},
-      {text: 'Identificación de extranjeros diferente al Nit asignado DIAN', value: '33'},
-      {text: 'Pasaporte', value: '41'},
-      {text: 'Documento de identificación extranjero', value: '42'},
-      {text: 'Sin identificación del exterior o para uso definido por la DIAN', value: '43'},
+    Tercero: {
+      Id: null,
+      DianIdentificacionId: null,
+      NumeroDeIdentificacion: null,
+      PrimerApellido: null,
+      SegundoApellido: null,
+      PrimerNombre: null,
+      OtrosNombres: null,
+      RazonSocial: null,
+      Direccion: null,
+      DianDepartamentoId: null,
+      DianCiudadId: null,
+      DianPaisId: null,
+      Cuentas: [],
+    },
+    TabActive: null,
+    ItemsDianIdentificacion: [],
+    ItemsDianDepartamento: [],
+    ItemsDianCiudad: [],
+    ItemsDianPais: [],
+    headers: [
+      { text: 'N°', align: 'center', sortable: false,  value: 'Numero' },
+      { text: 'Codigo', align: 'center', sortable: false,  value: 'Código' },
+      { text: 'Nombre', align: 'center', sortable: false,  value: 'Nombre' },
+      { text: 'Eliminar', align: 'center', sortable: false,  value: 'Eliminar' },
     ],
-    ItemsDepartamento: [
-      {nombre: 'Cesar', codigo: '20'},
-    ],
-    ItemsMunicipio: [
-      {codigo: '20011', nombre: 'Aguachica'},
-      {codigo: '20295', nombre: 'Gamarra'}
-    ],
-    ItemsPais: [
-      {codigo: '169', nombre: 'Colombia'},
-    ],
+    ItemsCuenta: [],
+    Cuenta: null,
+    ItemsClase: [],
+    ItemsGrupo: [],
+    ItemsCuenta: [],
+    ItemsSubcuenta: [],
+    ItemsAuxiliar: [],
     loading: 0
   }),
   beforeMount () {
@@ -127,24 +190,67 @@ export default {
       this.$router.push('/')
     }
   },
+  mounted () {
+    this.$nextTick(() => {
+
+    })
+  },
   apollo: {
+    DianIdentificaciones: {
+      query: DIAN_IDENTIFICACIONES,
+      update (data) {
+        this.ItemsDianIdentificacion = data.DianIdentificaciones;
+      }
+    },
+    DianPaises: {
+      query: DIAN_PAISES,
+      update (data) {
+        this.ItemsDianPais = data.DianPaises;
+      }
+    },
+    DianDepartamentos: {
+      query: DIAN_DEPARTAMENTOS,
+      update (data) {
+        this.ItemsDianDepartamento = data.DianDepartamentos;
+      }
+    },
+    DianCiudades: {
+      query: DIAN_CIUDADES,
+      update (data) {
+        this.ItemsDianCiudad = data.DianCiudades;
+      }
+    },
     Terceros: {
       query: TERCEROS,
       variables () {
         return {
-          TipoDeIdentificacion: this.TipoDeIdentificacion,
+          TipoDeIdentificacion: this.DianIdentificacionId,
           NumeroDeIdentificacion: this.NumeroDeIdentificacion
         }
       },
-      loadingKey: 'loading',
       update (data) {
-        //console.log(data)
         this.LoadTercero(data.Terceros)
       }
     },
+    Cuentas: {
+      query: CUENTAS,
+      update (data) {
+        this.ItemsCuenta = [];
+        for (let i = 0; i < data.Cuentas.length; i++){
+          let tmp = {
+            Buscar: data.Cuentas[i].Code+' - '+data.Cuentas[i].Name,
+            Id: data.Cuentas[i].Id,
+            Code: data.Cuentas[i].Code,
+            Name: data.Cuentas[i].Name,
+            Type: data.Cuentas[i].Type,
+          }
+          this.ItemsCuenta.push(tmp)
+        }
+      }
+    }
   },
   methods: {
-    CreateOrUpdate () {
+    /*CreateOrUpdate () {
       if (this.Id === null) {
         this.Create();
       }else{
@@ -229,10 +335,8 @@ export default {
         }
 
       },
-      }).then( data => {
-        //console.log(data)
-      }).catch( Err => {
-        //console.log(Err)
+      }).then( data => {}).catch( Err => {
+        console.log(Err)
       })
     },
     Update () {
@@ -329,12 +433,10 @@ export default {
           }
 
         },
-      }).then( data => {
-        //console.log(data)
-      }).catch( Err => {
+      }).then( data => {}).catch( Err => {
         //console.log(Err)
       })
-    },
+    },*/
     Reset () {
       this.Id = null
       this.TipoDeIdentificacion = null
@@ -348,41 +450,52 @@ export default {
       this.CodigoDepartamento = null
       this.CodigoMunicipio = null
       this.PaisDeResidencia = null
+      this.Cuentas = []
     },
     LoadTercero (Terceros) {
-      //console.log (Terceros)
+      console.log (Terceros)
       for (let i=0; i<Terceros.length; i++) {
         if (
-          this.TipoDeIdentificacion === Terceros[i].TipoDeIdentificacion
+          this.Tercero.DianIdentificacionId === Terceros[i].DianIdentificacion.Id
           &&
-          this.NumeroDeIdentificacion === Terceros[i].NumeroDeIdentificacion
+          this.Tercero.NumeroDeIdentificacion === Terceros[i].NumeroDeIdentificacion
         ) {
-          this.Id = Terceros[i].Id
-          this.PrimerApellido = Terceros[i].PrimerApellido
-          this.SegundoApellido = Terceros[i].SegundoApellido
-          this.PrimerNombre = Terceros[i].PrimerNombre
-          this.OtrosNombres = Terceros[i].OtrosNombres
-          this.RazonSocial = Terceros[i].RazonSocial
-          this.Direccion = Terceros[i].Direccion
-          this.CodigoDepartamento = Terceros[i].CodigoDepartamento
-          this.CodigoMunicipio = Terceros[i].CodigoMunicipio
-          this.PaisDeResidencia = Terceros[i].PaisDeResidencia
+          this.Tercero.Id = Terceros[i].Id
+          this.Tercero.PrimerApellido = Terceros[i].PrimerApellido
+          this.Tercero.SegundoApellido = Terceros[i].SegundoApellido
+          this.Tercero.PrimerNombre = Terceros[i].PrimerNombre
+          this.Tercero.OtrosNombres = Terceros[i].OtrosNombres
+          this.Tercero.RazonSocial = Terceros[i].RazonSocial
+          this.Tercero.Direccion = Terceros[i].Direccion
+          this.Tercero.DianPaisId = Terceros[i].DianPais.Id
+          this.Tercero.DianDepartamentoId = Terceros[i].DianDepartamento.Id
+          this.Tercero.DianCiudadId = Terceros[i].DianCiudad.Id
+          this.Tercero.Cuentas = []
+          for(let j=0; j < Terceros[i].Cuentas.length; j++){
+            let tmp = {
+              Numero: i+1,
+              Id: Terceros[i].Cuentas[j].Id,
+              Code: Terceros[i].Cuentas[j].Code,
+              Name: Terceros[i].Cuentas[j].Name,
+              EliminarDisable: false,
+            }
+          }
           break
         }else{
-          this.Id = null
-          this.PrimerApellido = null
-          this.SegundoApellido = null
-          this.PrimerNombre = null
-          this.OtrosNombres = null
-          this.RazonSocial = null
-          this.Direccion = null
-          this.CodigoDepartamento = null
-          this.CodigoMunicipio = null
-          this.PaisDeResidencia = null
+          this.Tercero.Id = null
+          this.Tercero.PrimerApellido = null
+          this.Tercero.SegundoApellido = null
+          this.Tercero.PrimerNombre = null
+          this.Tercero.OtrosNombres = null
+          this.Tercero.RazonSocial = null
+          this.Tercero.Direccion = null
+          this.Tercero.DianPaisId = null
+          this.Tercero.DianDepartamentoId = null
+          this.Tercero.DianCiudadId = null
+          this.Tercero.Cuentas = []
         }
       }
-
-    }
+    },
   }
 };
 
