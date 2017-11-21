@@ -220,9 +220,53 @@ const UpdateTercero = {
 };
 
 
+const TerceroAddCuenta = {
+  type: Tercero,
+  args: {
+    Id: {type: GraphQLInt},
+    CuentaId: {type: GraphQLInt},
+  },
+  resolve(_, args) {
+    return Db.models.Cuenta.findOne({
+      where: {Id: args.CuentaId}
+    }).then(Cuenta => {
+      return Db.models.Tercero.findOne({
+        where: {Id: args.Id}
+      }).then(Tercero => {
+        return Tercero.addCuenta(Cuenta);
+      })
+    });
+  }
+};
+
+
+const TerceroRemoveCuenta = {
+  type: Tercero,
+  args: {
+    Id: {type: GraphQLInt},
+    CuentaId: {type: GraphQLInt},
+  },
+  resolve(_, args) {
+    return Db.models.Tercero.findOne({
+      where: {Id: args.Id}
+    }).then(Tercero => {
+      return Db.models.Cuenta.findOne({
+        where: {Id: args.CuentaId}
+      }).then(Cuenta => {
+        return Tercero.removeCuenta(Cuenta).then( () => {
+          return Tercero;
+        });
+      })
+    })
+  }
+};
+
+
 export {
   Tercero,
   Terceros,
   CreateTercero,
-  UpdateTercero
+  UpdateTercero,
+  TerceroAddCuenta,
+  TerceroRemoveCuenta
 }

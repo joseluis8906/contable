@@ -1,0 +1,44 @@
+mutation TerceroRemoveCuenta(
+  $Id: Int
+  $CuentaId: Int
+){
+  TerceroRemoveCuenta(
+    Id: $Id
+    CuentaId: $CuentaId
+  ){
+    Id
+  	DianIdentificacion{
+      Id
+      Codigo
+      Nombre
+    }
+  	NumeroDeIdentificacion
+  	PrimerApellido
+		SegundoApellido
+		PrimerNombre
+		OtrosNombres
+		RazonSocial
+		Direccion
+		DianPais{
+      Id
+      Codigo
+      Nombre
+    }
+		DianDepartamento{
+      Id
+      Codigo
+      Nombre
+    }
+		DianCiudad{
+      Id
+      Codigo
+      Nombre
+    }
+    Cuentas {
+      Id
+      Code
+      Name
+      Type
+    }
+  }
+}
