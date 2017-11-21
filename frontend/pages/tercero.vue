@@ -109,20 +109,26 @@ v-layout( align-center justify-center )
 
                 v-expansion-panel(class="mt-4")
                   v-expansion-panel-content(v-for="(ItemClase, cl) in ItemsClase" :key="cl" @mousedown.native.stop="Buscar(ItemClase.Code)")
-                    div(slot="header") <v-btn @click.stop="Agregar(ItemClase)" icon small class="grey--text text--lighten-4"><v-icon style="margin: 0 !important">add_circle</v-icon></v-btn> {{ ItemClase.Code }} - {{ ItemClase.Name }}
+                    div(slot="header") <v-btn @click.stop="Agregar(ItemClase)" icon small class="grey--text text--lighten-4" :disabled="Boolean(ItemClase.Disabled)"><v-icon style="margin: 0 !important;">add_circle</v-icon></v-btn> {{ ItemClase.Code }} - {{ ItemClase.Name }}
                     div(slot="default")
                       v-expansion-panel
                         v-expansion-panel-content(v-for="(ItemGrupo, g) in ItemsGrupo" :key="g" @mousedown.native.stop="Buscar(ItemGrupo.Code)" class="teal darken-3" style="border-bottom: 1px solid #00493c !important")
-                          div(slot="header") <v-btn @click.stop="Agregar(ItemGrupo)" icon small class="grey--text text--lighten-4"><v-icon style="margin: 0 !important">add_circle</v-icon></v-btn> {{ ItemGrupo.Code }} - {{ ItemGrupo.Name }}
+                          div(slot="header") <v-btn @click.stop="Agregar(ItemGrupo)" icon small class="grey--text text--lighten-4" :disabled="Boolean(ItemGrupo.Disabled)"><v-icon style="margin: 0 !important">add_circle</v-icon></v-btn> {{ ItemGrupo.Code }} - {{ ItemGrupo.Name }}
                           div(slot="default")
                             v-expansion-panel
                               v-expansion-panel-content(v-for="(ItemCuenta, c) in ItemsCuenta" :key="c" @mousedown.native.stop="Buscar(ItemCuenta.Code)" class="lime darken-3" style="border-bottom: 1px solid #6e6d04 !important")
-                                div(slot="header" ) <v-btn @click.stop="Agregar(ItemCuenta)" icon small class="grey--text text--lighten-4"><v-icon style="margin: 0 !important">add_circle</v-icon></v-btn> {{ ItemCuenta.Code }} - {{ ItemCuenta.Name }}
+                                div(slot="header" ) <v-btn @click.stop="Agregar(ItemCuenta)" icon small class="grey--text text--lighten-4" :disabled="Boolean(ItemCuenta.Disabled)"><v-icon style="margin: 0 !important">add_circle</v-icon></v-btn> {{ ItemCuenta.Code }} - {{ ItemCuenta.Name }}
                                 div(slot="default")
                                   v-expansion-panel
                                     v-expansion-panel-content(v-for="(ItemSubcuenta, s) in ItemsSubcuenta" :key="s" class="blue darken-3" style="border-bottom: 1px solid #0545a0 !important")
-                                      div(slot="header" ) <v-btn @click.stop="Agregar(ItemSubcuenta)" icon small class="grey--text text--lighten-4"><v-icon style="margin: 0 !important">add_circle</v-icon></v-btn> {{ ItemSubcuenta.Code }} - {{ ItemSubcuenta.Name }}
+                                      div(slot="header" ) <v-btn @click.stop="Agregar(ItemSubcuenta)" icon small class="grey--text text--lighten-4" :disabled="Boolean(ItemSubcuenta.Disabled)"><v-icon style="margin: 0 !important">add_circle</v-icon></v-btn> {{ ItemSubcuenta.Code }} - {{ ItemSubcuenta.Name }}
                                       div(slot="default")
+
+          v-card-actions
+            v-spacer
+            v-btn( dark @click.native="Reset" ) Cancelar
+            v-btn( dark primary @click.native="CreateOrUpdate" ) Guardar
+
 </template>
 
 
@@ -132,6 +138,9 @@ h5.bold
 
 .alert-especial
   position absolute
+
+.application .theme--dark.btn:disabled:not(.btn--icon):not(.btn--flat)
+  background-color black !important
 
 .editover:hover
   color: orange
@@ -148,6 +157,8 @@ import DIAN_CIUDADES from '~/queries/DianCiudades.gql'
 import TERCEROS from '~/queries/Terceros.gql'
 import CREATE_TERCERO from '~/queries/CreateTercero.gql'
 import UPDATE_TERCERO from '~/queries/UpdateTercero.gql'
+import TERCERO_ADD_CUENTA from '~/queries/TerceroAddCuenta.gql'
+import TERCERO_REMOVE_CUENTA from '~/queries/TerceroRemoveCuenta.gql'
 
 import CUENTASLIKE from '~/queries/CuentasLike.gql'
 
@@ -261,6 +272,7 @@ export default {
             Type: res.data.CuentasLike[i].Type,
             Code: res.data.CuentasLike[i].Code,
             Name: res.data.CuentasLike[i].Name,
+            Disabled: false
           }
           this.ItemsClase.push(tmp)
         }
@@ -306,7 +318,8 @@ export default {
         variables: {
           Type: 'Supersolidaria',
           Code: this.Code,
-          Length: this.Length
+          Length: this.Length,
+          Disabled: true,
         },
         loadingKey: 'loading',
 
@@ -372,6 +385,7 @@ export default {
               Type: res.data.CuentasLike[i].Type,
               Code: res.data.CuentasLike[i].Code,
               Name: res.data.CuentasLike[i].Name,
+              Disabled: false,
             }
             this.ItemsGrupo.push(tmp)
           }
@@ -383,35 +397,32 @@ export default {
               Type: res.data.CuentasLike[i].Type,
               Code: res.data.CuentasLike[i].Code,
               Name: res.data.CuentasLike[i].Name,
+              Disabled: false,
             }
             this.ItemsCuenta.push(tmp)
           }
         }
         else if(res.data.CuentasLike[0].Code.length === 6){
+
           for(let i = 0; i<res.data.CuentasLike.length; i++){
             let tmp = {
               Id: res.data.CuentasLike[i].Id,
               Type: res.data.CuentasLike[i].Type,
               Code: res.data.CuentasLike[i].Code,
               Name: res.data.CuentasLike[i].Name,
+              Disabled: false,
+            }
+            for (let j = 0; j < this.Tercero.Cuentas.length; j++){
+              if(this.Tercero.Cuentas[j].Code.startsWith(tmp.Code)){
+                tmp.Disabled = true;
+              }
             }
             this.ItemsSubcuenta.push(tmp)
           }
         }
-        /*else if(res.data.CuentasLike[0].Code.length === 8){
-          for(let i = 0; i<res.data.CuentasLike.length; i++){
-            let tmp = {
-              Id: res.data.CuentasLike[i].Id,
-              Type: res.data.CuentasLike[i].Type,
-              Code: res.data.CuentasLike[i].Code,
-              Name: res.data.CuentasLike[i].Name,
-            }
-            this.ItemsAuxiliar.push(tmp)
-          }
-        }*/
       })
     },
-    /*CreateOrUpdate () {
+    CreateOrUpdate () {
       if (this.Id === null) {
         this.Create();
       }else{
@@ -420,7 +431,7 @@ export default {
     },
     Create () {
       const Tercero = {
-        TipoDeIdentificacion: this.TipoDeIdentificacion,
+        DianDepartamentoId: this.DianIdentificacionId,
         NumeroDeIdentificacion: this.NumeroDeIdentificacion,
         PrimerApellido: this.PrimerApellido,
         SegundoApellido: this.SegundoApellido,
@@ -428,9 +439,9 @@ export default {
         OtrosNombres: this.OtrosNombres,
         RazonSocial: this.RazonSocial,
         Direccion: this.Direccion,
-        CodigoDepartamento: this.CodigoDepartamento,
-        CodigoMunicipio: this.CodigoMunicipio,
-        PaisDeResidencia: this.PaisDeResidencia
+        DianPaisId: this.DianPaisId,
+        DianDepartamentoId: this.DianDepartamentoId,
+        DianPaisId: this.DianPaisId
       };
 
       this.Reset ();
@@ -438,7 +449,7 @@ export default {
       this.$apollo.mutate ({
         mutation: CREATE_TERCERO,
         variables: {
-          TipoDeIdentificacion: Tercero.TipoDeIdentificacion,
+          DianIdentificacionId: Tercero.DianIdentificacionId,
           NumeroDeIdentificacion: Tercero.NumeroDeIdentificacion,
           DigitoDeVerificacion: Tercero.DigitoDeVerificacion,
           PrimerApellido: Tercero.PrimerApellido,
@@ -447,9 +458,9 @@ export default {
           OtrosNombres: Tercero.OtrosNombres,
           RazonSocial: Tercero.RazonSocial,
           Direccion: Tercero.Direccion,
-          CodigoDepartamento: Tercero.CodigoDepartamento,
-          CodigoMunicipio: Tercero.CodigoMunicipio,
-          PaisDeResidencia: Tercero.PaisDeResidencia
+          DianPaisId: Tercero.DianPaisId,
+          DianDepartamentoId: Tercero.DianDepartamentoId,
+          DianCiudadId: Tercero.DianCiudadId
       },
       loadingKey: 'loading',
       update: (store, { data: res }) => {
@@ -458,9 +469,8 @@ export default {
           var data = store.readQuery({
             query: TERCEROS,
             variables: {
-              TipoDeIdentificacion: res.CreteTercero.TipoDeIdentificacion,
+              DianIdentificacionId: res.CreteTercero.DianIdentificacionId,
               NumeroDeIdentificacion: res.CreateTercero.NumeroDeIdentificacion,
-              DigitoDeVerificacion: res.CreateTercero.DigitoDeVerificacion
             }
           })
 
@@ -470,9 +480,8 @@ export default {
           store.writeQuery({
             query: TERCEROS,
             variables: {
-              TipoDeIdentificacion: res.CreateTercero.TipoDeIdentificacion,
+              DianIdentificacionId: res.CreateTercero.DianIdentificacionId,
               NumeroDeIdentificacion: res.CreateTercero.NumeroDeIdentificacion,
-              DigitoDeVerificacion: res.CreateTercero.DigitoDeVerificacion
             },
             data: data
           })
@@ -486,9 +495,8 @@ export default {
           store.writeQuery({
             query: TERCEROS,
             variables: {
-              TipoDeIdentificacion: res.CreateTercero.TipoDeIdentificacion,
+              DianIdentificacionId: res.CreateTercero.DianIdentificacionId,
               NumeroDeIdentificacion: res.CreateTercero.NumeroDeIdentificacion,
-              DigitoDeVerificacion: res.CreateTercero.DigitoDeVerificacion
             },
             data: data
           })
@@ -597,10 +605,10 @@ export default {
       }).then( data => {}).catch( Err => {
         //console.log(Err)
       })
-    },*/
+    },
     Reset () {
       this.Id = null
-      this.TipoDeIdentificacion = null
+      this.DianIdentificacion = null
       this.NumeroDeIdentificacion = null
       this.PrimerApellido = null
       this.SegundoApellido = null
@@ -608,9 +616,9 @@ export default {
       this.OtrosNombres = null
       this.RazonSocial = null
       this.Direccion = null
-      this.CodigoDepartamento = null
-      this.CodigoMunicipio = null
-      this.PaisDeResidencia = null
+      this.DianDepartamentoId = null
+      this.DianCiudadId = null
+      this.DianPaisId = null
       this.Cuentas = []
     },
     LoadTercero (Terceros) {
@@ -638,7 +646,7 @@ export default {
               Id: Terceros[i].Cuentas[j].Id,
               Code: Terceros[i].Cuentas[j].Code,
               Name: Terceros[i].Cuentas[j].Name,
-              EliminarDisable: false,
+              EliminarDisable: true,
             }
             this.Tercero.Cuentas.push(tmp)
           }
