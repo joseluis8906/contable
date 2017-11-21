@@ -107,7 +107,7 @@ v-layout( align-center justify-center )
                              :disabled="props.item.EliminarDisable")
                         v-icon remove
 
-                v-expansion-panel(class="mt-5")
+                v-expansion-panel(class="mt-4")
                   v-expansion-panel-content(v-for="(ItemClase, cl) in ItemsClase" :key="cl" @mousedown.native.stop="Buscar(ItemClase.Code)")
                     div(slot="header") <v-btn @click.stop="Agregar(ItemClase)" icon small class="grey--text text--lighten-4"><v-icon style="margin: 0 !important">add_circle</v-icon></v-btn> {{ ItemClase.Code }} - {{ ItemClase.Name }}
                     div(slot="default")
