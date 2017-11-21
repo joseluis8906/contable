@@ -155,8 +155,9 @@ const Cuenta = Db.define('Cuenta', {
   freezeTableName: true
 });
 
+Tercero.hasMany(Cuenta, {as: 'Cuentas'});
 Cuenta.belongsTo(Tercero);
-Tercero.hasMany(Cuenta);
+
 
 
 //Transaccion

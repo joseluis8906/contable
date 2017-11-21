@@ -90,7 +90,7 @@ v-layout( align-center justify-center )
             v-layout( row wrap)
               v-flex( xs12 )
                 v-data-table( v-bind:headers="headers"
-                              v-bind:items="Tercero.Cuenta"
+                              v-bind:items="Tercero.Cuentas"
                               class="elevation-5 grey lighten-1 grey--text text--darken-4" )
 
                   template(slot="items" scope="props")
@@ -107,27 +107,36 @@ v-layout( align-center justify-center )
                              :disabled="props.item.EliminarDisable")
                         v-icon remove
 
-                v-expansion-panel
+                v-expansion-panel(class="mt-5")
                   v-expansion-panel-content(v-for="(ItemClase, cl) in ItemsClase" :key="cl" @mousedown.native.stop="Buscar(ItemClase.Code)")
-                    div(slot="header") <v-icon @click.stop="Editar(ItemClase)" class="editover">edit</v-icon> {{ ItemClase.Code }} - {{ ItemClase.Name }}
+                    div(slot="header") <v-btn @click.stop="Agregar(ItemClase)" icon small class="grey--text text--lighten-4"><v-icon style="margin: 0 !important">add_circle</v-icon></v-btn> {{ ItemClase.Code }} - {{ ItemClase.Name }}
                     div(slot="default")
                       v-expansion-panel
                         v-expansion-panel-content(v-for="(ItemGrupo, g) in ItemsGrupo" :key="g" @mousedown.native.stop="Buscar(ItemGrupo.Code)" class="teal darken-3" style="border-bottom: 1px solid #00493c !important")
-                          div(slot="header") <v-icon @click.stop="Editar(ItemGrupo)" class="editover">edit</v-icon> {{ ItemGrupo.Code }} - {{ ItemGrupo.Name }}
+                          div(slot="header") <v-btn @click.stop="Agregar(ItemGrupo)" icon small class="grey--text text--lighten-4"><v-icon style="margin: 0 !important">add_circle</v-icon></v-btn> {{ ItemGrupo.Code }} - {{ ItemGrupo.Name }}
                           div(slot="default")
                             v-expansion-panel
                               v-expansion-panel-content(v-for="(ItemCuenta, c) in ItemsCuenta" :key="c" @mousedown.native.stop="Buscar(ItemCuenta.Code)" class="lime darken-3" style="border-bottom: 1px solid #6e6d04 !important")
-                                div(slot="header" ) <v-icon @click.stop="Editar(ItemCuenta)" class="editover">edit</v-icon> {{ ItemCuenta.Code }} - {{ ItemCuenta.Name }}
+                                div(slot="header" ) <v-btn @click.stop="Agregar(ItemCuenta)" icon small class="grey--text text--lighten-4"><v-icon style="margin: 0 !important">add_circle</v-icon></v-btn> {{ ItemCuenta.Code }} - {{ ItemCuenta.Name }}
                                 div(slot="default")
                                   v-expansion-panel
-                                    v-expansion-panel-content(v-for="(ItemSubcuenta, s) in ItemsSubcuenta" :key="s" @mousedown.native.stop="Buscar(ItemSubcuenta.Code)" class="blue darken-3" style="border-bottom: 1px solid #0545a0 !important")
-                                      div(slot="header" ) <v-icon @click.stop="Editar(ItemSubcuenta)" class="editover">edit</v-icon> {{ ItemSubcuenta.Code }} - {{ ItemSubcuenta.Name }}
+                                    v-expansion-panel-content(v-for="(ItemSubcuenta, s) in ItemsSubcuenta" :key="s" class="blue darken-3" style="border-bottom: 1px solid #0545a0 !important")
+                                      div(slot="header" ) <v-btn @click.stop="Agregar(ItemSubcuenta)" icon small class="grey--text text--lighten-4"><v-icon style="margin: 0 !important">add_circle</v-icon></v-btn> {{ ItemSubcuenta.Code }} - {{ ItemSubcuenta.Name }}
                                       div(slot="default")
-                                        v-expansion-panel
-                                          v-expansion-panel-content(v-for="(ItemAuxiliar, s) in ItemsAuxiliar" :key="s" class="brown darken-3" style="border-bottom: 1px solid #6e6d04 !important")
-                                            div(slot="header" ) <v-icon @click.stop="Editar(ItemAuxiliar)" class="editover">edit</v-icon> {{ ItemAuxiliar.Code }} - {{ ItemAuxiliar.Name }}
-                                            div(slot="default")
 </template>
+
+
+<style lang="stylus" scoped>
+h5.bold
+  font-weight bold
+
+.alert-especial
+  position absolute
+
+.editover:hover
+  color: orange
+</style>
+
 
 <script>
 
@@ -140,7 +149,7 @@ import TERCEROS from '~/queries/Terceros.gql'
 import CREATE_TERCERO from '~/queries/CreateTercero.gql'
 import UPDATE_TERCERO from '~/queries/UpdateTercero.gql'
 
-import CUENTAS from '~/queries/Cuentas.gql'
+import CUENTASLIKE from '~/queries/CuentasLike.gql'
 
 export default {
   data: () => ({
@@ -176,13 +185,11 @@ export default {
       { text: 'Nombre', align: 'center', sortable: false,  value: 'Nombre' },
       { text: 'Eliminar', align: 'center', sortable: false,  value: 'Eliminar' },
     ],
-    ItemsCuenta: [],
     Cuenta: null,
     ItemsClase: [],
     ItemsGrupo: [],
     ItemsCuenta: [],
     ItemsSubcuenta: [],
-    ItemsAuxiliar: [],
     loading: 0
   }),
   beforeMount () {
@@ -192,7 +199,7 @@ export default {
   },
   mounted () {
     this.$nextTick(() => {
-
+      this.BuscarInicial()
     })
   },
   apollo: {
@@ -224,32 +231,186 @@ export default {
       query: TERCEROS,
       variables () {
         return {
-          TipoDeIdentificacion: this.DianIdentificacionId,
-          NumeroDeIdentificacion: this.NumeroDeIdentificacion
+          TipoDeIdentificacion: this.Tercero.DianIdentificacionId,
+          NumeroDeIdentificacion: this.Tercero.NumeroDeIdentificacion
         }
       },
       update (data) {
         this.LoadTercero(data.Terceros)
       }
     },
-    Cuentas: {
-      query: CUENTAS,
-      update (data) {
-        this.ItemsCuenta = [];
-        for (let i = 0; i < data.Cuentas.length; i++){
-          let tmp = {
-            Buscar: data.Cuentas[i].Code+' - '+data.Cuentas[i].Name,
-            Id: data.Cuentas[i].Id,
-            Code: data.Cuentas[i].Code,
-            Name: data.Cuentas[i].Name,
-            Type: data.Cuentas[i].Type,
-          }
-          this.ItemsCuenta.push(tmp)
-        }
-      }
-    }
   },
   methods: {
+    BuscarInicial () {
+
+      this.$apollo.query({
+        query: CUENTASLIKE,
+        variables: {
+          Type: 'Supersolidaria',
+          Length: 1
+        },
+        loadingKey: 'loading',
+
+      }).then(res => {
+        this.Code = 0;
+        this.ItemsClase = [];
+
+        for(let i = 0; i<res.data.CuentasLike.length; i++){
+          let tmp = {
+            Id: res.data.CuentasLike[i].Id,
+            Type: res.data.CuentasLike[i].Type,
+            Code: res.data.CuentasLike[i].Code,
+            Name: res.data.CuentasLike[i].Name,
+          }
+          this.ItemsClase.push(tmp)
+        }
+      })
+    },
+    Buscar (Code) {
+
+      this.Code = Code;
+      var Length = this.Code.length;
+
+      switch (Length) {
+        case 1:
+          this.Length = 2
+          break;
+
+        case 2:
+          this.Length = 4
+          break;
+
+        case 4:
+          this.Length = 6
+          break;
+
+        //case 6:
+          //this.Length = 8
+          //break;
+
+        default:
+          this.Length = 1
+      }
+
+      this.Code = this.Code + '%';
+
+      if(this.OldCode === this.Code){
+        return
+      }else {
+
+        this.OldCode = this.Code
+      }
+
+      this.$apollo.query({
+        query: CUENTASLIKE,
+        variables: {
+          Type: 'Supersolidaria',
+          Code: this.Code,
+          Length: this.Length
+        },
+        loadingKey: 'loading',
+
+      }).then(res => {
+
+        if(res.data.CuentasLike.length === 0){
+          switch (Length) {
+            case 2:
+              this.ItemsCuenta = []
+              this.ItemsSubcuenta = []
+              break;
+
+            case 4:
+              this.ItemsSubcuenta = []
+              //this.Auxiliar = []
+              break;
+
+            //case 6:
+              //this.ItemsAuxiliar = []
+              //break;
+
+            default:
+              return
+          }
+          return
+        }
+
+        let length = res.data.CuentasLike.length > 0 ? res.data.CuentasLike[0].Code.length : 0
+
+        switch (length) {
+          case 2:
+            this.ItemsGrupo = []
+            this.ItemsCuenta = []
+            this.ItemsSubcuenta = []
+            this.ItemsAuxiliar = []
+            break;
+
+          case 4:
+            this.ItemsCuenta = []
+            this.ItemsSubcuenta = []
+            //this.ItemsAuxiliar = []
+            break;
+
+          case 6:
+            this.ItemsSubcuenta = []
+            //this.ItemsAuxiliar = []
+            break;
+
+          //case 8:
+            //this.ItemsAuxiliar = []
+            //break;
+
+          default:
+            //this.ItemsAuxiliar = []
+            this.ItemsSubcuenta = []
+            return
+        }
+
+        if(res.data.CuentasLike[0].Code.length === 2){
+          for(let i = 0; i<res.data.CuentasLike.length; i++){
+            let tmp = {
+              Id: res.data.CuentasLike[i].Id,
+              Type: res.data.CuentasLike[i].Type,
+              Code: res.data.CuentasLike[i].Code,
+              Name: res.data.CuentasLike[i].Name,
+            }
+            this.ItemsGrupo.push(tmp)
+          }
+        }
+        else if(res.data.CuentasLike[0].Code.length === 4){
+          for(let i = 0; i<res.data.CuentasLike.length; i++){
+            let tmp = {
+              Id: res.data.CuentasLike[i].Id,
+              Type: res.data.CuentasLike[i].Type,
+              Code: res.data.CuentasLike[i].Code,
+              Name: res.data.CuentasLike[i].Name,
+            }
+            this.ItemsCuenta.push(tmp)
+          }
+        }
+        else if(res.data.CuentasLike[0].Code.length === 6){
+          for(let i = 0; i<res.data.CuentasLike.length; i++){
+            let tmp = {
+              Id: res.data.CuentasLike[i].Id,
+              Type: res.data.CuentasLike[i].Type,
+              Code: res.data.CuentasLike[i].Code,
+              Name: res.data.CuentasLike[i].Name,
+            }
+            this.ItemsSubcuenta.push(tmp)
+          }
+        }
+        /*else if(res.data.CuentasLike[0].Code.length === 8){
+          for(let i = 0; i<res.data.CuentasLike.length; i++){
+            let tmp = {
+              Id: res.data.CuentasLike[i].Id,
+              Type: res.data.CuentasLike[i].Type,
+              Code: res.data.CuentasLike[i].Code,
+              Name: res.data.CuentasLike[i].Name,
+            }
+            this.ItemsAuxiliar.push(tmp)
+          }
+        }*/
+      })
+    },
     /*CreateOrUpdate () {
       if (this.Id === null) {
         this.Create();
@@ -453,7 +614,7 @@ export default {
       this.Cuentas = []
     },
     LoadTercero (Terceros) {
-      console.log (Terceros)
+      //console.log (Terceros)
       for (let i=0; i<Terceros.length; i++) {
         if (
           this.Tercero.DianIdentificacionId === Terceros[i].DianIdentificacion.Id
@@ -473,12 +634,13 @@ export default {
           this.Tercero.Cuentas = []
           for(let j=0; j < Terceros[i].Cuentas.length; j++){
             let tmp = {
-              Numero: i+1,
+              Numero: j+1,
               Id: Terceros[i].Cuentas[j].Id,
               Code: Terceros[i].Cuentas[j].Code,
               Name: Terceros[i].Cuentas[j].Name,
               EliminarDisable: false,
             }
+            this.Tercero.Cuentas.push(tmp)
           }
           break
         }else{
@@ -501,12 +663,3 @@ export default {
 
 
 </script>
-
-<style lang="stylus" scoped>
-h5.bold
-  font-weight bold
-
-.alert-especial
-  position absolute
-
-</style>

@@ -117,7 +117,7 @@ const Tercero = new GraphQLObjectType({
       Cuentas: {
         type: new GraphQLList(Cuenta),
         resolve(Tercero) {
-          return Tercero.getCuentas();
+          return Tercero.getCuentas({order:[['Code', 'ASC']]});
         }
       }
     };
