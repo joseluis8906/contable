@@ -161,6 +161,7 @@ import TERCERO_ADD_CUENTA from '~/queries/TerceroAddCuenta.gql'
 import TERCERO_REMOVE_CUENTA from '~/queries/TerceroRemoveCuenta.gql'
 
 import CUENTASLIKE from '~/queries/CuentasLike.gql'
+import CREATE_CUENTA from '~/queries/CreateCuenta.gql'
 
 export default {
   data: () => ({
@@ -632,50 +633,103 @@ export default {
       }
     },
     Agregar (Cuenta) {
-      console.log('llamado')
+
       if(!this.Tercero.Id && !Cuenta.Id){return}
 
-      const AddCuenta = {
-        Id: this.Tercero.Id,
-        CuentaId: Cuenta.Id
-      }
-
-      this.$apollo.mutate({
-        mutation: TERCERO_ADD_CUENTA,
+      this.$apollo.query({
+        query: CUENTASLIKE,
         variables: {
-          Id: AddCuenta.Id,
-          CuentaId: AddCuenta.CuentaId
-        },
-        loadingKey: "loading",
-        update: (store, { data: res }) => {
+          Code: Cuenta.Code + '%',
+          Length: Cuenta.Code.Length + 2
+        }
+      }).then(res => {
 
-          try{
-            var data = store.readQuery({
-              query: TERCEROS
-            })
+        let Cuentas = res.data.CuentasLike;
 
-            let existe = false;
-            for (let i=0; i < data.Terceros.length; i++){
-              if(data.Terceros[i].Id === res.TerceroAddCuenta.Id){
-                data.Terceros[i] = res.TerceroAddCuenta;
-                existe = true
-              }
+        let Postfix = Cuentas.length + 1;
+
+
+        Postfix < 10 ? Postfix = '0' + Postfix.toString() : Postfix = Postfix.toString();
+
+        let Name = this.Tercero.RazonSocial !== null && this.Tercero.RazonSocial !== '' ? this.Tercero.RazonSocial : `${this.Tercero.PrimerNombre} ${this.Tercero.OtrosNombres} ${this.Tercero.PrimerApellido} ${this.Tercero.SegundoApellido}`;
+
+        Name = Name.toUpperCase();
+
+        const NewCuenta = {
+          Type: 'Supersolidaria',
+          Code: Cuenta.Code + Postfix,
+          Name: Name,
+        };
+
+        this.$apollo.mutate({
+          mutation: CREATE_CUENTA,
+          variables: {
+            Type: NewCuenta.Type,
+            Code: NewCuenta.Code,
+            Name: NewCuenta.Name,
+          },
+          update: (store, { data: res }) => {
+
+            try{
+
+              var data = store.readQuery({
+                query: CUENTAS
+              });
+
+              data.Cuentas.push(res.CreateCuenta);
+
+              store.writeQuery({
+                query: CUENTAS,
+                data
+              });
+
+            } catch (Err) {console.log(Err)}
+
+            const AddCuenta = {
+              Id: this.Tercero.Id,
+              CuentaId: res.CreateCuenta.Id
             }
 
-            !existe ? data.Terceros.push(res.TerceroAddCuenta) : null;
+            this.$apollo.mutate({
+              mutation: TERCERO_ADD_CUENTA,
+              variables: {
+                Id: AddCuenta.Id,
+                CuentaId: AddCuenta.CuentaId
+              },
+              loadingKey: "loading",
+              update: (store, { data: res }) => {
 
-            store.writeQuery({
-              query: TERCEROS,
-              data
-            }).then( () => {
-              this.BuscarClase ()
+                try{
+                  var data = store.readQuery({
+                    query: TERCEROS
+                  })
+
+                  let existe = false;
+                  for (let i=0; i < data.Terceros.length; i++){
+                    if(data.Terceros[i].Id === res.TerceroAddCuenta.Id){
+                      data.Terceros[i] = res.TerceroAddCuenta;
+                      existe = true
+                    }
+                  }
+
+                  !existe ? data.Terceros.push(res.TerceroAddCuenta) : null;
+
+                  store.writeQuery({
+                    query: TERCEROS,
+                    data
+                  }).then( () => {
+                    this.BuscarClase ()
+                  })
+
+                } catch (Err) {console.log(Err)}
+
+              }
             })
 
-          } catch (Err) {console.log(Err)}
-
-        }
+          }
+        })
       })
-    }
+    },
   }
 };
 
