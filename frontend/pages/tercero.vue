@@ -108,21 +108,21 @@ v-layout( align-center justify-center )
                         v-icon remove
 
                 v-expansion-panel(class="mt-4")
-                  v-expansion-panel-content(v-for="(ItemClase, cl) in ItemsClase" :key="cl" @mousedown.native.stop="Buscar(ItemClase.Code)")
-                    div(slot="header") <v-btn @click.stop="Agregar(ItemClase)" icon small class="grey--text text--lighten-4" :disabled="Boolean(ItemClase.Disabled)"><v-icon style="margin: 0 !important;">add_circle</v-icon></v-btn> {{ ItemClase.Code }} - {{ ItemClase.Name }}
-                    div(slot="default")
-                      v-expansion-panel
-                        v-expansion-panel-content(v-for="(ItemGrupo, g) in ItemsGrupo" :key="g" @mousedown.native.stop="Buscar(ItemGrupo.Code)" class="teal darken-3" style="border-bottom: 1px solid #00493c !important")
-                          div(slot="header") <v-btn @click.stop="Agregar(ItemGrupo)" icon small class="grey--text text--lighten-4" :disabled="Boolean(ItemGrupo.Disabled)"><v-icon style="margin: 0 !important">add_circle</v-icon></v-btn> {{ ItemGrupo.Code }} - {{ ItemGrupo.Name }}
-                          div(slot="default")
-                            v-expansion-panel
-                              v-expansion-panel-content(v-for="(ItemCuenta, c) in ItemsCuenta" :key="c" @mousedown.native.stop="Buscar(ItemCuenta.Code)" class="lime darken-3" style="border-bottom: 1px solid #6e6d04 !important")
-                                div(slot="header" ) <v-btn @click.stop="Agregar(ItemCuenta)" icon small class="grey--text text--lighten-4" :disabled="Boolean(ItemCuenta.Disabled)"><v-icon style="margin: 0 !important">add_circle</v-icon></v-btn> {{ ItemCuenta.Code }} - {{ ItemCuenta.Name }}
-                                div(slot="default")
-                                  v-expansion-panel
-                                    v-expansion-panel-content(v-for="(ItemSubcuenta, s) in ItemsSubcuenta" :key="s" class="blue darken-3" style="border-bottom: 1px solid #0545a0 !important")
-                                      div(slot="header" ) <v-btn @click.stop="Agregar(ItemSubcuenta)" icon small class="grey--text text--lighten-4" :disabled="Boolean(ItemSubcuenta.Disabled)"><v-icon style="margin: 0 !important">add_circle</v-icon></v-btn> {{ ItemSubcuenta.Code }} - {{ ItemSubcuenta.Name }}
-                                      div(slot="default")
+                  v-expansion-panel-content(v-for="(Clase, cl) in Clases" :key="cl" @mousedown.native.stop="BuscarGrupo(Clase)")
+                    div(slot="header") {{ Clase.Code }}
+                    div(slot="default") <v-btn @click.stop="Agregar(Clase)" icon small class="grey--text text--lighten-4" :disabled="Boolean(Clase.Disabled)"><v-icon style="margin: 0 !important;">add_circle</v-icon></v-btn><span class="body-2">{{ Clase.Name }}</span>
+
+                        v-expansion-panel-content(v-for="(Grupo, g) in Clase.Grupos" :key="g" @mousedown.native.stop="BuscarCuenta(Grupo)" class="teal darken-3" style="border-bottom: 1px solid #00493c !important")
+                          div(slot="header") {{ Grupo.Code }}
+                          div(slot="default") <v-btn @click.stop="Agregar(Grupo)" icon small class="grey--text text--lighten-4" :disabled="Boolean(Grupo.Disabled)"><v-icon style="margin: 0 !important">add_circle</v-icon></v-btn><span class="body-2">{{ Grupo.Name }}</span>
+
+                              v-expansion-panel-content(v-for="(Cuenta, c) in Grupo.Cuentas" :key="c" @mousedown.native.stop="BuscarSubcuenta(Cuenta)" class="lime darken-3" style="border-bottom: 1px solid #6e6d04 !important")
+                                div(slot="header" ) {{ Cuenta.Code }}
+                                div(slot="default") <v-btn @click.stop="Agregar(Cuenta)" icon small class="grey--text text--lighten-4" :disabled="Boolean(Cuenta.Disabled)"><v-icon style="margin: 0 !important">add_circle</v-icon></v-btn><span class="body-2">{{ Cuenta.Name }}</span>
+
+                                    v-expansion-panel-content(v-for="(Subcuenta, s) in Cuenta.Subcuentas" :key="s" class="blue darken-3" style="border-bottom: 1px solid #0545a0 !important")
+                                      div(slot="header" ) {{ Subcuenta.Code }}
+                                      div(slot="default") <v-btn @click.stop="Agregar(Subcuenta)" icon small class="grey--text text--lighten-4" :disabled="Boolean(Subcuenta.Disabled)"><v-icon style="margin: 0 !important">add_circle</v-icon></v-btn><span class="body-2">{{ Subcuenta.Name }}</span>
 
           v-card-actions
             v-spacer
@@ -197,10 +197,9 @@ export default {
       { text: 'Eliminar', align: 'center', sortable: false,  value: 'Eliminar' },
     ],
     Cuenta: null,
-    ItemsClase: [],
-    ItemsGrupo: [],
-    ItemsCuenta: [],
-    ItemsSubcuenta: [],
+    OldCode: null,
+    Code: null,
+    Clases: [],
     loading: 0
   }),
   beforeMount () {
@@ -210,7 +209,7 @@ export default {
   },
   mounted () {
     this.$nextTick(() => {
-      this.BuscarInicial()
+      this.BuscarClase ()
     })
   },
   apollo: {
@@ -252,7 +251,7 @@ export default {
     },
   },
   methods: {
-    BuscarInicial () {
+    BuscarClase () {
 
       this.$apollo.query({
         query: CUENTASLIKE,
@@ -263,8 +262,8 @@ export default {
         loadingKey: 'loading',
 
       }).then(res => {
-        this.Code = 0;
-        this.ItemsClase = [];
+
+        this.Clases = [];
 
         for(let i = 0; i<res.data.CuentasLike.length; i++){
           let tmp = {
@@ -272,155 +271,120 @@ export default {
             Type: res.data.CuentasLike[i].Type,
             Code: res.data.CuentasLike[i].Code,
             Name: res.data.CuentasLike[i].Name,
-            Disabled: false
+            Disabled: false,
+            Grupos: []
           }
-          this.ItemsClase.push(tmp)
+          this.Clases.push(tmp)
         }
       })
     },
-    Buscar (Code) {
+    BuscarGrupo (Clase) {
 
-      this.Code = Code;
-      var Length = this.Code.length;
+      if(this.OldCode === Clase.Code){return}
 
-      switch (Length) {
-        case 1:
-          this.Length = 2
-          break;
-
-        case 2:
-          this.Length = 4
-          break;
-
-        case 4:
-          this.Length = 6
-          break;
-
-        //case 6:
-          //this.Length = 8
-          //break;
-
-        default:
-          this.Length = 1
-      }
-
-      this.Code = this.Code + '%';
-
-      if(this.OldCode === this.Code){
-        return
-      }else {
-
-        this.OldCode = this.Code
-      }
+      this.OldCode = Clase.Code;
 
       this.$apollo.query({
         query: CUENTASLIKE,
         variables: {
           Type: 'Supersolidaria',
-          Code: this.Code,
-          Length: this.Length,
-          Disabled: true,
+          Code: Clase.Code + '%',
+          Length: 2
         },
         loadingKey: 'loading',
 
       }).then(res => {
 
-        if(res.data.CuentasLike.length === 0){
-          switch (Length) {
-            case 2:
-              this.ItemsCuenta = []
-              this.ItemsSubcuenta = []
-              break;
+        Clase.Grupos = []
 
-            case 4:
-              this.ItemsSubcuenta = []
-              //this.Auxiliar = []
-              break;
-
-            //case 6:
-              //this.ItemsAuxiliar = []
-              //break;
-
-            default:
-              return
+        for(let i = 0; i<res.data.CuentasLike.length; i++){
+          let tmp = {
+            Id: res.data.CuentasLike[i].Id,
+            Type: res.data.CuentasLike[i].Type,
+            Code: res.data.CuentasLike[i].Code,
+            Name: res.data.CuentasLike[i].Name,
+            Disabled: false,
+            Cuentas: []
           }
-          return
-        }
-
-        let length = res.data.CuentasLike.length > 0 ? res.data.CuentasLike[0].Code.length : 0
-
-        switch (length) {
-          case 2:
-            this.ItemsGrupo = []
-            this.ItemsCuenta = []
-            this.ItemsSubcuenta = []
-            this.ItemsAuxiliar = []
-            break;
-
-          case 4:
-            this.ItemsCuenta = []
-            this.ItemsSubcuenta = []
-            //this.ItemsAuxiliar = []
-            break;
-
-          case 6:
-            this.ItemsSubcuenta = []
-            //this.ItemsAuxiliar = []
-            break;
-
-          //case 8:
-            //this.ItemsAuxiliar = []
-            //break;
-
-          default:
-            //this.ItemsAuxiliar = []
-            this.ItemsSubcuenta = []
-            return
-        }
-
-        if(res.data.CuentasLike[0].Code.length === 2){
-          for(let i = 0; i<res.data.CuentasLike.length; i++){
-            let tmp = {
-              Id: res.data.CuentasLike[i].Id,
-              Type: res.data.CuentasLike[i].Type,
-              Code: res.data.CuentasLike[i].Code,
-              Name: res.data.CuentasLike[i].Name,
-              Disabled: false,
-            }
-            this.ItemsGrupo.push(tmp)
-          }
-        }
-        else if(res.data.CuentasLike[0].Code.length === 4){
-          for(let i = 0; i<res.data.CuentasLike.length; i++){
-            let tmp = {
-              Id: res.data.CuentasLike[i].Id,
-              Type: res.data.CuentasLike[i].Type,
-              Code: res.data.CuentasLike[i].Code,
-              Name: res.data.CuentasLike[i].Name,
-              Disabled: false,
-            }
-            this.ItemsCuenta.push(tmp)
-          }
-        }
-        else if(res.data.CuentasLike[0].Code.length === 6){
-
-          for(let i = 0; i<res.data.CuentasLike.length; i++){
-            let tmp = {
-              Id: res.data.CuentasLike[i].Id,
-              Type: res.data.CuentasLike[i].Type,
-              Code: res.data.CuentasLike[i].Code,
-              Name: res.data.CuentasLike[i].Name,
-              Disabled: false,
-            }
-            for (let j = 0; j < this.Tercero.Cuentas.length; j++){
-              if(this.Tercero.Cuentas[j].Code.startsWith(tmp.Code)){
-                tmp.Disabled = true;
-              }
-            }
-            this.ItemsSubcuenta.push(tmp)
-          }
+          Clase.Grupos.push(tmp)
         }
       })
+    },
+    BuscarCuenta (Grupo) {
+
+      if(this.OldCode === Grupo.Code){return}
+
+      this.OldCode = Grupo.Code;
+
+      this.$apollo.query({
+        query: CUENTASLIKE,
+        variables: {
+          Type: 'Supersolidaria',
+          Code: Grupo.Code + '%',
+          Length: 4
+        },
+        loadingKey: 'loading',
+
+      }).then(res => {
+
+        Grupo.Cuentas = []
+
+        for(let i = 0; i<res.data.CuentasLike.length; i++){
+          let tmp = {
+            Id: res.data.CuentasLike[i].Id,
+            Type: res.data.CuentasLike[i].Type,
+            Code: res.data.CuentasLike[i].Code,
+            Name: res.data.CuentasLike[i].Name,
+            Disabled: false,
+            Subcuentas: []
+          }
+          let Cuentas = this.Tercero.Cuentas;
+          for (let j = 0; j < Cuentas.length; j++){
+            if(Cuentas[j].Code.length===6 && tmp.Code.startsWith(Cuentas[j].Code)){
+              tmp.Disabled = true;
+            }
+          }
+          Grupo.Cuentas.push(tmp)
+        }
+      });
+    },
+    BuscarSubcuenta (Cuenta) {
+
+      if(this.OldCode === Cuenta.Code){return}
+
+      this.OldCode = Cuenta.Code;
+
+      this.$apollo.query({
+        query: CUENTASLIKE,
+        variables: {
+          Type: 'Supersolidaria',
+          Code: Cuenta.Code + '%',
+          Length: 6
+        },
+        loadingKey: 'loading',
+
+      }).then(res => {
+
+        Cuenta.Subcuentas = []
+
+        for(let i = 0; i<res.data.CuentasLike.length; i++){
+          let tmp = {
+            Id: res.data.CuentasLike[i].Id,
+            Type: res.data.CuentasLike[i].Type,
+            Code: res.data.CuentasLike[i].Code,
+            Name: res.data.CuentasLike[i].Name,
+            Disabled: false,
+            Auxiliares: []
+          }
+          let Cuentas = this.Tercero.Cuentas;
+          for (let j = 0; j < Cuentas.length; j++){
+            if(Cuentas[j].Code.length===8 && Cuentas[j].Code.startsWith(tmp.Code)){
+              tmp.Disabled = true;
+            }
+          }
+          Cuenta.Subcuentas.push(tmp)
+        }
+      });
     },
     CreateOrUpdate () {
       if (this.Id === null) {
