@@ -110,19 +110,19 @@ v-layout( align-center justify-center )
                 v-expansion-panel(class="mt-4")
                   v-expansion-panel-content(v-for="(Clase, cl) in Clases" :key="cl" @mousedown.native.stop="BuscarGrupo(Clase)")
                     div(slot="header") {{ Clase.Code }}
-                    div(slot="default") <v-btn @click.stop="Agregar(Clase)" icon small class="grey--text text--lighten-4" :disabled="Boolean(Clase.Disabled)"><v-icon style="margin: 0 !important;">add_circle</v-icon></v-btn><span class="body-2">{{ Clase.Name }}</span>
+                    div(slot="default") <v-btn @click.native.stop="Agregar(Clase)" icon small class="grey--text text--lighten-4" :disabled="Boolean(Clase.Disabled)"><v-icon style="margin: 0 !important;">add_circle</v-icon></v-btn><span class="body-2">{{ Clase.Name }}</span>
 
                         v-expansion-panel-content(v-for="(Grupo, g) in Clase.Grupos" :key="g" @mousedown.native.stop="BuscarCuenta(Grupo)" class="teal darken-3" style="border-bottom: 1px solid #00493c !important")
                           div(slot="header") {{ Grupo.Code }}
-                          div(slot="default") <v-btn @click.stop="Agregar(Grupo)" icon small class="grey--text text--lighten-4" :disabled="Boolean(Grupo.Disabled)"><v-icon style="margin: 0 !important">add_circle</v-icon></v-btn><span class="body-2">{{ Grupo.Name }}</span>
+                          div(slot="default") <v-btn @click.native.stop="Agregar(Grupo)" icon small class="grey--text text--lighten-4" :disabled="Boolean(Grupo.Disabled)"><v-icon style="margin: 0 !important">add_circle</v-icon></v-btn><span class="body-2">{{ Grupo.Name }}</span>
 
                               v-expansion-panel-content(v-for="(Cuenta, c) in Grupo.Cuentas" :key="c" @mousedown.native.stop="BuscarSubcuenta(Cuenta)" class="lime darken-3" style="border-bottom: 1px solid #6e6d04 !important")
                                 div(slot="header" ) {{ Cuenta.Code }}
-                                div(slot="default") <v-btn @click.stop="Agregar(Cuenta)" icon small class="grey--text text--lighten-4" :disabled="Boolean(Cuenta.Disabled)"><v-icon style="margin: 0 !important">add_circle</v-icon></v-btn><span class="body-2">{{ Cuenta.Name }}</span>
+                                div(slot="default") <v-btn @click.native.stop="Agregar(Cuenta)" icon small class="grey--text text--lighten-4" :disabled="Boolean(Cuenta.Disabled)"><v-icon style="margin: 0 !important">add_circle</v-icon></v-btn><span class="body-2">{{ Cuenta.Name }}</span>
 
                                     v-expansion-panel-content(v-for="(Subcuenta, s) in Cuenta.Subcuentas" :key="s" class="blue darken-3" style="border-bottom: 1px solid #0545a0 !important")
                                       div(slot="header" ) {{ Subcuenta.Code }}
-                                      div(slot="default") <v-btn @click.stop="Agregar(Subcuenta)" icon small class="grey--text text--lighten-4" :disabled="Boolean(Subcuenta.Disabled)"><v-icon style="margin: 0 !important">add_circle</v-icon></v-btn><span class="body-2">{{ Subcuenta.Name }}</span>
+                                      div(slot="default") <v-btn @click.native.stop="Agregar(Subcuenta)" icon small class="grey--text text--lighten-4" :disabled="Boolean(Subcuenta.Disabled)"><v-icon style="margin: 0 !important">add_circle</v-icon></v-btn><span class="body-2">{{ Subcuenta.Name }}</span>
 
           v-card-actions
             v-spacer
@@ -584,6 +584,7 @@ export default {
       this.DianCiudadId = null
       this.DianPaisId = null
       this.Cuentas = []
+      this.BuscarClase ()
     },
     LoadTercero (Terceros) {
       //console.log (Terceros)
@@ -630,6 +631,51 @@ export default {
         }
       }
     },
+    Agregar (Cuenta) {
+      console.log('llamado')
+      if(!this.Tercero.Id && !Cuenta.Id){return}
+
+      const AddCuenta = {
+        Id: this.Tercero.Id,
+        CuentaId: Cuenta.Id
+      }
+
+      this.$apollo.mutate({
+        mutation: TERCERO_ADD_CUENTA,
+        variables: {
+          Id: AddCuenta.Id,
+          CuentaId: AddCuenta.CuentaId
+        },
+        loadingKey: "loading",
+        update: (store, { data: res }) => {
+
+          try{
+            var data = store.readQuery({
+              query: TERCEROS
+            })
+
+            let existe = false;
+            for (let i=0; i < data.Terceros.length; i++){
+              if(data.Terceros[i].Id === res.TerceroAddCuenta.Id){
+                data.Terceros[i] = res.TerceroAddCuenta;
+                existe = true
+              }
+            }
+
+            !existe ? data.Terceros.push(res.TerceroAddCuenta) : null;
+
+            store.writeQuery({
+              query: TERCEROS,
+              data
+            }).then( () => {
+              this.BuscarClase ()
+            })
+
+          } catch (Err) {console.log(Err)}
+
+        }
+      })
+    }
   }
 };
 
