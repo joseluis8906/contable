@@ -48,7 +48,8 @@ CREATE TABLE IF NOT EXISTS "DianCiudad" (
 
 CREATE TABLE IF NOT EXISTS "Periodo" (
   "Id" BIGSERIAL PRIMARY KEY,
-  "Nombre" TEXT UNIQUE,
+  "FechaInicial", DATE,
+  "FechaFinal" DATE,
   "Estado" TEXT
 );
 

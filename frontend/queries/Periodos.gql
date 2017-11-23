@@ -1,10 +1,12 @@
-mutation CreatePeriodo (
+query Periodos (
+  $Id: Int
   $Nombre: String
   $FechaInicial: String
   $FechaFinal: String
   $Estado: String
 ){
-  CreatePeriodo (
+  Periodos (
+    Id: $Id
     Nombre: $Nombre
     FechaInicial: $FechaInicial
     FechaFinal: $FechaFinal

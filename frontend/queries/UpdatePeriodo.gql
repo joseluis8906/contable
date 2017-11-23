@@ -1,0 +1,21 @@
+mutation UpdatePeriodo (
+	$Id: Int
+	$Nombre: String
+	$FechaInicial: String
+  $FechaFinal: String
+  $Estado: String
+){
+  UpdatePeriodo (
+		Id: $Id
+		Nombre: $Nombre
+		FechaInicial: $FechaInicial
+	  FechaFinal: $FechaFinal
+    Estado: $Estado
+  ){
+    Id
+		Nombre
+		FechaInicial
+	  FechaFinal
+    Estado
+  }
+}

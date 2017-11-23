@@ -27,7 +27,7 @@ v-layout( align-center justify-center )
           v-flex( xs12 )
 
             v-text-field( label="Número"
-                          value="0001" readonly)
+                          value="0001")
 
 
             v-menu( lazy

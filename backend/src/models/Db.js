@@ -101,6 +101,8 @@ const DianCiudad = Db.define('DianCiudad', {
 const Periodo = Db.define('Periodo', {
   Id: {type: Sequelize.INTEGER, primaryKey: true, autoIncrement: true},
   Nombre: Sequelize.STRING,
+  FechaInicial: Sequelize.DATEONLY,
+  FechaFinal: Sequelize.DATEONLY,
   Estado: Sequelize.STRING
 },
 {

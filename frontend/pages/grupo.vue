@@ -19,7 +19,7 @@ v-layout( align-center justify-center )
     v-card
       v-layout(row wrap pt-3 light-blue)
         v-flex( xs12 )
-          h5(class="grey--text text--lighten-4 text-xs-center bold")
+          h5(class="grey--text text--lighten-4 text-xs-center" style="font-weight: bold")
             v-icon(ma) group
             |  Grupo
       v-card-text

@@ -51,10 +51,12 @@ v-app(id="sandbox" :dark="dark" :light="!dark" standalone)
           { icon: 'group', text: 'Grupo', to: '/grupo' },
           { icon: 'group_work', text: 'Tercero', to: '/tercero' },
           { icon: 'assignment', text: 'Cuenta', to: '/cuenta' },
+          { icon: 'assignment_returned', text: 'Ingreso', to: '/ingreso' },
           { icon: 'assignment_late', text: 'Causación', to: '/causacion' },
-          { icon: 'assignment', text: 'Pago', to: '/pago' },
+          { icon: 'assignment_return', text: 'Pago', to: '/pago' },
+          { icon: 'perm_contact_calendar', text: 'Nómina', to: '/nomina' },
           { icon: 'book', text: 'Informe', to: '/informe' },
-
+          { icon: 'settings', text: 'Configuración', to: '/configuracion' },
         ],
         title: 'Administración Contable'
       }

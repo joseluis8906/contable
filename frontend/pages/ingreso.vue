@@ -20,22 +20,93 @@ v-layout( align-center justify-center )
       v-layout(row wrap pt-3 light-blue)
         v-flex( xs12 )
           h5(class="grey--text text--lighten-4 text-xs-center bold")
-            v-icon(ma) book
-            | Informe
+            v-icon(ma) assignment_returned
+            | Ingreso
       v-card-text
         v-layout( row wrap)
           v-flex( xs12 )
-            v-select( v-bind:items="ItemsTipo"
-                      v-model="Tipo"
-                      label="Tipo"
-                      item-value="value"
+
+            v-text-field( label="Número"
+                          value="0001")
+
+
+            v-menu( lazy
+                    :close-on-content-click="true"
+                    v-model="menu1"
+                    transition="scale-transition"
+                    offset-y
+                    full-width
+                    :nudge-left="40"
+                    max-width="290px" )
+
+              v-text-field( slot="activator"
+                            label="Fecha"
+                            v-model="Fecha"
+                            readonly )
+
+              v-date-picker( :months="months"
+                           :days="days"
+                           first-day-of-week="D"
+                           :header-date-format="({ monthName, year }) => { return `${monthName} ${year}` }"
+                           v-model="Fecha"
+                           no-title
+                           dark )
+                template( scope="{ save, cancel }" )
+                  v-card-actions
+                    v-btn( dark warning @click.native="Fecha=null" ) Limpiar
+
+
+
+            v-select( v-bind:items="ItemsTercero"
+                      v-model="Tercero"
+                      label="Tercero"
+                      item-value="text"
                       item-text="text"
                       dark )
 
+            v-text-field( label="Concepto"
+                          v-model="Concepto"
+                          multi-line )
+
+            v-data-table(v-bind:headers="headers"
+                        :items="ItemsCausacion"
+                        hide-actions
+                        class="elevation-5 grey lighten-1 grey--text text--darken-4" )
+
+              template(slot="headers" scope="props")
+                th(v-for="header in props.headers" :key="header"
+                  class="text-xs-center") {{ header.text }}
+
+              template(slot="items" scope="props")
+                td(class="text-xs-center" :style="{minWidth: ''+(props.item.No.length*10)+'px'}") {{ props.item.No }}
+                td(class="text-xs-center" :style="{minWidth: ''+(props.item.Codigo.length*10)+'px'}") {{ props.item.Codigo }}
+                td(class="text-xs-center" :style="{minWidth: ''+(props.item.Nombre.length*10)+'px'}") {{ props.item.Nombre }}
+                td(class="text-xs-center" :style="{minWidth: ''+(props.item.Monto.length*10)+'px'}") {{ props.item.Monto | currency('$', 0) }}
+                td(class="text-xs-center" :style="{minWidth: ''+(props.item.Monto.length*10)+'px'}")
+                  v-btn( fab
+                         dark
+                         small
+                         error
+                         style="width: 16px; height:16px"
+                         @click.native="eliminar(props.item)")
+                    v-icon(dark) remove
+
+            v-select( v-bind:items="ItemsCuentas"
+                      v-model="Cuenta"
+                      label="Cuenta"
+                      item-text="Nombre"
+                      item-value="Cuenta"
+                      class="mt-5"
+                      dark )
+
+            v-money(label="Monto" v-model="Monto" maskType="currency")
+
+            v-btn(fab dark class="indigo mt-0" @click.native="agregar")
+              v-icon(dark) add
+
       v-card-actions
         v-spacer
-        v-btn( dark @click.native="Reset" ) Cancelar
-        v-btn( dark primary @click.native="CreateOrUpdate" ) Guardar
+        v-btn( dark warning @click.native="Reset" ) Limpiar
 </template>
 
 <script>
@@ -44,6 +115,7 @@ import TERCEROS from '~/queries/Terceros.gql'
 import CREATE_TERCERO from '~/queries/CreateTercero.gql'
 import UPDATE_TERCERO from '~/queries/UpdateTercero.gql'
 
+import VMoney from '~/components/MonetaryInput.vue'
 
 export default {
   data: () => ({
@@ -53,6 +125,43 @@ export default {
       timeout: 6000,
       text: 'Cargando'
     },
+    menu1: false,
+    months: [
+      'Enero',
+      'Febrero',
+      'Marzo',
+      'Abril',
+      'Mayo',
+      'Junio',
+      'Julio',
+      'Agosto',
+      'Septiembre',
+      'Octubre',
+      'Noviembre',
+      'Diciembre'],
+    days: ['D', 'L', 'M', 'M', 'J', 'V', 'S'],
+    ItemsTercero: [
+      {text: "Libreria San Pablo", value: "22050501"}
+    ],
+    Fecha: null,
+    Tercero: null,
+    Concepto: null,
+    headers: [
+      {text: 'Nº', value: 'No'},
+      {text: 'Código', value: 'Codigo'},
+      {text: 'Nombre', value: 'Nombre'},
+      {text: 'Monto', value: 'Monto'},
+      {text: 'Eliminar', value: 'Eliminar'},
+    ],
+    ItemsCausacion: [
+      //{No: '01', Codigo: '1110', Nombre: 'Banco', Monto: 200000}
+    ],
+    ItemsCuentas: [
+      {Codigo: '1110', Nombre: 'Banco'},
+      {Codigo: '5110', Nombre: 'Honorarios'}
+    ],
+    Cuenta: null,
+    Monto: null,
     Id: null,
     TipoDeIdentificacion: null,
     NumeroDeIdentificacion: null,
@@ -69,16 +178,16 @@ export default {
     Cliente: null,
     Proveedor: null,
     Empleado: null,
-    ItemsTipo: [
-      {text: 'Causación', value: '01'},
-      {text: 'Comprobante de Egreso', value: '02'},
-      {text: 'Comprobante de diario', value: '03'},
-      {text: 'Auxiliar Contable', value: '04'},
-      {text: 'Libro de Banco', value: '05'},
-      {text: 'Estado de Resultado', value: '06'},
-      {text: 'Estado de Situación Financiera', value: '07'},
+    ItemsDeIdentificacion: [
+      {text: 'Cédula de ciudadanía', value: '13'},
+      {text: 'Tarjeta de extranjería', value: '21'},
+      {text: 'Cédula de extranjería', value: '22'},
+      {text: 'Nit', value: '31'},
+      {text: 'Identificación de extranjeros diferente al Nit asignado DIAN', value: '33'},
+      {text: 'Pasaporte', value: '41'},
+      {text: 'Documento de identificación extranjero', value: '42'},
+      {text: 'Sin identificación del exterior o para uso definido por la DIAN', value: '43'},
     ],
-    Tipo: null,
     ItemsDepartamento: [
       {nombre: 'Cesar', codigo: '20'},
     ],
@@ -103,7 +212,7 @@ export default {
         return {
           TipoDeIdentificacion: this.TipoDeIdentificacion,
           NumeroDeIdentificacion: this.NumeroDeIdentificacion,
-          DigitoDeVerificacion: this.DigitoDeVerificacion
+          DigitoDeVerificacion: this.DigitoDeVerificacionagregar
         }
       },
       loadingKey: 'loading',
@@ -114,6 +223,14 @@ export default {
     },
   },
   methods: {
+    agregar(){
+      //this.ItemsCausacion = []
+      let tmp = {No: '01', Codigo: this.Cuenta.Codigo, Nombre: this.Cuenta.Nombre, Monto: this.Monto}
+      this.ItemsCausacion.push(tmp)
+    },
+    eliminar(){
+      this.ItemsCausacion = []
+    },
     CreateOrUpdate () {
       if (this.Id === null) {
         this.Create();
@@ -356,9 +473,11 @@ export default {
           this.PaisDeResidencia = null
         }
       }
-
     }
-  }
+  },
+  components: {
+    VMoney
+  },
 };
 
 

@@ -23,6 +23,18 @@ const Periodo = new GraphQLObjectType({
           return Periodo.Nombre;
         }
       },
+      FechaInicial: {
+        type: GraphQLString,
+        resolve(Periodo) {
+          return Periodo.FechaInicial;
+        }
+      },
+      FechaFinal: {
+        type: GraphQLString,
+        resolve(Periodo) {
+          return Periodo.FechaFinal;
+        }
+      },
       Estado: {
         type: GraphQLString,
         resolve(Periodo) {
@@ -38,6 +50,8 @@ const Periodos = {
   args: {
     Id: {type: GraphQLInt},
     Nombre: {type: GraphQLString},
+    FechaInicial: {type: GraphQLString},
+    FechaFinal: {type: GraphQLString},
     Estado: {type: GraphQLString}
   },
   resolve(root, args) {
@@ -49,11 +63,15 @@ const CreatePeriodo = {
   type: Periodo,
   args: {
     Nombre: {type: GraphQLString},
+    FechaInicial: {type: GraphQLString},
+    FechaFinal: {type: GraphQLString},
     Estado: {type: GraphQLString},
   },
   resolve(_, args) {
     return Db.models.Periodo.create({
       Nombre: args.Nombre,
+      FechaInicial: args.FechaInicial,
+      FechaFinal: args.FechaFinal,
       Estado: args.Estado,
     });
   }
@@ -65,6 +83,8 @@ const UpdatePeriodo = {
   args: {
     Id: {type: GraphQLInt},
     Nombre: {type: GraphQLString},
+    FechaInicial: {type: GraphQLString},
+    FechaFinal: {type: GraphQLString},
     Estado: {type: GraphQLString},
   },
   resolve(_, args) {
@@ -72,6 +92,8 @@ const UpdatePeriodo = {
       where: {Id: args.Id}
     }).then (R => {
       R.Nombre = args.Nombre;
+      R.FechaInicial = args.FechaInicial;
+      R.FechaFinal = args.FechaFinal;
       R.Estado = args.Estado;
       R.save();
       return R;

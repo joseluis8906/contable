@@ -20,7 +20,7 @@ v-layout( align-center justify-center )
       v-layout(row wrap pt-3 light-blue)
         v-flex( xs12 )
           h5(class="grey--text text--lighten-4 text-xs-center bold")
-            v-icon(ma) assignment
+            v-icon(ma) assignment_return
             | Pago
       v-card-text
         v-layout( row wrap)
