@@ -82,8 +82,8 @@ v-layout( align-center justify-center )
 
           v-card-actions
             v-spacer
-            v-btn( dark @click.native="Reset" ) Cancelar
-            v-btn( dark primary @click.native="CreateOrUpdate" ) Guardar
+            v-btn( dark @click.native="Reset()" ) Cancelar
+            v-btn( dark primary @click.native="CreateOrUpdate()" ) Guardar
 
         v-tabs-content(id="tab-2")
           v-card-text
@@ -103,7 +103,7 @@ v-layout( align-center justify-center )
                              small
                              error
                              style="width: 16px; height:16px"
-                             @click.native="eliminar(props.item)"
+                             @click.native="Eliminar(props.item)"
                              :disabled="props.item.EliminarDisable")
                         v-icon remove
 
@@ -126,8 +126,8 @@ v-layout( align-center justify-center )
 
           v-card-actions
             v-spacer
-            v-btn( dark @click.native="Reset" ) Cancelar
-            v-btn( dark primary @click.native="CreateOrUpdate" ) Guardar
+            v-btn( dark @click.native="Reset()" ) Cancelar
+            v-btn( dark primary @click.native="CreateOrUpdate()" ) Guardar
 
 </template>
 
@@ -572,19 +572,20 @@ export default {
       })
     },
     Reset () {
-      this.Id = null
-      this.DianIdentificacion = null
-      this.NumeroDeIdentificacion = null
-      this.PrimerApellido = null
-      this.SegundoApellido = null
-      this.PrimerNombre = null
-      this.OtrosNombres = null
-      this.RazonSocial = null
-      this.Direccion = null
-      this.DianDepartamentoId = null
-      this.DianCiudadId = null
-      this.DianPaisId = null
-      this.Cuentas = []
+      this.Tercero.Id = null
+      this.Tercero.DianIdentificacionId = null
+      this.Tercero.NumeroDeIdentificacion = null
+      this.Tercero.PrimerApellido = null
+      this.Tercero.SegundoApellido = null
+      this.Tercero.PrimerNombre = null
+      this.Tercero.OtrosNombres = null
+      this.Tercero.RazonSocial = null
+      this.Tercero.Direccion = null
+      this.Tercero.DianDepartamentoId = null
+      this.Tercero.DianCiudadId = null
+      this.Tercero.DianPaisId = null
+      this.Tercero.Cuentas = []
+      this.OldCode = null
       this.BuscarClase ()
     },
     LoadTercero (Terceros) {
@@ -612,7 +613,7 @@ export default {
               Id: Terceros[i].Cuentas[j].Id,
               Code: Terceros[i].Cuentas[j].Code,
               Name: Terceros[i].Cuentas[j].Name,
-              EliminarDisable: true,
+              EliminarDisable: false,
             }
             this.Tercero.Cuentas.push(tmp)
           }
@@ -635,6 +636,8 @@ export default {
     Agregar (Cuenta) {
 
       if(!this.Tercero.Id && !Cuenta.Id){return}
+
+      Cuenta.Disabled = true;
 
       this.$apollo.query({
         query: CUENTASLIKE,
@@ -685,51 +688,125 @@ export default {
 
             } catch (Err) {console.log(Err)}
 
-            const AddCuenta = {
-              Id: this.Tercero.Id,
-              CuentaId: res.CreateCuenta.Id
-            }
 
-            this.$apollo.mutate({
-              mutation: TERCERO_ADD_CUENTA,
-              variables: {
-                Id: AddCuenta.Id,
-                CuentaId: AddCuenta.CuentaId
-              },
-              loadingKey: "loading",
-              update: (store, { data: res }) => {
-
-                try{
-                  var data = store.readQuery({
-                    query: TERCEROS
-                  })
-
-                  let existe = false;
-                  for (let i=0; i < data.Terceros.length; i++){
-                    if(data.Terceros[i].Id === res.TerceroAddCuenta.Id){
-                      data.Terceros[i] = res.TerceroAddCuenta;
-                      existe = true
-                    }
-                  }
-
-                  !existe ? data.Terceros.push(res.TerceroAddCuenta) : null;
-
-                  store.writeQuery({
-                    query: TERCEROS,
-                    data
-                  }).then( () => {
-                    this.BuscarClase ()
-                  })
-
-                } catch (Err) {console.log(Err)}
-
-              }
-            })
 
           }
+        }).then( res => {
+
+          const AddCuenta = {
+            Id: this.Tercero.Id,
+            CuentaId: res.data.CreateCuenta.Id
+          }
+
+          this.$apollo.mutate({
+            mutation: TERCERO_ADD_CUENTA,
+            variables: {
+              Id: AddCuenta.Id,
+              CuentaId: AddCuenta.CuentaId
+            },
+            loadingKey: "loading",
+            update: (store, { data: res }) => {
+
+              try{
+                var data = store.readQuery({
+                  query: TERCEROS
+                })
+
+                let existe = false;
+                for (let i=0; i < data.Terceros.length; i++){
+                  if(data.Terceros[i].Id === res.TerceroAddCuenta.Id){
+                    data.Terceros[i] = res.TerceroAddCuenta;
+                    existe = true
+                  }
+                }
+
+                !existe ? data.Terceros.push(res.TerceroAddCuenta) : null;
+
+                store.writeQuery({
+                  query: TERCEROS,
+                  data
+                }).then( () => {
+                  this.BuscarClase ()
+                })
+
+              } catch (Err) {console.log(Err)}
+
+            }
+          })
         })
       })
     },
+    Eliminar (Cuenta) {
+
+      var Code = Cuenta.Code.substr(0, Cuenta.Code.length-2)
+
+      for(let h=0; h<this.Clases.length; h++){
+        if(this.Clases[h].Grupos && Code.length>=2){
+          for(let i=0; i<this.Clases[h].Grupos.length; i++){
+            if(Code.length === 2 && Code === this.Clases[h].Grupos[i].Code){
+              this.Clases[h].Grupos[i].Disabled = false
+              break
+            }
+            if(this.Clases[h].Grupos[i].Cuentas && Code.length>=4){
+              for(let j=0; j<this.Clases[h].Grupos[i].Cuentas.length; j++){
+                if(Code.length === 4 && Code === this.Clases[h].Grupos[i].Cuentas[j].Code){
+                  this.Clases[h].Grupos[i].Cuentas[j].Disabled = false
+                  break
+                }
+                if(this.Clases[h].Grupos[i].Cuentas[j]){
+                  for(let k=0; k<this.Clases[h].Grupos[i].Cuentas[j].Subcuentas.length; k++){
+                    if(Code === this.Clases[h].Grupos[i].Cuentas[j].Subcuentas[k].Code){
+                      this.Clases[h].Grupos[i].Cuentas[j].Subcuentas[k].Disabled = false
+                      break
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+
+      const RemoveCuenta = {
+        Id: this.Tercero.Id,
+        CuentaId: Cuenta.Id
+      }
+
+      this.$apollo.mutate({
+        mutation: TERCERO_REMOVE_CUENTA,
+        variables: {
+          Id: RemoveCuenta.Id,
+          CuentaId: RemoveCuenta.CuentaId
+        },
+        loadingKey: "loading",
+        update: (store, { data: res }) => {
+
+          try{
+            var data = store.readQuery({
+              query: TERCEROS
+            })
+
+            let existe = false;
+            for (let i=0; i < data.Terceros.length; i++){
+              if(data.Terceros[i].Id === res.TerceroRemoveCuenta.Id){
+                data.Terceros[i] = res.TerceroRemoveCuenta;
+                existe = true
+              }
+            }
+
+            !existe ? data.Terceros.push(res.TerceroRemoveCuenta) : null;
+
+            store.writeQuery({
+              query: TERCEROS,
+              data
+            }).then( () => {
+              this.BuscarClase ()
+            })
+
+          } catch (Err) {console.log(Err)}
+        }
+      })
+    }
   }
 };
 

@@ -254,6 +254,7 @@ const TerceroRemoveCuenta = {
         where: {Id: args.CuentaId}
       }).then(Cuenta => {
         return Tercero.removeCuenta(Cuenta).then( () => {
+          Cuenta.destroy();
           return Tercero;
         });
       })
