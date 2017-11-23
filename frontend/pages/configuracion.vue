@@ -29,6 +29,10 @@ v-layout( align-center justify-center )
             v-icon timeline
             h6(class="body-2 grey--text text--lighten-4") Periodo
 
+          v-tabs-item(href="#tab-2" @click.native="Reset")
+            v-icon(fa) usd
+            h6(class="body-2 grey--text text--lighten-4") Saldo Inicial
+
         v-tabs-content(id="tab-1")
           v-card-text
             v-layout( row wrap)
@@ -55,7 +59,7 @@ v-layout( align-center justify-center )
 
                   v-date-picker( :months="months"
                                  :days="days"
-                                 first-day-of-week="D"
+                                 first-day-of-week="Dom"
                                  :header-date-format="({ monthName, year }) => { return `${monthName} ${year}` }"
                                  v-model="Periodo.FechaInicial"
                                  autosave
@@ -82,7 +86,7 @@ v-layout( align-center justify-center )
 
                  v-date-picker( :months="months"
                                 :days="days"
-                                first-day-of-week="D"
+                                first-day-of-week="Dom"
                                 :header-date-format="({ monthName, year }) => { return `${monthName} ${year}` }"
                                 v-model="Periodo.FechaFinal"
                                 autosave
@@ -101,6 +105,11 @@ v-layout( align-center justify-center )
             v-spacer
             v-btn( dark @click.native="Reset" ) Cancelar
             v-btn( dark primary @click.native="Guardar" ) Guardar
+
+        v-tabs-content(id="tab-2")
+          v-card-text
+            v-layout( row wrap)
+              v-flex( xs12 )
 
 </template>
 
@@ -137,7 +146,8 @@ export default {
         'Septiembre',
         'Octubre',
         'Noviembre',
-        'Diciembre'],
+        'Diciembre'
+      ],
       days: ['Dom', 'Lun', 'Mar', 'Mie', 'Jue', 'Vie', 'Sab'],
       Periodo: {
         Id: null,
@@ -166,6 +176,12 @@ export default {
           this.Periodo.FechaInicial = data.Periodos[0].FechaInicial;
           this.Periodo.FechaFinal = data.Periodos[0].FechaFinal;
           this.Periodo.Estado = data.Periodos[0].Estado;
+        }
+        else{
+          this.Periodo.Id = null;
+          this.Periodo.FechaInicial = null;
+          this.Periodo.FechaFinal = null;
+          this.Periodo.Estado = null;
         }
       }
     }
