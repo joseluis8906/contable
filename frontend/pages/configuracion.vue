@@ -33,6 +33,7 @@ v-layout( align-center justify-center )
             v-icon(fa) usd
             h6(class="body-2 grey--text text--lighten-4") Saldo Inicial
 
+        //- Periodo
         v-tabs-content(id="tab-1")
           v-card-text
             v-layout( row wrap)
@@ -106,10 +107,17 @@ v-layout( align-center justify-center )
             v-btn( dark @click.native="Reset" ) Cancelar
             v-btn( dark primary @click.native="Guardar" ) Guardar
 
+        //- Saldo Inicial
         v-tabs-content(id="tab-2")
           v-card-text
             v-layout( row wrap)
               v-flex( xs12 )
+                v-select( v-model="SaldoInicial.Periodo"
+                          :items="SaldoInicial.Periodos"
+                          label="Estado"
+                          item-text="Nombre"
+                          return-object
+                          dark )
 
 </template>
 
@@ -157,12 +165,19 @@ export default {
         Estado: null,
         EstadoOptions: ["Abierto", "Cerrado"],
       },
+      SaldoInicial: {
+        Periodos: [],
+        Periodo: {
+          Id: null,
+          Nombre: null,
+        },
+      },
       TabActive: null,
       loading: 0
     }
   },
   apollo: {
-    Periodos: {
+    OnePeriodos: {
       query: PERIODOS,
       variables () {
         return {
@@ -183,6 +198,13 @@ export default {
           this.Periodo.FechaFinal = null;
           this.Periodo.Estado = null;
         }
+      }
+    },
+    Periodos: {
+      query: PERIODOS,
+      loadingKey: 'loading',
+      update (data) {
+        this.SaldoInicial.Periodos = data.Periodos;
       }
     }
   },

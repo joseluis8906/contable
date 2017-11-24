@@ -388,7 +388,7 @@ export default {
       });
     },
     CreateOrUpdate () {
-      if (this.Id === null) {
+      if (this.Tercero.Id === null) {
         this.Create();
       }else{
         this.Update();
@@ -396,17 +396,17 @@ export default {
     },
     Create () {
       const Tercero = {
-        DianDepartamentoId: this.DianIdentificacionId,
-        NumeroDeIdentificacion: this.NumeroDeIdentificacion,
-        PrimerApellido: this.PrimerApellido,
-        SegundoApellido: this.SegundoApellido,
-        PrimerNombre: this.PrimerNombre,
-        OtrosNombres: this.OtrosNombres,
-        RazonSocial: this.RazonSocial,
-        Direccion: this.Direccion,
-        DianPaisId: this.DianPaisId,
-        DianDepartamentoId: this.DianDepartamentoId,
-        DianPaisId: this.DianPaisId
+        DianDepartamentoId: this.Tercero.DianIdentificacionId,
+        NumeroDeIdentificacion: this.Tercero.NumeroDeIdentificacion,
+        PrimerApellido: this.Tercero.PrimerApellido,
+        SegundoApellido: this.Tercero.SegundoApellido,
+        PrimerNombre: this.Tercero.PrimerNombre,
+        OtrosNombres: this.Tercero.OtrosNombres,
+        RazonSocial: this.Tercero.RazonSocial,
+        Direccion: this.Tercero.Direccion,
+        DianPaisId: this.Tercero.DianPaisId,
+        DianDepartamentoId: this.Tercero.DianDepartamentoId,
+        DianPaisId: this.Tercero.DianPaisId
       };
 
       this.Reset ();
@@ -451,42 +451,26 @@ export default {
             data: data
           })
 
-        } catch (Err) {
-
-          var data = {Terceros: []}
-
-          data.Terceros.push(res.CreateTercero)
-
-          store.writeQuery({
-            query: TERCEROS,
-            variables: {
-              DianIdentificacionId: res.CreateTercero.DianIdentificacionId,
-              NumeroDeIdentificacion: res.CreateTercero.NumeroDeIdentificacion,
-            },
-            data: data
-          })
-
-        }
+        } catch (Err) { consoel.log(Err) }
 
       },
-      }).then( data => {}).catch( Err => {
-        console.log(Err)
       })
+      
     },
     Update () {
       const Tercero = {
-        Id: this.Id,
-        TipoDeIdentificacion: this.TipoDeIdentificacion,
-        NumeroDeIdentificacion: this.NumeroDeIdentificacion,
-        PrimerApellido: this.PrimerApellido,
-        SegundoApellido: this.SegundoApellido,
-        PrimerNombre: this.PrimerNombre,
-        OtrosNombres: this.OtrosNombres,
-        RazonSocial: this.RazonSocial,
-        Direccion: this.Direccion,
-        CodigoDepartamento: this.CodigoDepartamento,
-        CodigoMunicipio: this.CodigoMunicipio,
-        PaisDeResidencia: this.PaisDeResidencia
+        Id: this.Tercero.Id,
+        DianIdentificacionId: this.Tercero.DianIdentificacionId,
+        NumeroDeIdentificacion: this.Tercero.NumeroDeIdentificacion,
+        PrimerApellido: this.Tercero.PrimerApellido,
+        SegundoApellido: this.Tercero.SegundoApellido,
+        PrimerNombre: this.Tercero.PrimerNombre,
+        OtrosNombres: this.Tercero.OtrosNombres,
+        RazonSocial: this.Tercero.RazonSocial,
+        Direccion: this.Tercero.Direccion,
+        DianDepartamentoId: this.Tercero.DianDepartamentoId,
+        DianCiudadId: this.Tercero.DianCiudadId,
+        DianPaisId: this.Tercero.DianPaisId
       };
 
       this.Reset ();
@@ -495,7 +479,7 @@ export default {
         mutation: UPDATE_TERCERO,
         variables: {
           Id: Tercero.Id,
-          TipoDeIdentificacion: Tercero.TipoDeIdentificacion,
+          DianIdentificacionId: Tercero.DianIdentificacionId,
           NumeroDeIdentificacion: Tercero.NumeroDeIdentificacion,
           DigitoDeVerificacion: Tercero.DigitoDeVerificacion,
           PrimerApellido: Tercero.PrimerApellido,
@@ -504,71 +488,33 @@ export default {
           OtrosNombres: Tercero.OtrosNombres,
           RazonSocial: Tercero.RazonSocial,
           Direccion: Tercero.Direccion,
-          CodigoDepartamento: Tercero.CodigoDepartamento,
-          CodigoMunicipio: Tercero.CodigoMunicipio,
-          PaisDeResidencia: Tercero.PaisDeResidencia
+          DianDepartamentoId: Tercero.DianDepartamentoId,
+          DianCiudadId: Tercero.DianCiudadId,
+          DianPaisId: Tercero.DianPaisId
         },
         loadingKey: 'loading',
         update: (store, { data: res }) => {
           //console.log(Ente);
           try {
+
             var data = store.readQuery({
-              query: TERCEROS,
-              variables: {
-                TipoDeIdentificacion: res.UpdateTercero.TipoDeIdentificacion,
-                NumeroDeIdentificacion: res.UpdateTercero.NumeroDeIdentificacion,
-                DigitoDeVerificacion: res.UpdateTercero.DigitoDeVerificacion
-              }
+              query: TERCEROS
             })
 
             for (let i=0; i<data.Terceros.length; i++) {
               if (data.Terceros[i].Id === res.UpdateTercero.Id) {
-                data.Terceros[i].TipoDeIdentificacion = res.UpdateTercero.TipoDeIdentificacion
-                data.Terceros[i].NumeroDeIdentificacion = res.UpdateTercero.NumeroDeIdentificacion
-                data.Terceros[i].DigitoDeVerificacion = res.UpdateTercero.DigitoDeVerificacion
-                data.Terceros[i].PrimerApellido = res.UpdateTercero.PrimerApellido
-                data.Terceros[i].SegundoApellido = res.UpdateTercero.SegundoApellido
-                data.Terceros[i].PrimerNombre = res.UpdateTercero.PrimerNombre
-                data.Terceros[i].OtrosNombres = res.UpdateTercero.OtrosNombres
-                data.Terceros[i].RazonSocial = res.UpdateTercero.RazonSocial
-                data.Terceros[i].Direccion = res.UpdateTercero.Direccion
-                data.Terceros[i].CodigoDepartamento = res.UpdateTercero.CodigoDepartamento
-                data.Terceros[i].CodigoMunicipio = res.UpdateTercero.CodigoMunicipio
-                data.Terceros[i].PaisDeResidencia = res.UpdateTercero.PaisDeResidencia
+                data.Terceros[i] = res.UpdateTercero
               }
             }
 
             store.writeQuery({
               query: TERCEROS,
-              variables: {
-                TipoDeIdentificacion: res.UpdateTercero.TipoDeIdentificacion,
-                NumeroDeIdentificacion: res.UpdateTercero.NumeroDeIdentificacion,
-                DigitoDeVerificacion: res.UpdateTercero.DigitoDeVerificacion
-              },
-              data: data
+              data
             })
 
-          } catch (Err) {
-
-            var data = {Terceros: []}
-
-            data.Terceros.push(res.UpdateTercero)
-
-            store.writeQuery({
-              query: TERCEROS,
-              variables: {
-                TipoDeIdentificacion: res.UpdateTercero.TipoDeIdentificacion,
-                NumeroDeIdentificacion: res.UpdateTercero.NumeroDeIdentificacion,
-                DigitoDeVerificacion: res.UpdateTercero.DigitoDeVerificacion
-              },
-              data: data
-            })
-
-          }
+          } catch (Err) {console.log(Err)}
 
         },
-      }).then( data => {}).catch( Err => {
-        //console.log(Err)
       })
     },
     Reset () {
