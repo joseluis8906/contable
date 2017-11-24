@@ -395,8 +395,9 @@ export default {
       }
     },
     Create () {
+
       const Tercero = {
-        DianDepartamentoId: this.Tercero.DianIdentificacionId,
+        DianIdentificacionId: this.Tercero.DianIdentificacionId,
         NumeroDeIdentificacion: this.Tercero.NumeroDeIdentificacion,
         PrimerApellido: this.Tercero.PrimerApellido,
         SegundoApellido: this.Tercero.SegundoApellido,
@@ -406,7 +407,7 @@ export default {
         Direccion: this.Tercero.Direccion,
         DianPaisId: this.Tercero.DianPaisId,
         DianDepartamentoId: this.Tercero.DianDepartamentoId,
-        DianPaisId: this.Tercero.DianPaisId
+        DianCiudadId: this.Tercero.DianCiudadId
       };
 
       this.Reset ();
@@ -451,11 +452,11 @@ export default {
             data: data
           })
 
-        } catch (Err) { consoel.log(Err) }
+        } catch (Err) { console.log(Err) }
 
       },
       })
-      
+
     },
     Update () {
       const Tercero = {
