@@ -53,6 +53,7 @@ v-app(id="sandbox" :dark="dark" :light="!dark" standalone)
           { icon: 'assignment', text: 'Cuenta', to: '/cuenta' },
           { icon: 'assignment_returned', text: 'Ingreso', to: '/ingreso' },
           { icon: 'assignment_late', text: 'Causación', to: '/causacion' },
+          { icon: 'description', text: 'Nota', to: '/nota' },
           { icon: 'assignment_return', text: 'Pago', to: '/pago' },
           { icon: 'perm_contact_calendar', text: 'Nómina', to: '/nomina' },
           { icon: 'book', text: 'Informe', to: '/informe' },
