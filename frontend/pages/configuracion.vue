@@ -114,11 +114,28 @@ v-layout( align-center justify-center )
               v-flex( xs12 )
                 v-select( v-model="SaldoInicial.Periodo"
                           :items="SaldoInicial.Periodos"
-                          label="Estado"
+                          label="Periodo"
                           item-text="Nombre"
                           return-object
                           dark )
 
+                v-select( v-model="SaldoInicial.Cuenta"
+                          :items="SaldoInicial.Cuentas"
+                          label="Cuenta"
+                          item-text="Buscar"
+                          return-object
+                          autocomplete
+                          dark )
+
+                v-money( v-model="SaldoInicial.Monto"
+                         label="Monto"
+                         maskType="currency" dark)
+
+
+          v-card-actions
+            v-spacer
+            v-btn( dark @click.native="Reset" ) Cancelar
+            v-btn( dark primary @click.native="Cargar" ) Cargar
 </template>
 
 <style lang="stylus" scoped>
@@ -128,6 +145,9 @@ v-layout( align-center justify-center )
 import PERIODOS from '~/queries/Periodos.gql';
 import CREATE_PERIODO from '~/queries/CreatePeriodo.gql';
 import UPDATE_PERIODO from '~/queries/UpdatePeriodo.gql';
+
+import CUENTAS from '~/queries/Cuentas.gql';
+import VMoney from '~/components/MonetaryInput.vue'
 
 export default {
   data () {
@@ -171,6 +191,15 @@ export default {
           Id: null,
           Nombre: null,
         },
+        Cuentas: [],
+        Cuenta: {
+          Id: null,
+          Buscar: null,
+          Type: null,
+          Code: null,
+          Name: null,
+        },
+        Monto: null
       },
       TabActive: null,
       loading: 0
@@ -205,6 +234,26 @@ export default {
       loadingKey: 'loading',
       update (data) {
         this.SaldoInicial.Periodos = data.Periodos;
+      }
+    },
+    Cuentas: {
+      query: CUENTAS,
+      variables:{
+        Type: 'Supersolidaria'
+      },
+      loadingKey: 'loading',
+      update (data) {
+        this.SaldoInicial.Cuentas = [];
+        for(let i=0; i < data.Cuentas.length; i++){
+          let tmp = {
+            Id: data.Cuentas[i].Id,
+            Buscar: `${data.Cuentas[i].Code} - ${data.Cuentas[i].Name.substr(0, 48)}`,
+            Type: data.Cuentas[i].Type,
+            Code: data.Cuentas[i].Code,
+            Name: data.Cuentas[i].Name,
+          }
+          this.SaldoInicial.Cuentas.push(tmp)
+        }
       }
     }
   },
@@ -295,5 +344,6 @@ export default {
       }
     },
   },
+  components: {VMoney},
 }
 </script>
