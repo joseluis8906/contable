@@ -22,19 +22,19 @@ const SaldoInicial = new GraphQLObjectType({
         }
       },
       PeriodoId: {
-        type: GraphQLString,
+        type: GraphQLInt,
         resolve(SaldoInicial) {
           return SaldoInicial.PeriodoId;
         }
       },
       CuentaId: {
-        type: GraphQLString,
+        type: GraphQLInt,
         resolve(SaldoInicial) {
           return SaldoInicial.CuentaId;
         }
       },
       Monto: {
-        type: GraphQLString,
+        type: GraphQLFloat,
         resolve(SaldoInicial) {
           return SaldoInicial.Monto;
         }

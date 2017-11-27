@@ -345,8 +345,8 @@ Cuenta.hasOne(NotaItem, {foreignKey: 'CuentaHaberId'});
 //SaldoInicial
 const SaldoInicial = Db.define('SaldoInicial', {
   Id: {type: Sequelize.INTEGER, primaryKey: true, autoIncrement: true},
-  PeriodoId: {type: Sequelize.INTEGER, references: {model: Periodo, key: 'Id'}, primaryKey: true},
-  CuentaId: {type: Sequelize.INTEGER, references: {model: Cuenta, key: 'Id'}, primaryKey: true},
+  PeriodoId: {type: Sequelize.INTEGER, references: {model: Periodo, key: 'Id'}},
+  CuentaId: {type: Sequelize.INTEGER, references: {model: Cuenta, key: 'Id'}},
   Monto: Sequelize.DECIMAL
 },
 {
@@ -357,8 +357,9 @@ const SaldoInicial = Db.define('SaldoInicial', {
 SaldoInicial.belongsTo(Periodo);
 Periodo.hasMany(SaldoInicial, {as: 'SaldosIniciales'});
 
-SaldoInicial.belongsTo(Cuenta);
-Cuenta.hasMany(SaldoInicial, {as: 'SaldosIniciales'});
+SaldoInicial.belongsTo(Cuenta, {foreignKey: 'CuentaId'});
+Cuenta.hasMany(SaldoInicial, {as: 'SaldosIniciales', foreignKey: 'CuentaId'});
+
 
 //open connection
 Db.authenticate().then(() => {

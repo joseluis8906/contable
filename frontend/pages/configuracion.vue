@@ -264,6 +264,18 @@ export default {
       this.Periodo.FechaInicial = null;
       this.Periodo.FechaFinal = null;
       this.Periodo.Estado = null;
+      this.SaldoInicial.Periodo = {
+        Id: null,
+        Nombre: null,
+      };
+      this.SaldoInicial.Cuenta = {
+        Id: null,
+        Buscar: null,
+        Type: null,
+        Code: null,
+        Name: null,
+      };
+      this.SaldoInicial.Monto = null;
     },
     Guardar () {
 
