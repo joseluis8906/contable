@@ -1,0 +1,28 @@
+query SaldosIniciales(
+  $Id: Int
+  $PeriodoId: Int
+  $CuentaId: Int
+  $Monto: Float
+){
+  SaldosIniciales(
+    Id: $Id
+    PeriodoId: $PeriodoId
+    CuentaId: $CuentaId
+    Monto: $Monto
+  ){
+    Id
+    Periodo {
+      Id
+      Nombre
+      FechaInicial
+      FechaFinal
+    }
+    Cuenta {
+      Id
+      Code
+      Name
+      Type
+    }
+    Monto
+  }
+}

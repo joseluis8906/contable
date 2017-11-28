@@ -4,7 +4,7 @@ mutation UpdateSaldoInicial(
   $CuentaId: Int
   $Monto: Float
 ){
-  CreateSaldoInicial(
+  UpdateSaldoInicial(
     Id: $Id
     PeriodoId: $PeriodoId
     CuentaId: $CuentaId
@@ -12,8 +12,18 @@ mutation UpdateSaldoInicial(
   )
   {
     Id
-    PeriodoId
-    CuentaId
+    Periodo {
+      Id
+      Nombre
+      FechaInicial
+      FechaFinal
+    }
+    Cuenta {
+      Id
+      Code
+      Name
+      Type
+    }
     Monto
   }
 }
