@@ -386,7 +386,7 @@ export default {
               data
             })
 
-          }catch(Err){console.log(Err)}
+          }catch(Err){ console.log(Err) }
         }
       })
     }
