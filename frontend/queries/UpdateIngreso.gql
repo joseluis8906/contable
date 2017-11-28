@@ -17,7 +17,11 @@ mutation UpdateIngreso(
     Id
     Fecha
     Numero
-    PeriodoId
+    Periodo {
+      Id
+      Nombre
+      Estado
+    }
     Concepto
     Total
     Items {

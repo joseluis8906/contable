@@ -13,7 +13,11 @@ mutation IngresoAddItem(
   	Id
     Fecha
     Numero
-    PeriodoId
+    Periodo {
+      Id
+      Nombre
+      Estado
+    }
     Concepto
     Total
     Items {

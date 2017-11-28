@@ -69,8 +69,8 @@ v-layout( align-center justify-center )
 
               template(slot="items" scope="props")
                 td(class="text-xs-center" :style="{minWidth: ''+(props.index.toString().length*10)+'px'}") {{ props.index + 1 }}
-                td(class="text-xs-center" :style="{minWidth: ''+((props.item.CuentaDebito.Code.length + props.item.CuentaDebito.Name.length)*10)+'px'}") {{ props.item.CuentaDebito.Code }} - {{ props.item.CuentaDebito.Name }}
-                td(class="text-xs-center" :style="{minWidth: ''+((props.item.CuentaCredito.Code.length + props.item.CuentaCredito.Name.length)*10)+'px'}") {{ props.item.CuentaCredito.Code }} - {{ props.item.CuentaCredito.Name }}
+                td(class="text-xs-center" :style="{minWidth: ''+((props.item.CuentaDebe.Code.length + props.item.CuentaDebe.Name.length)*10)+'px'}") {{ props.item.CuentaDebe.Code }} - {{ props.item.CuentaDebe.Name }}
+                td(class="text-xs-center" :style="{minWidth: ''+((props.item.CuentaHaber.Code.length + props.item.CuentaHaber.Name.length)*10)+'px'}") {{ props.item.CuentaHaber.Code }} - {{ props.item.CuentaHaber.Name }}
                 td(class="text-xs-center" :style="{minWidth: ''+(props.item.Monto.length*10)+'px'}") {{ props.item.Monto | currency('$', 0) }}
                 td(class="text-xs-center" :style="{minWidth: ''+(16)+'px'}")
                   v-btn( fab
@@ -140,6 +140,13 @@ export default {
       'Noviembre',
       'Diciembre'],
     days: ['Dom', 'Lun', 'Mar', 'Mie', 'Jue', 'Vie', 'Sab'],
+    Periodo: {
+      Id: null,
+      Nombre: null,
+      FechaInicial: null,
+      FechaFinal: null,
+      Estado: null,
+    },
     Ingreso: {
       Id: null,
       Numero: null,
@@ -168,6 +175,18 @@ export default {
     }
   },
   apollo: {
+    QPeriodo: {
+      query: PERIODOS,
+      variable: {
+        Estado: 'Abierto'
+      },
+      loadingKey: 'loading',
+      update (data) {
+        if(data.Periodos.length > 0){
+          this.Periodo = data.Periodos[0];
+        }
+      }
+    },
     QConfIngresos: {
       query: CONFINGRESOS,
       loadingKey: 'loading',
@@ -179,21 +198,112 @@ export default {
       query: INGRESOS,
       variables () {
         return {
-          Numero: this.Ingreso.Numero,
+          Numero: this.Ingreso.Numero
         }
       },
+      loadingKey: 'loading',
       update (data) {
-        if(data.Ingresos.length > 0){
-          this.Ingreso = data.Ingresos[0]
-        }
-        console.log(this.Ingreso)
+        this.LoadIngreso(data)
+
       }
     }
   },
   methods: {
+    LoadIngreso (data) {
+
+      if(data.Ingresos.length > 0){
+        this.Ingreso.Id = data.Ingresos[0].Id;
+        this.Ingreso.Fecha = data.Ingresos[0].Fecha;
+        this.Ingreso.Concepto = data.Ingresos[0].Concepto;
+        this.Ingreso.Total = data.Ingresos[0].Total;
+        this.Ingreso.Items = [].concat(data.Ingresos[0].Items);
+      }
+      else{
+        this.PartialReset();
+      }
+
+    },
+    Guardar () {
+      if(this.Ingreso.Id !== null || this.Periodo.Id === null){
+        return false;
+      }
+
+      this.$apollo.mutate({
+        mutation: CREATE_INGRESO,
+        variables:{
+          Numero: this.Ingreso.Numero,
+          Fecha: this.Ingreso.Fecha,
+          PeriodoId: this.Periodo.Id,
+          Concepto: this.Ingreso.Concepto,
+          Total: 0,
+        },
+        update: (store, {data: res}) => {
+
+          try{
+            const data = store.readQuery({
+              query: INGRESOS,
+              variables: {
+                Numero: res.CreateIngreso.Numero,
+              },
+            });
+
+            data.Ingresos.push(res.CreateIngreso);
+
+            store.writeQuery({
+              query: INGRESOS,
+              variables: {
+                Numero: res.CreateIngreso.Numero,
+              },
+              data
+            });
+
+          }catch(Err){console.log(Err)}
+        }
+      });
+    },
     Agregar () {
-      let tmp = Object.assign({Monto: this.Monto}, this.ConfIngreso);
-      this.Ingreso.Items.push(tmp);
+
+      const NewItem = {
+        IngresoId: this.Ingreso.Id,
+        CuentaDebeId: this.ConfIngreso.CuentaDebito.Id,
+        CuentaHaberId: this.ConfIngreso.CuentaCredito.Id,
+        Monto: this.Monto,
+      }
+
+      this.ConfIngreso = null;
+      this.Monto = null;
+
+      this.$apollo.mutate({
+        mutation: INGRESO_ADD_ITEM,
+        variables: {
+          IngresoId: NewItem.IngresoId,
+          CuentaDebeId: NewItem.CuentaDebeId,
+          CuentaHaberId: NewItem.CuentaHaberId,
+          Monto: NewItem.Monto,
+        },
+        update: (store, {data: res}) => {
+          try{
+            var data = store.readQuery({
+              query: INGRESOS,
+              variables: {
+                Numero: res.IngresoAddItem.Numero,
+              }
+            });
+
+            data.Ingresos.push(res.IngresoAddItem);
+
+            store.writeQuery({
+              query: INGRESOS,
+              variables: {
+                Numero: res.IngresoAddItem.Numero,
+              },
+              data
+            });
+
+          }catch(Err){console.log(Err)}
+
+        }
+      })
     },
     Eliminar(){
 
@@ -208,6 +318,13 @@ export default {
         Items: [],
       };
     },
+    PartialReset () {
+      this.Ingreso.Id = null;
+      this.Ingreso.Fecha = null;
+      this.Ingreso.Concepto = null;
+      this.Ingreso.Total = null;
+      this.Ingreso.Items = []
+    }
   },
   components: {
     VMoney
