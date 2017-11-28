@@ -146,6 +146,9 @@ import PERIODOS from '~/queries/Periodos.gql';
 import CREATE_PERIODO from '~/queries/CreatePeriodo.gql';
 import UPDATE_PERIODO from '~/queries/UpdatePeriodo.gql';
 
+import SALDOS_INICIALES from '~/queries/SaldosIniciales.gql';
+import CREATE_SALDO_INICIAL from '~/queries/CreateSaldoInicial.gql';
+
 import CUENTAS from '~/queries/Cuentas.gql';
 import VMoney from '~/components/MonetaryInput.vue'
 
@@ -352,9 +355,41 @@ export default {
             }catch (Err) { console.log(Err) };
           }
         });
-
       }
     },
+    Cargar () {
+      const NewSaldoInicial = {
+        PeriodoId: this.SaldoInicial.Periodo.Id,
+        CuentaId: this.SaldoInicial.Cuenta.Id,
+        Monto: this.SaldoInicial.Monto
+      }
+
+      this.Reset();
+
+      this.$apollo.mutate({
+        mutation: CREATE_SALDO_INICIAL,
+        variables: {
+          PeriodoId: NewSaldoInicial.PeriodoId,
+          CuentaId: NewSaldoInicial.CuentaId,
+          Monto: NewSaldoInicial.Monto
+        },
+        update: (store, {data: res}) => {
+          try{
+            var data = store.readQuery({
+              query: SALDOS_INICIALES
+            });
+
+            data.SaldosIniciales.push (res.SaldoInicial);
+
+            store.writeQuery({
+              query: SALDOS_INICIALES,
+              data
+            })
+
+          }catch(Err){console.log(Err)}
+        }
+      })
+    }
   },
   components: {VMoney},
 }

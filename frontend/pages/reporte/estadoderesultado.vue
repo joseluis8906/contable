@@ -164,7 +164,6 @@ v-container(pt-0 pr-0 pb-0 pl-0 mt-0 mb-0)
           td(style="width: 2.5%;" class="text-xs-center") {{ true ? '$' : '' }}
           td(style="width: 20%;" class="text-xs-right") 18.000.000
 
-
 </template>
 
 <style lang="stylus" scoped>

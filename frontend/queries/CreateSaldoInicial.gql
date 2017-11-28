@@ -10,8 +10,18 @@ mutation CreateSaldoInicial(
   )
   {
     Id
-    PeriodoId
-    CuentaId
+    Periodo {
+      Id
+      Nombre
+      FechaInicial
+      FechaFinal
+    }
+    Cuenta {
+      Id
+      Code
+      Name
+      Type
+    }
     Monto
   }
 }
