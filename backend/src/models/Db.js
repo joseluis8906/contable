@@ -357,7 +357,7 @@ const SaldoInicial = Db.define('SaldoInicial', {
 SaldoInicial.belongsTo(Periodo);
 Periodo.hasMany(SaldoInicial, {as: 'SaldosIniciales'});
 
-SaldoInicial.belongsTo(Cuenta, {foreignKey: 'CuentaId'});
+SaldoInicial.belongsTo(Cuenta, {as: 'Cuenta', foreignKey: 'CuentaId'});
 Cuenta.hasMany(SaldoInicial, {as: 'SaldosIniciales', foreignKey: 'CuentaId'});
 
 
