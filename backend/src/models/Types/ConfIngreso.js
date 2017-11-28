@@ -21,7 +21,7 @@ const ConfIngreso = new GraphQLObjectType({
         }
       },
       Nombre: {
-        type: GraphQLInt,
+        type: GraphQLString,
         resolve(ConfIngreso){
           return ConfIngreso.Nombre;
         }

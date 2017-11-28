@@ -152,25 +152,27 @@ v-layout( align-center justify-center )
             v-layout( row wrap)
               v-flex( xs12 )
 
-                v-text-field(label="Nombre" v-model="Ingreso.Nombre")
+                v-text-field(label="Nombre" v-model="ConfIngreso.Nombre")
 
                 v-select( label="Débito"
                           :items="Cuentas"
                           item-text="Buscar"
-                          v-model="Ingreso.Debito"
+                          v-model="ConfIngreso.CuentaDebito"
+                          return-object
                           autocomplete )
 
                 v-select( label="Crédito"
                           :items="Cuentas"
                           item-text="Buscar"
-                          v-model="Ingreso.Credito"
+                          v-model="ConfIngreso.CuentaCredito"
+                          return-object
                           autocomplete )
 
 
           v-card-actions
             v-spacer
             v-btn( dark @click.native="Reset" ) Cancelar
-            v-btn( dark primary @click.native="GuardarIngreso" ) Cargar
+            v-btn( dark primary @click.native="GuardarConfIngreso" ) Cargar
 </template>
 
 <style lang="stylus" scoped>
@@ -183,6 +185,9 @@ import UPDATE_PERIODO from '~/queries/UpdatePeriodo.gql';
 
 import SALDOS_INICIALES from '~/queries/SaldosIniciales.gql';
 import CREATE_SALDO_INICIAL from '~/queries/CreateSaldoInicial.gql';
+
+import CONFINGRESOS from '~/queries/ConfIngresos.gql';
+import CREATE_CONFINGRESO from '~/queries/CreateConfIngreso.gql';
 
 import CUENTAS from '~/queries/Cuentas.gql';
 import VMoney from '~/components/MonetaryInput.vue'
@@ -239,12 +244,12 @@ export default {
         },
         Monto: null
       },
-      Ingreso: {
+      ConfIngreso: {
         Nombre: null,
-        Debito: null,
-        Credito: null,
+        CuentaDebito: null,
+        CuentaCredito: null,
       },
-      Ingresos: [],
+      ConfIngresos: [],
       TabActive: null,
       loading: 0
     }
@@ -299,6 +304,13 @@ export default {
           this.Cuentas.push(tmp)
         }
       }
+    },
+    QConfIngresos: {
+      query: CONFINGRESOS,
+      loadingKey: 'loading',
+      update (data) {
+        this.ConfIngresos = data.ConfIngresos;
+      }
     }
   },
   methods: {
@@ -320,6 +332,9 @@ export default {
         Name: null,
       };
       this.SaldoInicial.Monto = null;
+      this.ConfIngreso.Nombre = null;
+      this.ConfIngreso.CuentaDebito = null;
+      this.ConfIngreso.CuentaCredito = null;
     },
     Guardar () {
 
@@ -420,10 +435,43 @@ export default {
               query: SALDOS_INICIALES
             });
 
-            data.SaldosIniciales.push (res.SaldoInicial);
+            data.SaldosIniciales.push (res.CreateSaldoInicial);
 
             store.writeQuery({
               query: SALDOS_INICIALES,
+              data
+            })
+
+          }catch(Err){ console.log(Err) }
+        }
+      })
+    },
+    GuardarConfIngreso () {
+      const NewConfIngreso = {
+        Nombre: this.ConfIngreso.Nombre,
+        CuentaDebitoId: this.ConfIngreso.CuentaDebito.Id,
+        CuentaCreditoId: this.ConfIngreso.CuentaCredito.Id,
+      }
+
+      this.Reset()
+
+      this.$apollo.mutate({
+        mutation: CREATE_CONFINGRESO,
+        variables: {
+          Nombre: NewConfIngreso.Nombre,
+          CuentaDebitoId: NewConfIngreso.CuentaDebitoId,
+          CuentaCreditoId: NewConfIngreso.CuentaCreditoId,
+        },
+        update: (store, {data: res}) => {
+          try{
+            var data = store.readQuery({
+              query: CONFINGRESOS
+            });
+
+            data.ConfIngresos.push (res.CreateConfIngreso);
+
+            store.writeQuery({
+              query: CONFINGRESOS,
               data
             })
 

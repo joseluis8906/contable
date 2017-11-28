@@ -26,8 +26,7 @@ v-layout( align-center justify-center )
         v-layout( row wrap)
           v-flex( xs12 )
 
-            v-text-field( label="Número"
-                          value="0001")
+            v-text-field( label="Número" )
 
 
             v-menu( lazy
@@ -55,14 +54,6 @@ v-layout( align-center justify-center )
                   v-card-actions
                     v-btn( dark warning @click.native="Fecha=null" ) Limpiar
 
-
-
-            v-select( v-bind:items="ItemsTercero"
-                      v-model="Tercero"
-                      label="Tercero"
-                      item-value="text"
-                      item-text="text"
-                      dark )
 
             v-text-field( label="Concepto"
                           v-model="Concepto"
