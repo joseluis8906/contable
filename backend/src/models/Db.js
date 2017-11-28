@@ -364,6 +364,7 @@ Cuenta.hasMany(SaldoInicial, {as: 'SaldosIniciales', foreignKey: 'CuentaId'});
 //ConfIngreso
 const ConfIngreso = Db.define('ConfIngreso', {
   Id: {type: Sequelize.INTEGER, primaryKey: true, autoIncrement: true},
+  Nombre: Sequelize.STRING,
   CuentaDebitoId: {type: Sequelize.INTEGER, references: {model: Cuenta, key: 'Id'}},
   CuentaCreditoId: {type: Sequelize.INTEGER, references: {model: Cuenta, key: 'Id'}},
 },

@@ -20,6 +20,12 @@ const ConfIngreso = new GraphQLObjectType({
           return ConfIngreso.Id;
         }
       },
+      Nombre: {
+        type: GraphQLInt,
+        resolve(ConfIngreso){
+          return ConfIngreso.Nombre;
+        }
+      },
       CuentaDebitoId: {
         type: GraphQLInt,
         resolve(ConfIngreso) {

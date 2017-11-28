@@ -1,0 +1,28 @@
+query ConfIngresos(
+  $Id: Int
+  $Nombre: String
+  $CuentaDebitoId: Int
+  $CuentaCreditoId: Int
+){
+  ConfIngresos(
+    Id: $Id
+    Nombre: $Nombre
+    CuentaDebitoId: $CuentaDebitoId
+    CuentaCreditoId: $CuentaCreditoId
+  ){
+    Id
+    Nombre
+    CuentaDebito{
+      Id
+      Type
+      Code
+      Name
+    }
+    CuentaCredito{
+      Id
+      Type
+      Code
+      Name
+    }
+  }
+}

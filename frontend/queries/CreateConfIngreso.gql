@@ -1,0 +1,26 @@
+mutation CreateConfIngreso(
+  $Nombre: String
+  $CuentaDebitoId: Int
+  $CuentaCreditoId: Int
+){
+  CreateConfIngreso(
+    Nombre: $Nombre
+    CuentaDebitoId: $CuentaDebitoId
+    CuentaCreditoId: $CuentaCreditoId
+  ){
+    Id
+    Nombre
+    CuentaDebito{
+      Id
+      Type
+      Code
+      Name
+    }
+    CuentaCredito{
+      Id
+      Type
+      Code
+      Name
+    }
+  }
+}
