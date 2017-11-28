@@ -589,8 +589,9 @@ export default {
       this.$apollo.query({
         query: CUENTASLIKE,
         variables: {
+          Type: 'Supersolidaria',
           Code: Cuenta.Code + '%',
-          Length: Cuenta.Code.Length + 2
+          Length: Cuenta.Code.length + 2
         }
       }).then(res => {
 
@@ -634,8 +635,6 @@ export default {
               });
 
             } catch (Err) {console.log(Err)}
-
-
 
           }
         }).then( res => {

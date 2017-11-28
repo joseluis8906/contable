@@ -8,7 +8,6 @@ v-container(pt-0 pr-0 pb-0 pl-0 mt-0 mb-0)
     h6(class="title text-xs-center mb-5") DEL 01 DE ENERO AL 31 DE DICIEMBRE
 
     table(style="width: 80%; height: auto; margin-left: auto; margin-right: auto;" class="mt-5" )
-      thead
       tbody
         tr(style="font-weight: bold !important; border-bottom: 1px solid black" class="subheading")
           td(style="width: 55%;") 4 - TOTAL INGRESOS
@@ -155,6 +154,7 @@ v-container(pt-0 pr-0 pb-0 pl-0 mt-0 mb-0)
           td(style="width: 2.5%;" class="text-xs-center") {{ false ? '$' : '' }}
           td(style="width: 20%;" class="text-xs-right")
 
+        br
         br
 
         tr(style="border: 1px black; border-style: solid none double none")

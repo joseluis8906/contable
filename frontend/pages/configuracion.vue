@@ -33,6 +33,14 @@ v-layout( align-center justify-center )
             v-icon(fa) usd
             h6(class="body-2 grey--text text--lighten-4") Saldo Inicial
 
+          v-tabs-item(href="#tab-3" @click.native="Reset")
+            v-icon assignment_returned
+            h6(class="body-2 grey--text text--lighten-4") Ingresos
+
+          v-tabs-item(href="#tab-4" @click.native="Reset")
+            v-icon assignment_return
+            h6(class="body-2 grey--text text--lighten-4") Gastos
+
         //- Periodo
         v-tabs-content(id="tab-1")
           v-card-text
@@ -113,14 +121,14 @@ v-layout( align-center justify-center )
             v-layout( row wrap)
               v-flex( xs12 )
                 v-select( v-model="SaldoInicial.Periodo"
-                          :items="SaldoInicial.Periodos"
+                          :items="Periodos"
                           label="Periodo"
                           item-text="Nombre"
                           return-object
                           dark )
 
                 v-select( v-model="SaldoInicial.Cuenta"
-                          :items="SaldoInicial.Cuentas"
+                          :items="Cuentas"
                           label="Cuenta"
                           item-text="Buscar"
                           return-object
@@ -130,6 +138,22 @@ v-layout( align-center justify-center )
                 v-money( v-model="SaldoInicial.Monto"
                          label="Monto"
                          maskType="currency" dark)
+
+
+          v-card-actions
+            v-spacer
+            v-btn( dark @click.native="Reset" ) Cancelar
+            v-btn( dark primary @click.native="Cargar" ) Cargar
+
+
+        //- ingresos
+        v-tabs-content(id="tab-3")
+          v-card-text
+            v-layout( row wrap)
+              v-flex( xs12 )
+                v-text-field(label="Nombre")
+
+                v-select()
 
 
           v-card-actions
@@ -180,6 +204,8 @@ export default {
         'Diciembre'
       ],
       days: ['Dom', 'Lun', 'Mar', 'Mie', 'Jue', 'Vie', 'Sab'],
+      Cuentas: [],
+      Periodos: [],
       Periodo: {
         Id: null,
         Nombre: null,
@@ -189,12 +215,10 @@ export default {
         EstadoOptions: ["Abierto", "Cerrado"],
       },
       SaldoInicial: {
-        Periodos: [],
         Periodo: {
           Id: null,
           Nombre: null,
         },
-        Cuentas: [],
         Cuenta: {
           Id: null,
           Buscar: null,
@@ -236,7 +260,7 @@ export default {
       query: PERIODOS,
       loadingKey: 'loading',
       update (data) {
-        this.SaldoInicial.Periodos = data.Periodos;
+        this.Periodos = data.Periodos;
       }
     },
     Cuentas: {
@@ -246,7 +270,7 @@ export default {
       },
       loadingKey: 'loading',
       update (data) {
-        this.SaldoInicial.Cuentas = [];
+        this.Cuentas = [];
         for(let i=0; i < data.Cuentas.length; i++){
           let tmp = {
             Id: data.Cuentas[i].Id,
@@ -255,7 +279,7 @@ export default {
             Code: data.Cuentas[i].Code,
             Name: data.Cuentas[i].Name,
           }
-          this.SaldoInicial.Cuentas.push(tmp)
+          this.Cuentas.push(tmp)
         }
       }
     }
