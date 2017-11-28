@@ -151,15 +151,26 @@ v-layout( align-center justify-center )
           v-card-text
             v-layout( row wrap)
               v-flex( xs12 )
-                v-text-field(label="Nombre")
 
-                v-select()
+                v-text-field(label="Nombre" v-model="Ingreso.Nombre")
+
+                v-select( label="Débito"
+                          :items="Cuentas"
+                          item-text="Buscar"
+                          v-model="Ingreso.Debito"
+                          autocomplete )
+
+                v-select( label="Crédito"
+                          :items="Cuentas"
+                          item-text="Buscar"
+                          v-model="Ingreso.Credito"
+                          autocomplete )
 
 
           v-card-actions
             v-spacer
             v-btn( dark @click.native="Reset" ) Cancelar
-            v-btn( dark primary @click.native="Cargar" ) Cargar
+            v-btn( dark primary @click.native="GuardarIngreso" ) Cargar
 </template>
 
 <style lang="stylus" scoped>
@@ -228,12 +239,18 @@ export default {
         },
         Monto: null
       },
+      Ingreso: {
+        Nombre: null,
+        Debito: null,
+        Credito: null,
+      },
+      Ingresos: [],
       TabActive: null,
       loading: 0
     }
   },
   apollo: {
-    OnePeriodos: {
+    QOnePeriodos: {
       query: PERIODOS,
       variables () {
         return {
@@ -256,14 +273,14 @@ export default {
         }
       }
     },
-    Periodos: {
+    QPeriodos: {
       query: PERIODOS,
       loadingKey: 'loading',
       update (data) {
         this.Periodos = data.Periodos;
       }
     },
-    Cuentas: {
+    QCuentas: {
       query: CUENTAS,
       variables:{
         Type: 'Supersolidaria'

@@ -361,6 +361,24 @@ SaldoInicial.belongsTo(Cuenta, {as: 'Cuenta', foreignKey: 'CuentaId'});
 Cuenta.hasMany(SaldoInicial, {as: 'SaldosIniciales', foreignKey: 'CuentaId'});
 
 
+//ConfIngreso
+const ConfIngreso = Db.define('ConfIngreso', {
+  Id: {type: Sequelize.INTEGER, primaryKey: true, autoIncrement: true},
+  CuentaDebitoId: {type: Sequelize.INTEGER, references: {model: Cuenta, key: 'Id'}},
+  CuentaCreditoId: {type: Sequelize.INTEGER, references: {model: Cuenta, key: 'Id'}},
+},
+{
+  timestamps: false,
+  freezeTableName: true
+});
+
+ConfIngreso.belongsTo(Cuenta, {as: 'CuentaDebito', foreignKey: 'CuentaDebitoId'});
+Cuenta.hasMany(ConfIngreso, {foreignKey: 'CuentaDebitoId'});
+
+ConfIngreso.belongsTo(Cuenta, {as: 'CuentaCredito', foreignKey: 'CuentaCreditoId'});
+Cuenta.hasMany(ConfIngreso, {foreignKey: 'CuentaCreditoId'});
+
+
 //open connection
 Db.authenticate().then(() => {
   console.log('Db conection success');
