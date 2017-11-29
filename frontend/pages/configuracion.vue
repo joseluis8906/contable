@@ -22,6 +22,7 @@ v-layout( align-center justify-center )
           h5(class="grey--text text--lighten-4 text-xs-center" style="font-weight: bold")
             v-icon settings
             |  Configuración
+            
       v-tabs(dark fixed icons grow v-model="TabActive")
         v-tabs-bar(slot="activators" class="light-blue darken-4")
           v-tabs-slider(class="success")
