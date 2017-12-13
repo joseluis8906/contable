@@ -1,15 +1,15 @@
 <template lang="pug">
 div(class="hello")
-  p Contable
-  //g-carousel
-  //g-icon-grid
-  //g-section1
-  //g-section3
-  //g-section4
-  //g-section2
-  //g-section5
-  //g-testimonios
-  //g-contact
+  //- p Contable
+  //- g-carousel
+  //- g-icon-grid
+  //- g-section1
+  //- g-section3
+  //- g-section4
+  //- g-section2
+  //- g-section5
+  //- g-testimonios
+  //- g-contact
 
 </template>
 
