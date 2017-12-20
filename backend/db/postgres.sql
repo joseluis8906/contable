@@ -35,14 +35,16 @@ CREATE TABLE IF NOT EXISTS "DianPais" (
 CREATE TABLE IF NOT EXISTS "DianDepartamento" (
   "Id" BIGSERIAL PRIMARY KEY,
   "Codigo" TEXT UNIQUE,
-  "Nombre" TEXT
+  "Nombre" TEXT,
+  "DianPaisId" BIGINT REFERENCES "DianPais"("Id") ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 
-CREATE TABLE IF NOT EXISTS "DianCiudad" (
+CREATE TABLE IF NOT EXISTS "DianCiudadNew" (
   "Id" BIGSERIAL PRIMARY KEY,
   "Codigo" TEXT UNIQUE,
-  "Nombre" TEXT
+  "Nombre" TEXT,
+  "DianDepartamentoId" BIGINT REFERENCES "DianDepartamento"("Id") ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 
