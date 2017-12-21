@@ -5,6 +5,7 @@ import { GraphQLObjectType,
   GraphQLList } from 'graphql';
 
 import Db from '../Db';
+import { DianDepartamento } from './DianDepartamento';
 
 const DianPais = new GraphQLObjectType({
   name: "DianPais",
@@ -27,6 +28,12 @@ const DianPais = new GraphQLObjectType({
         type: GraphQLString,
         resolve(DianPais) {
           return DianPais.Nombre;
+        }
+      },
+      DianDepartamentos:{
+        type: new GraphQLList(DianDepartamento),
+        resolve(DianPais){
+          return DianPais.getDianDepartamentos();
         }
       }
     };

@@ -5,6 +5,8 @@ import { GraphQLObjectType,
   GraphQLList } from 'graphql';
 
 import Db from '../Db';
+import { DianPais } from './DianPais';
+import { DianCiudad } from './DianCiudad';
 
 const DianDepartamento = new GraphQLObjectType({
   name: "DianDepartamento",
@@ -28,6 +30,24 @@ const DianDepartamento = new GraphQLObjectType({
         resolve(DianDepartamento) {
           return DianDepartamento.Nombre;
         }
+      },
+      DianPaisId: {
+        type: GraphQLInt,
+        resolve(DianDepartamento) {
+          return DianDepartamento.DianPaisId;
+        }
+      },
+      DianPais: {
+        type: DianPais,
+        resolve(DianDepartamento) {
+          return DianDepartamento.getDianPais();
+        }
+      },
+      DianCiudades: {
+        type: new GraphQLList(DianCiudad),
+        resolve(DianDepartamento){
+          return DianDepartamento.getDianCiudades();
+        }
       }
     };
   }
@@ -38,7 +58,8 @@ const DianDepartamentos = {
   args: {
     Id: {type: GraphQLInt},
     Codigo: {type: GraphQLString},
-    Nombre: {type: GraphQLString}
+    Nombre: {type: GraphQLString},
+    DianPaisId: {type: GraphQLInt}
   },
   resolve(root, args) {
     return Db.models.DianDepartamento.findAll({where: args});
@@ -50,11 +71,13 @@ const CreateDianDepartamento = {
   args: {
     Codigo: {type: GraphQLString},
     Nombre: {type: GraphQLString},
+    DianPaisId: {type: GraphQLInt}
   },
   resolve(_, args) {
     return Db.models.DianDepartamento.create({
       Codigo: args.Codigo,
       Nombre: args.Nombre,
+      DianPaisId: args.DianPaisId
     });
   }
 };
@@ -66,6 +89,7 @@ const UpdateDianDepartamento = {
     Id: {type: GraphQLInt},
     Codigo: {type: GraphQLString},
     Nombre: {type: GraphQLString},
+    DianPaisId: {type: GraphQLInt}
   },
   resolve(_, args) {
     return Db.models.DianDepartamento.findOne({
@@ -73,6 +97,7 @@ const UpdateDianDepartamento = {
     }).then (R => {
       R.Codigo = args.Codigo;
       R.Nombre = args.Nombre;
+      R.DianPaisId = args.DianPaisId;
       R.save();
       return R;
     });

@@ -77,25 +77,31 @@ const DianPais = Db.define('DianPais', {
 const DianDepartamento = Db.define('DianDepartamento', {
   Id: {type: Sequelize.INTEGER, primaryKey: true, autoIncrement: true},
   Codigo: Sequelize.STRING,
-  Nombre: Sequelize.STRING
+  Nombre: Sequelize.STRING,
+  DianPaisId: {type: Sequelize.INTEGER, references: {model: DianPais, key: 'Id'}},
 },
 {
   timestamps: false,
   freezeTableName: true
 });
 
+DianDepartamento.belongsTo(DianPais, {as: 'DianPais', foreignKey: 'DianPaisId'});
+DianPais.hasMany(DianDepartamento, { foreignKey: 'DianPaisId'});
 
 //DianCiudad
 const DianCiudad = Db.define('DianCiudad', {
   Id: {type: Sequelize.INTEGER, primaryKey: true, autoIncrement: true},
   Codigo: Sequelize.STRING,
-  Nombre: Sequelize.STRING
+  Nombre: Sequelize.STRING,
+  DianDepartamentoId: {type: Sequelize.INTEGER, references: {model: DianDepartamento, key: 'Id'}},
 },
 {
   timestamps: false,
   freezeTableName: true
 });
 
+DianCiudad.belongsTo(DianDepartamento, {foreignKey: 'DianDepartamentoId'});
+DianDepartamento.hasMany(DianCiudad, {as: 'DianCiudades', foreignKey: 'DianDepartamentoId'});
 
 //Periodo
 const Periodo = Db.define('Periodo', {
