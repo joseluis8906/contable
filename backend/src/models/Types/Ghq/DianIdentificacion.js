@@ -4,62 +4,55 @@ import { GraphQLObjectType,
   GraphQLFloat,
   GraphQLList } from 'graphql';
 
-import Db from '../Db';
-import { DianDepartamento } from './DianDepartamento';
+import Db from '../../Db';
 
-const DianPais = new GraphQLObjectType({
-  name: "DianPais",
-  description: "Object representation of DianPais",
+const DianIdentificacion = new GraphQLObjectType({
+  name: "DianIdentificacion",
+  description: "Object representation of DianIdentificacion",
   fields: () => {
     return {
       Id: {
         type: GraphQLInt,
-        resolve(DianPais) {
-          return DianPais.Id;
+        resolve(DianIdentificacion) {
+          return DianIdentificacion.Id;
         }
       },
       Codigo: {
         type: GraphQLString,
-        resolve(DianPais) {
-          return DianPais.Codigo;
+        resolve(DianIdentificacion) {
+          return DianIdentificacion.Codigo;
         }
       },
       Nombre: {
         type: GraphQLString,
-        resolve(DianPais) {
-          return DianPais.Nombre;
-        }
-      },
-      DianDepartamentos:{
-        type: new GraphQLList(DianDepartamento),
-        resolve(DianPais){
-          return DianPais.getDianDepartamentos();
+        resolve(DianIdentificacion) {
+          return DianIdentificacion.Nombre;
         }
       }
     };
   }
 });
 
-const DianPaises = {
-  type: new GraphQLList(DianPais),
+const DianIdentificaciones = {
+  type: new GraphQLList(DianIdentificacion),
   args: {
     Id: {type: GraphQLInt},
     Codigo: {type: GraphQLString},
     Nombre: {type: GraphQLString}
   },
   resolve(root, args) {
-    return Db.models.DianPais.findAll({where: args});
+    return Db.models.DianIdentificacion.findAll({where: args});
   }
 };
 
-const CreateDianPais = {
-  type: DianPais,
+const CreateDianIdentificacion = {
+  type: DianIdentificacion,
   args: {
     Codigo: {type: GraphQLString},
     Nombre: {type: GraphQLString},
   },
   resolve(_, args) {
-    return Db.models.DianPais.create({
+    return Db.models.DianIdentificacion.create({
       Codigo: args.Codigo,
       Nombre: args.Nombre,
     });
@@ -67,15 +60,15 @@ const CreateDianPais = {
 };
 
 
-const UpdateDianPais = {
-  type: DianPais,
+const UpdateDianIdentificacion = {
+  type: DianIdentificacion,
   args: {
     Id: {type: GraphQLInt},
     Codigo: {type: GraphQLString},
     Nombre: {type: GraphQLString},
   },
   resolve(_, args) {
-    return Db.models.DianPais.findOne({
+    return Db.models.DianIdentificacion.findOne({
       where: {Id: args.Id}
     }).then (R => {
       R.Codigo = args.Codigo;
@@ -88,8 +81,8 @@ const UpdateDianPais = {
 
 
 export {
-  DianPais,
-  DianPaises,
-  CreateDianPais,
-  UpdateDianPais
+  DianIdentificacion,
+  DianIdentificaciones,
+  CreateDianIdentificacion,
+  UpdateDianIdentificacion
 }

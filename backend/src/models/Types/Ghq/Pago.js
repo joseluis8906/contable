@@ -4,7 +4,7 @@ import { GraphQLObjectType,
   GraphQLFloat,
   GraphQLList } from 'graphql';
 
-import Db from '../Db';
+import Db from '../../Db';
 import { Periodo } from './Periodo';
 import { Cuenta } from './Cuenta';
 import { CausacionItem } from './Causacion';

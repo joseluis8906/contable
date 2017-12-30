@@ -4,7 +4,7 @@ import { GraphQLObjectType,
   GraphQLFloat,
   GraphQLList } from 'graphql';
 
-import Db from '../Db';
+import Db from '../../Db';
 import { Tercero } from './Tercero';
 import Sequelize from 'sequelize';
 

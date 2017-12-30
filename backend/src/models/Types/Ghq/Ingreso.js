@@ -4,126 +4,126 @@ import { GraphQLObjectType,
   GraphQLFloat,
   GraphQLList } from 'graphql';
 
-import Db from '../Db';
+import Db from '../../Db';
 import { Periodo } from './Periodo';
 import { Cuenta } from './Cuenta';
 
-const Causacion = new GraphQLObjectType({
-  name: "Causacion",
-  description: "Object representation of Causacion",
+const Ingreso = new GraphQLObjectType({
+  name: "Ingreso",
+  description: "Object representation of Ingreso",
   fields: () => {
     return {
       Id: {
         type: GraphQLInt,
-        resolve(Causacion) {
-          return Causacion.Id;
+        resolve(Ingreso) {
+          return Ingreso.Id;
         }
       },
       Fecha: {
         type: GraphQLString,
-        resolve(Causacion) {
-          return Causacion.Fecha;
+        resolve(Ingreso) {
+          return Ingreso.Fecha;
         }
       },
       Numero: {
         type: GraphQLString,
-        resolve(Causacion) {
-          return Causacion.Numero;
+        resolve(Ingreso) {
+          return Ingreso.Numero;
         }
       },
       PeriodoId: {
         type: GraphQLInt,
-        resolve(Causacion) {
-          return Causacion.PeriodoId;
+        resolve(Ingreso) {
+          return Ingreso.PeriodoId;
         }
       },
       Concepto: {
         type: GraphQLString,
-        resolve(Causacion) {
-          return Causacion.Concepto;
+        resolve(Ingreso) {
+          return Ingreso.Concepto;
         }
       },
       Total: {
         type: GraphQLFloat,
-        resolve(Causacion) {
-          return Causacion.Total;
+        resolve(Ingreso) {
+          return Ingreso.Total;
         }
       },
       Periodo: {
         type: Periodo,
-        resolve(Causacion) {
-          return Causacion.getPeriodo();
+        resolve(Ingreso) {
+          return Ingreso.getPeriodo();
         }
       },
       Items: {
-        type: new GraphQLList(CausacionItem),
-        resolve(Causacion) {
-          return Causacion.getCausacionItems();
+        type: new GraphQLList(IngresoItem),
+        resolve(Ingreso) {
+          return Ingreso.getIngresoItems();
         }
       }
     };
   }
 });
 
-const CausacionItem = new GraphQLObjectType({
-  name: "CausacionItem",
-  description: "Object representation of CausacionItem",
+const IngresoItem = new GraphQLObjectType({
+  name: "IngresoItem",
+  description: "Object representation of IngresoItem",
   fields: () => {
     return {
       Id: {
         type: GraphQLInt,
-        resolve(CausacionItem) {
-          return CausacionItem.Id;
+        resolve(IngresoItem) {
+          return IngresoItem.Id;
         }
       },
-      CausacionId: {
+      IngresoId: {
         type: GraphQLInt,
-        resolve(CausacionItem) {
-          return CausacionItem.CausacionId;
+        resolve(IngresoItem) {
+          return IngresoItem.IngresoId;
         }
       },
       CuentaDebeId: {
         type: GraphQLInt,
-        resolve(CausacionItem) {
-          return CausacionItem.CuentaDebeId;
+        resolve(IngresoItem) {
+          return IngresoItem.CuentaDebeId;
         }
       },
       CuentaHaberId: {
         type: GraphQLInt,
-        resolve(CausacionItem) {
-          return CausacionItem.CuentaHaberId;
+        resolve(IngresoItem) {
+          return IngresoItem.CuentaHaberId;
         }
       },
       Monto: {
         type: GraphQLFloat,
-        resolve(CausacionItem) {
-          return CausacionItem.Monto;
+        resolve(IngresoItem) {
+          return IngresoItem.Monto;
         }
       },
-      Causacion: {
-        type: Causacion,
-        resolve(CausacionItem) {
-          return CausacionItem.getCausacion();
+      Ingreso: {
+        type: Ingreso,
+        resolve(IngresoItem) {
+          return IngresoItem.getIngreso();
         }
       },
       CuentaDebe: {
         type: Cuenta,
-        resolve(CausacionItem) {
-          return CausacionItem.getCuentaDebe();
+        resolve(IngresoItem) {
+          return IngresoItem.getCuentaDebe();
         }
       },
       CuentaHaber: {
         type: Cuenta,
-        resolve(CausacionItem) {
-          return CausacionItem.getCuentaHaber();
+        resolve(IngresoItem) {
+          return IngresoItem.getCuentaHaber();
         }
       },
     };
   }
 });
 
-const Causaciones = {
-  type: new GraphQLList(Causacion),
+const Ingresos = {
+  type: new GraphQLList(Ingreso),
   args: {
     Id: {type: GraphQLInt},
     Fecha: {type: GraphQLString},
@@ -133,12 +133,12 @@ const Causaciones = {
     Total: {type: GraphQLFloat},
   },
   resolve(root, args) {
-    return Db.models.Causacion.findAll({where: args});
+    return Db.models.Ingreso.findAll({where: args});
   }
 };
 
-const CreateCausacion = {
-  type: Causacion,
+const CreateIngreso = {
+  type: Ingreso,
   args: {
     Fecha: {type: GraphQLString},
     Numero: {type: GraphQLString},
@@ -147,7 +147,7 @@ const CreateCausacion = {
     Total: {type: GraphQLFloat},
   },
   resolve(_, args) {
-    return Db.models.Causacion.create({
+    return Db.models.Ingreso.create({
       Fecha: args.Fecha,
       Numero: args.Numero,
       PeriodoId: args.PeriodoId,
@@ -158,8 +158,8 @@ const CreateCausacion = {
 };
 
 
-const UpdateCausacion = {
-  type: Causacion,
+const UpdateIngreso = {
+  type: Ingreso,
   args: {
     Id: {type: GraphQLInt},
     Fecha: {type: GraphQLString},
@@ -169,7 +169,7 @@ const UpdateCausacion = {
     Total: {type: GraphQLFloat},
   },
   resolve(_, args) {
-    return Db.models.Causacion.findOne({
+    return Db.models.Ingreso.findOne({
       where: {Id: args.Id}
     }).then (R => {
       R.Fecha = args.Fecha;
@@ -183,8 +183,8 @@ const UpdateCausacion = {
   }
 };
 
-const UpdateCausacionItem = {
-  type: CausacionItem,
+const UpdateIngresoItem = {
+  type: IngresoItem,
   args: {
     Id: {type: GraphQLInt},
     CuentaDebeId: {type: GraphQLInt},
@@ -192,7 +192,7 @@ const UpdateCausacionItem = {
     Monto: {type: GraphQLFloat},
   },
   resolve(_, args) {
-    return Db.models.CausacionItem.findOne({
+    return Db.models.IngresoItem.findOne({
       where: {Id: args.Id}
     }).then (R => {
       R.CuentaDebeId = args.CuentaDebeId;
@@ -205,40 +205,40 @@ const UpdateCausacionItem = {
 };
 
 
-const CausacionAddItem = {
-  type: Causacion,
+const IngresoAddItem = {
+  type: Ingreso,
   args: {
-    CausacionId: {type: GraphQLInt},
+    IngresoId: {type: GraphQLInt},
     CuentaDebeId: {type: GraphQLInt},
     CuentaHaberId: {type: GraphQLInt},
     Monto: {type: GraphQLFloat},
   },
   resolve(_, args) {
-    return Db.models.CausacionItem.create({
-      CausacionId: args.CausacionId,
+    return Db.models.IngresoItem.create({
+      IngresoId: args.IngresoId,
       CuentaDebeId: args.CuentaDebeId,
       CuentaHaberId: args.CuentaHaberId,
       Monto: args.Monto,
     }).then(RC => {
-      return RC.getCausacion();
+      return RC.getIngreso();
     });
   }
 };
 
 
-const CausacionRemoveItem = {
-  type: Causacion,
+const IngresoRemoveItem = {
+  type: Ingreso,
   args: {
-    CausacionId: {type: GraphQLInt},
-    CausacionItemId: {type: GraphQLInt},
+    IngresoId: {type: GraphQLInt},
+    IngresoItemId: {type: GraphQLInt},
   },
   resolve(_, args) {
-    return Db.models.CausacionItem.findOne({
-      where: {Id: args.CausacionItemId}
+    return Db.models.IngresoItem.findOne({
+      where: {Id: args.IngresoItemId}
     }).then(It => {
       return It.destroy().then(() => {
-        return Db.models.Causacion.findOne({
-          where: {Id: args.CausacionId}
+        return Db.models.Ingreso.findOne({
+          where: {Id: args.IngresoId}
         });
       });
     });
@@ -247,12 +247,12 @@ const CausacionRemoveItem = {
 
 
 export {
-  Causacion,
-  Causaciones,
-  CreateCausacion,
-  UpdateCausacion,
-  CausacionItem,
-  UpdateCausacionItem,
-  CausacionAddItem,
-  CausacionRemoveItem
+  Ingreso,
+  Ingresos,
+  CreateIngreso,
+  UpdateIngreso,
+  IngresoItem,
+  UpdateIngresoItem,
+  IngresoAddItem,
+  IngresoRemoveItem
 }

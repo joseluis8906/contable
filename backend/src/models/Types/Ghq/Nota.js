@@ -4,126 +4,126 @@ import { GraphQLObjectType,
   GraphQLFloat,
   GraphQLList } from 'graphql';
 
-import Db from '../Db';
+import Db from '../../Db';
 import { Periodo } from './Periodo';
 import { Cuenta } from './Cuenta';
 
-const Ingreso = new GraphQLObjectType({
-  name: "Ingreso",
-  description: "Object representation of Ingreso",
+const Nota = new GraphQLObjectType({
+  name: "Nota",
+  description: "Object representation of Nota",
   fields: () => {
     return {
       Id: {
         type: GraphQLInt,
-        resolve(Ingreso) {
-          return Ingreso.Id;
+        resolve(Nota) {
+          return Nota.Id;
         }
       },
       Fecha: {
         type: GraphQLString,
-        resolve(Ingreso) {
-          return Ingreso.Fecha;
+        resolve(Nota) {
+          return Nota.Fecha;
         }
       },
       Numero: {
         type: GraphQLString,
-        resolve(Ingreso) {
-          return Ingreso.Numero;
+        resolve(Nota) {
+          return Nota.Numero;
         }
       },
       PeriodoId: {
         type: GraphQLInt,
-        resolve(Ingreso) {
-          return Ingreso.PeriodoId;
+        resolve(Nota) {
+          return Nota.PeriodoId;
         }
       },
       Concepto: {
         type: GraphQLString,
-        resolve(Ingreso) {
-          return Ingreso.Concepto;
+        resolve(Nota) {
+          return Nota.Concepto;
         }
       },
       Total: {
         type: GraphQLFloat,
-        resolve(Ingreso) {
-          return Ingreso.Total;
+        resolve(Nota) {
+          return Nota.Total;
         }
       },
       Periodo: {
         type: Periodo,
-        resolve(Ingreso) {
-          return Ingreso.getPeriodo();
+        resolve(Nota) {
+          return Nota.getPeriodo();
         }
       },
       Items: {
-        type: new GraphQLList(IngresoItem),
-        resolve(Ingreso) {
-          return Ingreso.getIngresoItems();
+        type: new GraphQLList(NotaItem),
+        resolve(Nota) {
+          return Nota.getNotaItems();
         }
       }
     };
   }
 });
 
-const IngresoItem = new GraphQLObjectType({
-  name: "IngresoItem",
-  description: "Object representation of IngresoItem",
+const NotaItem = new GraphQLObjectType({
+  name: "NotaItem",
+  description: "Object representation of NotaItem",
   fields: () => {
     return {
       Id: {
         type: GraphQLInt,
-        resolve(IngresoItem) {
-          return IngresoItem.Id;
+        resolve(NotaItem) {
+          return NotaItem.Id;
         }
       },
-      IngresoId: {
+      NotaId: {
         type: GraphQLInt,
-        resolve(IngresoItem) {
-          return IngresoItem.IngresoId;
+        resolve(NotaItem) {
+          return NotaItem.NotaId;
         }
       },
       CuentaDebeId: {
         type: GraphQLInt,
-        resolve(IngresoItem) {
-          return IngresoItem.CuentaDebeId;
+        resolve(NotaItem) {
+          return NotaItem.CuentaDebeId;
         }
       },
       CuentaHaberId: {
         type: GraphQLInt,
-        resolve(IngresoItem) {
-          return IngresoItem.CuentaHaberId;
+        resolve(NotaItem) {
+          return NotaItem.CuentaHaberId;
         }
       },
       Monto: {
         type: GraphQLFloat,
-        resolve(IngresoItem) {
-          return IngresoItem.Monto;
+        resolve(NotaItem) {
+          return NotaItem.Monto;
         }
       },
-      Ingreso: {
-        type: Ingreso,
-        resolve(IngresoItem) {
-          return IngresoItem.getIngreso();
+      Nota: {
+        type: Nota,
+        resolve(NotaItem) {
+          return NotaItem.getNota();
         }
       },
       CuentaDebe: {
         type: Cuenta,
-        resolve(IngresoItem) {
-          return IngresoItem.getCuentaDebe();
+        resolve(NotaItem) {
+          return NotaItem.getCuentaDebe();
         }
       },
       CuentaHaber: {
         type: Cuenta,
-        resolve(IngresoItem) {
-          return IngresoItem.getCuentaHaber();
+        resolve(NotaItem) {
+          return NotaItem.getCuentaHaber();
         }
       },
     };
   }
 });
 
-const Ingresos = {
-  type: new GraphQLList(Ingreso),
+const Notas = {
+  type: new GraphQLList(Nota),
   args: {
     Id: {type: GraphQLInt},
     Fecha: {type: GraphQLString},
@@ -133,12 +133,12 @@ const Ingresos = {
     Total: {type: GraphQLFloat},
   },
   resolve(root, args) {
-    return Db.models.Ingreso.findAll({where: args});
+    return Db.models.Nota.findAll({where: args});
   }
 };
 
-const CreateIngreso = {
-  type: Ingreso,
+const CreateNota = {
+  type: Nota,
   args: {
     Fecha: {type: GraphQLString},
     Numero: {type: GraphQLString},
@@ -147,7 +147,7 @@ const CreateIngreso = {
     Total: {type: GraphQLFloat},
   },
   resolve(_, args) {
-    return Db.models.Ingreso.create({
+    return Db.models.Nota.create({
       Fecha: args.Fecha,
       Numero: args.Numero,
       PeriodoId: args.PeriodoId,
@@ -158,8 +158,8 @@ const CreateIngreso = {
 };
 
 
-const UpdateIngreso = {
-  type: Ingreso,
+const UpdateNota = {
+  type: Nota,
   args: {
     Id: {type: GraphQLInt},
     Fecha: {type: GraphQLString},
@@ -169,7 +169,7 @@ const UpdateIngreso = {
     Total: {type: GraphQLFloat},
   },
   resolve(_, args) {
-    return Db.models.Ingreso.findOne({
+    return Db.models.Nota.findOne({
       where: {Id: args.Id}
     }).then (R => {
       R.Fecha = args.Fecha;
@@ -183,8 +183,8 @@ const UpdateIngreso = {
   }
 };
 
-const UpdateIngresoItem = {
-  type: IngresoItem,
+const UpdateNotaItem = {
+  type: NotaItem,
   args: {
     Id: {type: GraphQLInt},
     CuentaDebeId: {type: GraphQLInt},
@@ -192,7 +192,7 @@ const UpdateIngresoItem = {
     Monto: {type: GraphQLFloat},
   },
   resolve(_, args) {
-    return Db.models.IngresoItem.findOne({
+    return Db.models.NotaItem.findOne({
       where: {Id: args.Id}
     }).then (R => {
       R.CuentaDebeId = args.CuentaDebeId;
@@ -205,40 +205,40 @@ const UpdateIngresoItem = {
 };
 
 
-const IngresoAddItem = {
-  type: Ingreso,
+const NotaAddItem = {
+  type: Nota,
   args: {
-    IngresoId: {type: GraphQLInt},
+    NotaId: {type: GraphQLInt},
     CuentaDebeId: {type: GraphQLInt},
     CuentaHaberId: {type: GraphQLInt},
     Monto: {type: GraphQLFloat},
   },
   resolve(_, args) {
-    return Db.models.IngresoItem.create({
-      IngresoId: args.IngresoId,
+    return Db.models.NotaItem.create({
+      NotaId: args.NotaId,
       CuentaDebeId: args.CuentaDebeId,
       CuentaHaberId: args.CuentaHaberId,
       Monto: args.Monto,
     }).then(RC => {
-      return RC.getIngreso();
+      return RC.getNota();
     });
   }
 };
 
 
-const IngresoRemoveItem = {
-  type: Ingreso,
+const NotaRemoveItem = {
+  type: Nota,
   args: {
-    IngresoId: {type: GraphQLInt},
-    IngresoItemId: {type: GraphQLInt},
+    NotaId: {type: GraphQLInt},
+    NotaItemId: {type: GraphQLInt},
   },
   resolve(_, args) {
-    return Db.models.IngresoItem.findOne({
-      where: {Id: args.IngresoItemId}
+    return Db.models.NotaItem.findOne({
+      where: {Id: args.NotaItemId}
     }).then(It => {
       return It.destroy().then(() => {
-        return Db.models.Ingreso.findOne({
-          where: {Id: args.IngresoId}
+        return Db.models.Nota.findOne({
+          where: {Id: args.NotaId}
         });
       });
     });
@@ -247,12 +247,12 @@ const IngresoRemoveItem = {
 
 
 export {
-  Ingreso,
-  Ingresos,
-  CreateIngreso,
-  UpdateIngreso,
-  IngresoItem,
-  UpdateIngresoItem,
-  IngresoAddItem,
-  IngresoRemoveItem
+  Nota,
+  Notas,
+  CreateNota,
+  UpdateNota,
+  NotaItem,
+  UpdateNotaItem,
+  NotaAddItem,
+  NotaRemoveItem
 }

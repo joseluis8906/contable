@@ -5,22 +5,22 @@ import { GraphQLObjectType,
   GraphQLList,
   GraphQLSchema } from 'graphql';
 
-import { User, Users, CreateUser, UpdateUser, UserAddGroup, UserRemoveGroup } from './Types/User';
-import { Group, Groups, CreateGroup, UpdateGroup } from './Types/Group';
-import { DianIdentificacion, DianIdentificaciones, CreateDianIdentificacion, UpdateDianIdentificacion } from './Types/DianIdentificacion';
-import { DianPais, DianPaises, CreateDianPais, UpdateDianPais } from './Types/DianPais';
-import { DianDepartamento, DianDepartamentos, CreateDianDepartamento, UpdateDianDepartamento } from './Types/DianDepartamento';
-import { DianCiudad, DianCiudades, CreateDianCiudad, UpdateDianCiudad } from './Types/DianCiudad';
-import { Periodo, Periodos, CreatePeriodo, UpdatePeriodo } from './Types/Periodo';
-import { Tercero, Terceros, CreateTercero, UpdateTercero, TerceroAddCuenta, TerceroRemoveCuenta } from './Types/Tercero';
-import { Cuenta, Cuentas, CuentasLike, CreateCuenta, UpdateCuenta } from './Types/Cuenta';
-import { Transaccion, Transacciones, CreateTransaccion, UpdateTransaccion } from './Types/Transaccion';
-import { Ingreso, Ingresos, CreateIngreso, UpdateIngreso, IngresoItem, UpdateIngresoItem, IngresoAddItem, IngresoRemoveItem } from './Types/Ingreso';
-import { Causacion, Causaciones, CreateCausacion, UpdateCausacion, CausacionItem, UpdateCausacionItem, CausacionAddItem, CausacionRemoveItem } from './Types/Causacion';
-import { Pago, Pagos, CreatePago, UpdatePago, PagoItem, UpdatePagoItem, PagoAddItem, PagoRemoveItem } from './Types/Pago';
-import { Nota, Notas, CreateNota, UpdateNota, NotaItem, UpdateNotaItem, NotaAddItem, NotaRemoveItem } from './Types/Nota';
-import { SaldoInicial, SaldosIniciales, CreateSaldoInicial, UpdateSaldoInicial } from './Types/SaldoInicial';
-import { ConfIngreso, ConfIngresos, CreateConfIngreso, UpdateConfIngreso } from './Types/ConfIngreso';
+import { User, Users, CreateUser, UpdateUser, UserAddGroup, UserRemoveGroup } from './Types/Ghq/User';
+import { Group, Groups, CreateGroup, UpdateGroup } from './Types/Ghq/Group';
+import { DianIdentificacion, DianIdentificaciones, CreateDianIdentificacion, UpdateDianIdentificacion } from './Types/Ghq/DianIdentificacion';
+import { DianPais, DianPaises, CreateDianPais, UpdateDianPais } from './Types/Ghq/DianPais';
+import { DianDepartamento, DianDepartamentos, CreateDianDepartamento, UpdateDianDepartamento } from './Types/Ghq/DianDepartamento';
+import { DianCiudad, DianCiudades, CreateDianCiudad, UpdateDianCiudad } from './Types/Ghq/DianCiudad';
+import { Periodo, Periodos, CreatePeriodo, UpdatePeriodo } from './Types/Ghq/Periodo';
+import { Tercero, Terceros, CreateTercero, UpdateTercero, TerceroAddCuenta, TerceroRemoveCuenta } from './Types/Ghq/Tercero';
+import { Cuenta, Cuentas, CuentasLike, CreateCuenta, UpdateCuenta } from './Types/Ghq/Cuenta';
+import { Transaccion, Transacciones, CreateTransaccion, UpdateTransaccion } from './Types/Ghq/Transaccion';
+import { Ingreso, Ingresos, CreateIngreso, UpdateIngreso, IngresoItem, UpdateIngresoItem, IngresoAddItem, IngresoRemoveItem } from './Types/Ghq/Ingreso';
+import { Causacion, Causaciones, CreateCausacion, UpdateCausacion, CausacionItem, UpdateCausacionItem, CausacionAddItem, CausacionRemoveItem } from './Types/Ghq/Causacion';
+import { Pago, Pagos, CreatePago, UpdatePago, PagoItem, UpdatePagoItem, PagoAddItem, PagoRemoveItem } from './Types/Ghq/Pago';
+import { Nota, Notas, CreateNota, UpdateNota, NotaItem, UpdateNotaItem, NotaAddItem, NotaRemoveItem } from './Types/Ghq/Nota';
+import { SaldoInicial, SaldosIniciales, CreateSaldoInicial, UpdateSaldoInicial } from './Types/Ghq/SaldoInicial';
+import { ConfIngreso, ConfIngresos, CreateConfIngreso, UpdateConfIngreso } from './Types/Ghq/ConfIngreso';
 
 //Query
 var Query = new GraphQLObjectType({

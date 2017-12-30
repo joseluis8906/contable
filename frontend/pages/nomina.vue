@@ -176,7 +176,7 @@ export default {
         this.Empleado.PrimaLegal = this.Empleado.Cesantias;
         this.Empleado.Vacaciones = Math.round(Number(this.Comodines.Salario*this.Comodines.Tiempo)/720)
 
-        this.Empleado.AportesDeSalud = Math.round(this.Comodines.SLMV*0.085)//empleado le toca el 0.04
+        this.Empleado.AportesDeSalud = Math.round((this.Empleado.Sueldo-this.Empleado.AuxilioDeTransporte)/*this.Comodines.SLMV*/*0.04)//empleado le toca el 0.04
         this.Empleado.AportesDePension = Math.round((this.Comodines.SLMV*0.12))//empleado le toca 0.04
         this.Empleado.AportesCajaCompensacion = Math.round(this.Comodines.SLMV*0.04)
         this.Empleado.AportesARL = Math.round(this.Comodines.SLMV*0.00522)

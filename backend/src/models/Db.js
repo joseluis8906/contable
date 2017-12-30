@@ -14,171 +14,42 @@ const Db = new Sequelize('unixjs01', 'unixjs', 'K3J9 8LMN 02F3 B3LW', {
   }
 });
 
-
-const User = Db.define('User', {
-  Id: {type: Sequelize.INTEGER, primaryKey: true, autoIncrement: true},
-  UserName: {type: Sequelize.STRING, unique: true},
-  Password: Sequelize.STRING,
-  Active: Sequelize.STRING
-},
-{
-  timestamps: false,
-  freezeTableName: true
-});
-
-const Group = Db.define('Group', {
-  Id: {type: Sequelize.INTEGER, primaryKey: true, autoIncrement: true},
-  Name: {type: Sequelize.STRING, unique: true}
-},
-{
-  timestamps: false,
-  freezeTableName: true
-});
-
-const UserGroup = Db.define('UserGroup', {
-  UserId: {type: Sequelize.INTEGER, references: {model: User, key: 'Id'}},
-  GroupId: {type: Sequelize.INTEGER, references: {model: Group, key: 'Id'}}
-},
-{
-  timestamps: false,
-  freezeTableName: true
-});
-
+const User = Db.import(__dirname + "/Types/Seq/User");
+const Group = Db.import(__dirname + "/Types/Seq/Group");
+const UserGroup = Db.import(__dirname + "/Types/Seq/UserGroup");
 User.belongsToMany(Group, {through: 'UserGroup'});
 Group.belongsToMany(User, {through: 'UserGroup'});
 
 
 //############# contable ################
-//DianIdentificacion
-const DianIdentificacion = Db.define('DianIdentificacion', {
-  Id: {type: Sequelize.INTEGER, primaryKey: true, autoIncrement: true},
-  Codigo: Sequelize.STRING,
-  Nombre: Sequelize.STRING
-},
-{
-  timestamps: false,
-  freezeTableName: true
-});
+const DianIdentificacion = Db.import(__dirname + "/Types/Seq/DianIdentificacion");
+const DianPais = Db.import(__dirname + "/Types/Seq/DianPais");
 
-
-//DianPais
-const DianPais = Db.define('DianPais', {
-  Id: {type: Sequelize.INTEGER, primaryKey: true, autoIncrement: true},
-  Codigo: Sequelize.STRING,
-  Nombre: Sequelize.STRING
-},
-{
-  timestamps: false,
-  freezeTableName: true
-});
-
-
-//DianDepartamento
-const DianDepartamento = Db.define('DianDepartamento', {
-  Id: {type: Sequelize.INTEGER, primaryKey: true, autoIncrement: true},
-  Codigo: Sequelize.STRING,
-  Nombre: Sequelize.STRING,
-  DianPaisId: {type: Sequelize.INTEGER, references: {model: DianPais, key: 'Id'}},
-},
-{
-  timestamps: false,
-  freezeTableName: true
-});
-
+const DianDepartamento = Db.import(__dirname + "/Types/Seq/DianDepartamento");
 DianDepartamento.belongsTo(DianPais, {as: 'DianPais', foreignKey: 'DianPaisId'});
 DianPais.hasMany(DianDepartamento, { foreignKey: 'DianPaisId'});
 
-//DianCiudad
-const DianCiudad = Db.define('DianCiudad', {
-  Id: {type: Sequelize.INTEGER, primaryKey: true, autoIncrement: true},
-  Codigo: Sequelize.STRING,
-  Nombre: Sequelize.STRING,
-  DianDepartamentoId: {type: Sequelize.INTEGER, references: {model: DianDepartamento, key: 'Id'}},
-},
-{
-  timestamps: false,
-  freezeTableName: true
-});
-
+const DianCiudad = Db.import(__dirname + "/Types/Seq/DianCiudad");
 DianCiudad.belongsTo(DianDepartamento, {foreignKey: 'DianDepartamentoId'});
 DianDepartamento.hasMany(DianCiudad, {as: 'DianCiudades', foreignKey: 'DianDepartamentoId'});
 
-//Periodo
-const Periodo = Db.define('Periodo', {
-  Id: {type: Sequelize.INTEGER, primaryKey: true, autoIncrement: true},
-  Nombre: Sequelize.STRING,
-  FechaInicial: Sequelize.DATEONLY,
-  FechaFinal: Sequelize.DATEONLY,
-  Estado: Sequelize.STRING
-},
-{
-  timestamps: false,
-  freezeTableName: true
-});
+const Periodo = Db.import(__dirname + "/Types/Seq/Periodo");
 
-
-//Tercero
-const Tercero = Db.define('Tercero', {
-  Id: {type: Sequelize.INTEGER, primaryKey: true, autoIncrement: true},
-  DianIdentificacionId: {type: Sequelize.INTEGER, references: {model: DianIdentificacion, key: 'Id'}},
-  NumeroDeIdentificacion: Sequelize.STRING,
-  PrimerApellido: Sequelize.STRING,
-  SegundoApellido: Sequelize.STRING,
-  PrimerNombre: Sequelize.STRING,
-  OtrosNombres: Sequelize.STRING,
-  RazonSocial: Sequelize.STRING,
-  Direccion: Sequelize.STRING,
-  DianPaisId: {type: Sequelize.INTEGER, references: {model: DianPais, key: 'Id'}},
-  DianDepartamentoId: {type: Sequelize.INTEGER, references: {model: DianDepartamento, key: 'Id'}},
-  DianCiudadId: {type: Sequelize.INTEGER, references: {model: DianCiudad, key: 'Id'}}
-},
-{
-  timestamps: false,
-  freezeTableName: true
-});
-
+const Tercero = Db.import(__dirname + "/Types/Seq/Tercero");
 Tercero.belongsTo(DianIdentificacion);
 DianIdentificacion.hasOne(Tercero);
-
 Tercero.belongsTo(DianPais, {as: 'DianPais', foreignKey:'DianPaisId'});
 DianPais.hasOne(Tercero, {as: 'DianPais', foreignKey:'DianPaisId'});
-
 Tercero.belongsTo(DianDepartamento);
 DianDepartamento.hasOne(Tercero);
-
 Tercero.belongsTo(DianCiudad);
 DianCiudad.hasOne(Tercero);
 
-
-//Cuenta
-const Cuenta = Db.define('Cuenta', {
-  Id: {type: Sequelize.INTEGER, primaryKey: true, autoIncrement: true},
-  Type: Sequelize.STRING,
-  Code: Sequelize.STRING,
-  Name: Sequelize.STRING,
-  TerceroId: {type: Sequelize.INTEGER, references: {model: Tercero, key: 'Id'}}
-},
-{
-  timestamps: false,
-  freezeTableName: true
-});
-
-Tercero.hasMany(Cuenta, {as: 'Cuentas'});
+const Cuenta = Db.import(__dirname + "/Types/Seq/Cuenta");
 Cuenta.belongsTo(Tercero);
+Tercero.hasMany(Cuenta, {as: 'Cuentas'});
 
-
-
-//Transaccion
-const Transaccion = Db.define('Transaccion', {
-  Id: {type: Sequelize.INTEGER, primaryKey: true, autoIncrement: true},
-  Tipo: Sequelize.STRING,
-  Numero: Sequelize.STRING,
-  Estado: Sequelize.STRING,
-},
-{
-  timestamps: false,
-  freezeTableName: true
-});
+const Transaccion = Db.import(__dirname + "/Types/Seq/Transaccion");
 
 
 //Ingreso

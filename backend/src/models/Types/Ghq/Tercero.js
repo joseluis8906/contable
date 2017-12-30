@@ -5,7 +5,7 @@ import { GraphQLObjectType,
   GraphQLList } from 'graphql';
 
 
-import Db from '../Db';
+import Db from '../../Db';
 import { DianIdentificacion } from './DianIdentificacion';
 import { DianPais } from './DianPais';
 import { DianDepartamento } from './DianDepartamento';

@@ -4,126 +4,126 @@ import { GraphQLObjectType,
   GraphQLFloat,
   GraphQLList } from 'graphql';
 
-import Db from '../Db';
+import Db from '../../Db';
 import { Periodo } from './Periodo';
 import { Cuenta } from './Cuenta';
 
-const Nota = new GraphQLObjectType({
-  name: "Nota",
-  description: "Object representation of Nota",
+const Causacion = new GraphQLObjectType({
+  name: "Causacion",
+  description: "Object representation of Causacion",
   fields: () => {
     return {
       Id: {
         type: GraphQLInt,
-        resolve(Nota) {
-          return Nota.Id;
+        resolve(Causacion) {
+          return Causacion.Id;
         }
       },
       Fecha: {
         type: GraphQLString,
-        resolve(Nota) {
-          return Nota.Fecha;
+        resolve(Causacion) {
+          return Causacion.Fecha;
         }
       },
       Numero: {
         type: GraphQLString,
-        resolve(Nota) {
-          return Nota.Numero;
+        resolve(Causacion) {
+          return Causacion.Numero;
         }
       },
       PeriodoId: {
         type: GraphQLInt,
-        resolve(Nota) {
-          return Nota.PeriodoId;
+        resolve(Causacion) {
+          return Causacion.PeriodoId;
         }
       },
       Concepto: {
         type: GraphQLString,
-        resolve(Nota) {
-          return Nota.Concepto;
+        resolve(Causacion) {
+          return Causacion.Concepto;
         }
       },
       Total: {
         type: GraphQLFloat,
-        resolve(Nota) {
-          return Nota.Total;
+        resolve(Causacion) {
+          return Causacion.Total;
         }
       },
       Periodo: {
         type: Periodo,
-        resolve(Nota) {
-          return Nota.getPeriodo();
+        resolve(Causacion) {
+          return Causacion.getPeriodo();
         }
       },
       Items: {
-        type: new GraphQLList(NotaItem),
-        resolve(Nota) {
-          return Nota.getNotaItems();
+        type: new GraphQLList(CausacionItem),
+        resolve(Causacion) {
+          return Causacion.getCausacionItems();
         }
       }
     };
   }
 });
 
-const NotaItem = new GraphQLObjectType({
-  name: "NotaItem",
-  description: "Object representation of NotaItem",
+const CausacionItem = new GraphQLObjectType({
+  name: "CausacionItem",
+  description: "Object representation of CausacionItem",
   fields: () => {
     return {
       Id: {
         type: GraphQLInt,
-        resolve(NotaItem) {
-          return NotaItem.Id;
+        resolve(CausacionItem) {
+          return CausacionItem.Id;
         }
       },
-      NotaId: {
+      CausacionId: {
         type: GraphQLInt,
-        resolve(NotaItem) {
-          return NotaItem.NotaId;
+        resolve(CausacionItem) {
+          return CausacionItem.CausacionId;
         }
       },
       CuentaDebeId: {
         type: GraphQLInt,
-        resolve(NotaItem) {
-          return NotaItem.CuentaDebeId;
+        resolve(CausacionItem) {
+          return CausacionItem.CuentaDebeId;
         }
       },
       CuentaHaberId: {
         type: GraphQLInt,
-        resolve(NotaItem) {
-          return NotaItem.CuentaHaberId;
+        resolve(CausacionItem) {
+          return CausacionItem.CuentaHaberId;
         }
       },
       Monto: {
         type: GraphQLFloat,
-        resolve(NotaItem) {
-          return NotaItem.Monto;
+        resolve(CausacionItem) {
+          return CausacionItem.Monto;
         }
       },
-      Nota: {
-        type: Nota,
-        resolve(NotaItem) {
-          return NotaItem.getNota();
+      Causacion: {
+        type: Causacion,
+        resolve(CausacionItem) {
+          return CausacionItem.getCausacion();
         }
       },
       CuentaDebe: {
         type: Cuenta,
-        resolve(NotaItem) {
-          return NotaItem.getCuentaDebe();
+        resolve(CausacionItem) {
+          return CausacionItem.getCuentaDebe();
         }
       },
       CuentaHaber: {
         type: Cuenta,
-        resolve(NotaItem) {
-          return NotaItem.getCuentaHaber();
+        resolve(CausacionItem) {
+          return CausacionItem.getCuentaHaber();
         }
       },
     };
   }
 });
 
-const Notas = {
-  type: new GraphQLList(Nota),
+const Causaciones = {
+  type: new GraphQLList(Causacion),
   args: {
     Id: {type: GraphQLInt},
     Fecha: {type: GraphQLString},
@@ -133,12 +133,12 @@ const Notas = {
     Total: {type: GraphQLFloat},
   },
   resolve(root, args) {
-    return Db.models.Nota.findAll({where: args});
+    return Db.models.Causacion.findAll({where: args});
   }
 };
 
-const CreateNota = {
-  type: Nota,
+const CreateCausacion = {
+  type: Causacion,
   args: {
     Fecha: {type: GraphQLString},
     Numero: {type: GraphQLString},
@@ -147,7 +147,7 @@ const CreateNota = {
     Total: {type: GraphQLFloat},
   },
   resolve(_, args) {
-    return Db.models.Nota.create({
+    return Db.models.Causacion.create({
       Fecha: args.Fecha,
       Numero: args.Numero,
       PeriodoId: args.PeriodoId,
@@ -158,8 +158,8 @@ const CreateNota = {
 };
 
 
-const UpdateNota = {
-  type: Nota,
+const UpdateCausacion = {
+  type: Causacion,
   args: {
     Id: {type: GraphQLInt},
     Fecha: {type: GraphQLString},
@@ -169,7 +169,7 @@ const UpdateNota = {
     Total: {type: GraphQLFloat},
   },
   resolve(_, args) {
-    return Db.models.Nota.findOne({
+    return Db.models.Causacion.findOne({
       where: {Id: args.Id}
     }).then (R => {
       R.Fecha = args.Fecha;
@@ -183,8 +183,8 @@ const UpdateNota = {
   }
 };
 
-const UpdateNotaItem = {
-  type: NotaItem,
+const UpdateCausacionItem = {
+  type: CausacionItem,
   args: {
     Id: {type: GraphQLInt},
     CuentaDebeId: {type: GraphQLInt},
@@ -192,7 +192,7 @@ const UpdateNotaItem = {
     Monto: {type: GraphQLFloat},
   },
   resolve(_, args) {
-    return Db.models.NotaItem.findOne({
+    return Db.models.CausacionItem.findOne({
       where: {Id: args.Id}
     }).then (R => {
       R.CuentaDebeId = args.CuentaDebeId;
@@ -205,40 +205,40 @@ const UpdateNotaItem = {
 };
 
 
-const NotaAddItem = {
-  type: Nota,
+const CausacionAddItem = {
+  type: Causacion,
   args: {
-    NotaId: {type: GraphQLInt},
+    CausacionId: {type: GraphQLInt},
     CuentaDebeId: {type: GraphQLInt},
     CuentaHaberId: {type: GraphQLInt},
     Monto: {type: GraphQLFloat},
   },
   resolve(_, args) {
-    return Db.models.NotaItem.create({
-      NotaId: args.NotaId,
+    return Db.models.CausacionItem.create({
+      CausacionId: args.CausacionId,
       CuentaDebeId: args.CuentaDebeId,
       CuentaHaberId: args.CuentaHaberId,
       Monto: args.Monto,
     }).then(RC => {
-      return RC.getNota();
+      return RC.getCausacion();
     });
   }
 };
 
 
-const NotaRemoveItem = {
-  type: Nota,
+const CausacionRemoveItem = {
+  type: Causacion,
   args: {
-    NotaId: {type: GraphQLInt},
-    NotaItemId: {type: GraphQLInt},
+    CausacionId: {type: GraphQLInt},
+    CausacionItemId: {type: GraphQLInt},
   },
   resolve(_, args) {
-    return Db.models.NotaItem.findOne({
-      where: {Id: args.NotaItemId}
+    return Db.models.CausacionItem.findOne({
+      where: {Id: args.CausacionItemId}
     }).then(It => {
       return It.destroy().then(() => {
-        return Db.models.Nota.findOne({
-          where: {Id: args.NotaId}
+        return Db.models.Causacion.findOne({
+          where: {Id: args.CausacionId}
         });
       });
     });
@@ -247,12 +247,12 @@ const NotaRemoveItem = {
 
 
 export {
-  Nota,
-  Notas,
-  CreateNota,
-  UpdateNota,
-  NotaItem,
-  UpdateNotaItem,
-  NotaAddItem,
-  NotaRemoveItem
+  Causacion,
+  Causaciones,
+  CreateCausacion,
+  UpdateCausacion,
+  CausacionItem,
+  UpdateCausacionItem,
+  CausacionAddItem,
+  CausacionRemoveItem
 }
